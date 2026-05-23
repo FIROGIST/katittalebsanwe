@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قضية طالب ثانوي - استمارة مطورة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-color: #f5c400; 
+            --dark-color: #111111;
+            --bg-color: #f4f4f4;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --gray-light: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* تثبيت طبقة الخلفية بشكل كامل ومستقل عن التمرير */
+        .edu-background {
+            position: fixed;
+            top: -5%; 
+            left: -5%;
+            width: 110%;
+            height: 110%;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url('download (6).jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+        }
+
+        /* طبقة التظليل الفاتحة لضمان الـ Contrast */
+        .edu-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(244, 244, 244, 0.78);
+        }
+
+        /* حاوية الكارت الرئيسي */
+        .form-container {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 500px;
+            padding: 35px;
+            text-align: center;
+            position: relative;
+            z-index: 2; 
+        }
+
+        .brand-logo {
+            width: 100%;
+            max-width: 240px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .step-counter {
+            font-size: 13px;
+            color: #9ca3af;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        h2.question-title {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .form-step {
+            display: none;
+            animation: slideIn 0.4s ease-out forwards;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #edf2f7;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+            text-align: right;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(245, 196, 0, 0.15);
+        }
+
+        /* عداد الحروف لخانة textarea */
+        .char-counter {
+            text-align: left;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 5px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .char-counter.valid {
+            color: #10b981;
+        }
+        .char-counter.invalid {
+            color: #ef4444;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-next {
+            background-color: var(--dark-color);
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-next:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-prev {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .success-message {
+            padding: 20px 0;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: #10b981;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="edu-background" id="bgPattern"></div>
+
+    <div class="form-container">
+        <img src="logoform.png" alt="قضية طالب ثانوي" class="brand-logo">
+
+        <form id="studentForm" onsubmit="event.preventDefault();">
+            
+            <div class="form-step active" data-step="1">
+                <div class="step-counter">السؤال 1 من 7</div>
+                <h2 class="question-title">أهلاً بك.. ما هو اسمك بالكامل؟</h2>
+                <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي هنا" required>
+                <div class="btn-group">
+                    <button type="button" class="btn-next" onclick="nextStep()">بدء الاستمارة</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="2">
+                <div class="step-counter">السؤال 2 من 7</div>
+                <h2 class="question-title">يا <span class="dynamic-name">بطل</span>، رقم تليفونك (واتساب) للتواصل:</h2>
+                <input type="tel" id="phone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم (يبدأ بـ 010 أو 011 أو 012 أو 015)" required>
+                <div class="btn-group">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="3">
+                <div class="step-counter">السؤال 3 من 7</div>
+                <h2 class="question-title">ما هو بريدك الإلكتروني يا <span class="dynamic-name">بطل</span>؟</h2>
+                <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
+                <div class="btn-group">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="4">
+                <div class="step-counter">السؤال 4 من 7</div>
+                <h2 class="question-title">في أي مرحلة دراسية أنت الآن؟</h2>
+                <select id="grade" class="input-field" onchange="handleGradeChange()" required>
+                    <option value="">اختر السنة الدراسية</option>
+                    <option value="1">الصف الأول الثانوي</option>
+                    <option value="2">الصف الثاني الثانوي</option>
+                    <option value="3">الصف الثالث الثانوي</option>
+                </select>
+                <div class="btn-group">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="5" id="stepSection">
+                <div class="step-counter">السؤال 5 من 7</div>
+                <h2 class="question-title">ما هي شعبتك الدراسية؟</h2>
+                <select id="section" class="input-field" required>
+                    <option value="">اختر الشعبة</option>
+                    <option value="علمي">علمي (علوم/رياضة)</option>
+                    <option value="أدبي">أدبي</option>
+                    <option value="عام" id="optGeneral">عام (لأولى ثانوي)</option>
+                </select>
+                <div class="btn-group">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="6">
+                <div class="step-counter">السؤال 6 من 7</div>
+                <h2 class="question-title">من أي محافظة تتابعنا يا <span class="dynamic-name">بطل</span>؟</h2>
+                <input type="text" id="city" class="input-field" placeholder="مثلاً: القاهرة، الإسكندرية..." required>
+                <div class="btn-group">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="7">
+                <div class="step-counter">السؤال الأخير</div>
+                <h2 class="question-title">ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟</h2>
+                <textarea id="message" class="input-field" style="height: 120px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك..." oninput="checkMessageLength()" required></textarea>
+                <div class="char-counter" id="charCounter">0 / 1000 حرف (الحد الأقصى 1000 حرف)</div>
+                <div class="btn-group">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" id="submitBtn" onclick="submitForm()" disabled>إرسال الاستمارة</button>
+                </div>
+            </div>
+
+            <div class="form-step" id="successStep">
+                <div class="success-message">
+                    <div class="success-icon">✓</div>
+                    <h2 class="question-title">شكرًا لك يا <span id="studentName">بطل</span>!</h2>
+                    <p style="color: #6b7280; line-height: 1.6;">تم استلام بياناتك بنجاح. فريق "قضية طالب ثانوي" سيتواصل معك في أقرب وقت لحسم قضيتك!</p>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let skippedSectionStep = false; 
+        const formSteps = document.querySelectorAll('.form-step');
+        const bgPattern = document.getElementById('bgPattern');
+
+        // ميكانيكية حركة الخلفية البارالاكس
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
+            bgPattern.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // تحديث الاسم الأول ديناميكياً
+        function updateDynamicNames() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const firstName = fullName ? fullName.split(' ')[0] : "بطل";
+            document.querySelectorAll('.dynamic-name').forEach(el => {
+                el.innerText = firstName;
+            });
+        }
+
+        // معالجة تغيير السنة الدراسية بشكل ذكي
+        function handleGradeChange() {
+            const grade = document.getElementById('grade').value;
+            const sectionSelect = document.getElementById('section');
+            
+            if (grade === "1") {
+                sectionSelect.value = "عام"; 
+                skippedSectionStep = true;
+            } else {
+                if (sectionSelect.value === "عام") sectionSelect.value = ""; 
+                skippedSectionStep = false;
+            }
+        }
+
+        function showStep(stepIndex) {
+            formSteps.forEach((step, index) => {
+                step.classList.toggle('active', index === stepIndex);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() {
+            const currentStepEl = formSteps[currentStep];
+            const inputs = currentStepEl.querySelectorAll('input, select, textarea');
+            
+            let allValid = true;
+            inputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    allValid = false;
+                }
+            });
+
+            if (allValid && currentStep < formSteps.length - 1) {
+                if (currentStep === 0) {
+                    updateDynamicNames(); 
+                }
+
+                if (currentStep === 3 && skippedSectionStep) {
+                    currentStep = 5; 
+                } else {
+                    currentStep++;
+                }
+                
+                showStep(currentStep);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                if (currentStep === 5 && skippedSectionStep) {
+                    currentStep = 3;
+                } else {
+                    currentStep--;
+                }
+                showStep(currentStep);
+            }
+        }
+
+        function checkMessageLength() {
+            const msgInput = document.getElementById('message');
+            const counterEl = document.getElementById('charCounter');
+            const submitBtn = document.getElementById('submitBtn');
+            const currentLength = msgInput.value.length;
+
+            if (currentLength > 0 && currentLength <= 1000) {
+                counterEl.innerText = `${currentLength} / 1000 حرف (مسموح بالإرسال)`;
+                counterEl.classList.add('valid');
+                counterEl.classList.remove('invalid');
+                submitBtn.disabled = false; 
+            } else if (currentLength > 1000) {
+                counterEl.innerText = `${currentLength} / 1000 حرف (تخطيت الحد الأقصى بـ ${currentLength - 1000} حرف)`;
+                counterEl.classList.remove('valid');
+                counterEl.classList.add('invalid');
+                submitBtn.disabled = true; 
+            } else {
+                counterEl.innerText = `${currentLength} / 1000 حرف (الحد الأقصى 1000 حرف)`;
+                counterEl.classList.remove('valid');
+                counterEl.classList.remove('invalid');
+                submitBtn.disabled = true; 
+            }
+        }
+
+        function escapeHTML(text) {
+            if (!text) return "";
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        // دالة إرسال البيانات إلى التليجرام والانتقال لصفحة النجاح
+        async function submitForm() {
+            const messageInput = document.getElementById('message');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (messageInput.value.length === 0 || messageInput.value.length > 1000) return;
+
+            const fullName = escapeHTML(document.getElementById('fullName').value);
+            const phone = escapeHTML(document.getElementById('phone').value);
+            const email = escapeHTML(document.getElementById('email').value);
+            const gradeVal = document.getElementById('grade').value;
+            const section = escapeHTML(document.getElementById('section').value);
+            const city = escapeHTML(document.getElementById('city').value);
+            const message = escapeHTML(messageInput.value);
+
+            let gradeText = "";
+            if (gradeVal === "1") gradeText = "الصف الأول الثانوي";
+            else if (gradeVal === "2") gradeText = "الصف الثاني الثانوي";
+            else if (gradeVal === "3") gradeText = "الصف الثالث الثانوي";
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "جاري الإرسال...";
+
+            // تحديث التوكن والآيدي الجديد بناءً على طلبك
+            const botToken = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
+            const chatId = "8244352245";
+
+            const telegramMessage = `
+<b>📥 استمارة طالب جديدة صُعِدت لـ "قضية طالب ثانوي"</b>
+--------------------------------------
+<b>👤 الاسم بالكامل:</b> ${fullName}
+<b>📱 رقم الواتساب:</b> <a href="https://wa.me/2${phone}">${phone}</a>
+<b>📧 البريد الإلكتروني:</b> ${email}
+<b>🎓 السنة الدراسية:</b> ${gradeText}
+<b>🧬 الشعبة:</b> ${section}
+<b>📍 المحافظة:</b> ${city}
+
+<b>⚠️ أكبر مشكلة تواجه الطالب:</b>
+${message}
+            `.trim();
+
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: telegramMessage,
+                        parse_mode: 'HTML'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('فشل إرسال البيانات لسيرفر تليجرام');
+                }
+
+                document.getElementById('studentName').innerText = fullName.split(' ')[0];
+
+                currentStep = formSteps.length - 1; 
+                showStep(currentStep);
+
+            } catch (error) {
+                console.error("خطأ أثناء الإرسال:", error);
+                alert("عذرًا، حدث خطأ أثناء إرسال البيانات. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "إرسال الاستمارة";
+            }
+        }
+
+        // مسح الـ LocalStorage القديم وتصفير الفورم تماماً عند عمل فريش أو خروج ودخول
+        window.onload = function() {
+            localStorage.removeItem('studentFormData');
+            document.getElementById('studentForm').reset();
+        };
+    </script>
+</body>
+</html>
