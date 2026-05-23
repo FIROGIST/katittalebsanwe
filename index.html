@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قضية طالب ثانوي - استمارة مطورة</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700&display=swap');
 
         :root {
             --primary-color: #f5c400; 
@@ -204,7 +204,7 @@
         <form id="studentForm" onsubmit="event.preventDefault();">
             
             <div class="form-step active" data-step="1">
-                <div class="step-counter">السؤال 1 من 7</div>
+                <div class="step-counter">السؤال 1 من 8</div>
                 <h2 class="question-title">أهلاً بك.. ما هو اسمك بالكامل؟</h2>
                 <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي هنا" required>
                 <div class="btn-group">
@@ -213,7 +213,7 @@
             </div>
 
             <div class="form-step" data-step="2">
-                <div class="step-counter">السؤال 2 من 7</div>
+                <div class="step-counter">السؤال 2 من 8</div>
                 <h2 class="question-title">يا <span class="dynamic-name">بطل</span>، رقم تليفونك (واتساب) للتواصل:</h2>
                 <input type="tel" id="phone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم (يبدأ بـ 010 أو 011 أو 012 أو 015)" required>
                 <div class="btn-group">
@@ -223,7 +223,7 @@
             </div>
 
             <div class="form-step" data-step="3">
-                <div class="step-counter">السؤال 3 من 7</div>
+                <div class="step-counter">السؤال 3 من 8</div>
                 <h2 class="question-title">ما هو بريدك الإلكتروني يا <span class="dynamic-name">بطل</span>؟</h2>
                 <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
                 <div class="btn-group">
@@ -233,7 +233,7 @@
             </div>
 
             <div class="form-step" data-step="4">
-                <div class="step-counter">السؤال 4 من 7</div>
+                <div class="step-counter">السؤال 4 من 8</div>
                 <h2 class="question-title">في أي مرحلة دراسية أنت الآن؟</h2>
                 <select id="grade" class="input-field" onchange="handleGradeChange()" required>
                     <option value="">اختر السنة الدراسية</option>
@@ -247,14 +247,13 @@
                 </div>
             </div>
 
-            <div class="form-step" data-step="5" id="stepSection">
-                <div class="step-counter">السؤال 5 من 7</div>
-                <h2 class="question-title">ما هي شعبتك الدراسية؟</h2>
-                <select id="section" class="input-field" required>
-                    <option value="">اختر الشعبة</option>
-                    <option value="علمي">علمي (علوم/رياضة)</option>
-                    <option value="أدبي">أدبي</option>
-                    <option value="عام" id="optGeneral">عام (لأولى ثانوي)</option>
+            <div class="form-step" data-step="5">
+                <div class="step-counter">السؤال 5 من 8</div>
+                <h2 class="question-title">ما هو نوع نظامك التعليمي؟</h2>
+                <select id="educationType" class="input-field" required>
+                    <option value="">اختر نوع التعليم</option>
+                    <option value="عام">ثانوي عام</option>
+                    <option value="أزهر">ثانوي أزهري</option>
                 </select>
                 <div class="btn-group">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
@@ -262,8 +261,19 @@
                 </div>
             </div>
 
-            <div class="form-step" data-step="6">
-                <div class="step-counter">السؤال 6 من 7</div>
+            <div class="form-step" data-step="6" id="stepSection">
+                <div class="step-counter">السؤال 6 من 8</div>
+                <h2 class="question-title">ما هي شعبتك الدراسية؟</h2>
+                <select id="section" class="input-field" required>
+                    </select>
+                <div class="btn-group">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="7">
+                <div class="step-counter">السؤال 7 من 8</div>
                 <h2 class="question-title">من أي محافظة تتابعنا يا <span class="dynamic-name">بطل</span>؟</h2>
                 <input type="text" id="city" class="input-field" placeholder="مثلاً: القاهرة، الإسكندرية..." required>
                 <div class="btn-group">
@@ -272,14 +282,14 @@
                 </div>
             </div>
 
-            <div class="form-step" data-step="7">
-                <div class="step-counter">السؤال الأخير</div>
+            <div class="form-step" data-step="8">
+                <div class="step-counter">السؤال الأخير (اختياري)</div>
                 <h2 class="question-title">ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟</h2>
-                <textarea id="message" class="input-field" style="height: 120px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك..." oninput="checkMessageLength()" required></textarea>
+                <textarea id="message" class="input-field" style="height: 120px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك، أو يمكنك تخطي هذا السؤال..." oninput="checkMessageLength()"></textarea>
                 <div class="char-counter" id="charCounter">0 / 1000 حرف (الحد الأقصى 1000 حرف)</div>
                 <div class="btn-group">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" id="submitBtn" onclick="submitForm()" disabled>إرسال الاستمارة</button>
+                    <button type="button" class="btn-next" id="submitBtn" onclick="submitForm()">إرسال الاستمارة</button>
                 </div>
             </div>
 
@@ -300,14 +310,12 @@
         const formSteps = document.querySelectorAll('.form-step');
         const bgPattern = document.getElementById('bgPattern');
 
-        // ميكانيكية حركة الخلفية البارالاكس
         document.addEventListener('mousemove', (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
             const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
             bgPattern.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
 
-        // تحديث الاسم الأول ديناميكياً
         function updateDynamicNames() {
             const fullName = document.getElementById('fullName').value.trim();
             const firstName = fullName ? fullName.split(' ')[0] : "بطل";
@@ -316,17 +324,35 @@
             });
         }
 
-        // معالجة تغيير السنة الدراسية بشكل ذكي
         function handleGradeChange() {
             const grade = document.getElementById('grade').value;
             const sectionSelect = document.getElementById('section');
             
+            sectionSelect.innerHTML = "";
+
             if (grade === "1") {
-                sectionSelect.value = "عام"; 
+                const opt = document.createElement('option');
+                opt.value = "عام مشترك";
+                opt.text = "عام مشترك (لأولى ثانوي)";
+                sectionSelect.appendChild(opt);
                 skippedSectionStep = true;
-            } else {
-                if (sectionSelect.value === "عام") sectionSelect.value = ""; 
+            } 
+            else if (grade === "2") {
                 skippedSectionStep = false;
+                sectionSelect.innerHTML = `
+                    <option value="">اختر الشعبة</option>
+                    <option value="علمي">علمي</option>
+                    <option value="أدبي">أدبي</option>
+                `;
+            } 
+            else if (grade === "3") {
+                skippedSectionStep = false;
+                sectionSelect.innerHTML = `
+                    <option value="">اختر الشعبة</option>
+                    <option value="علمي علوم">علمي علوم</option>
+                    <option value="علمي رياضة">علمي رياضة</option>
+                    <option value="أدبي">أدبي</option>
+                `;
             }
         }
 
@@ -354,8 +380,8 @@
                     updateDynamicNames(); 
                 }
 
-                if (currentStep === 3 && skippedSectionStep) {
-                    currentStep = 5; 
+                if (currentStep === 4 && skippedSectionStep) {
+                    currentStep = 6; 
                 } else {
                     currentStep++;
                 }
@@ -366,8 +392,8 @@
 
         function prevStep() {
             if (currentStep > 0) {
-                if (currentStep === 5 && skippedSectionStep) {
-                    currentStep = 3;
+                if (currentStep === 6 && skippedSectionStep) {
+                    currentStep = 4; 
                 } else {
                     currentStep--;
                 }
@@ -375,26 +401,29 @@
             }
         }
 
+        // دالة فحص الحروف المحدثة لتناسب الخيار الاختياري
         function checkMessageLength() {
             const msgInput = document.getElementById('message');
             const counterEl = document.getElementById('charCounter');
             const submitBtn = document.getElementById('submitBtn');
             const currentLength = msgInput.value.length;
 
-            if (currentLength > 0 && currentLength <= 1000) {
+            if (currentLength === 0) {
+                counterEl.innerText = `0 / 1000 حرف (يمكنك الإرسال مباشرة أو تخطي السؤال)`;
+                counterEl.classList.remove('valid');
+                counterEl.classList.remove('invalid');
+                submitBtn.disabled = false; 
+                submitBtn.innerText = "إرسال الاستمارة";
+            } else if (currentLength > 0 && currentLength <= 1000) {
                 counterEl.innerText = `${currentLength} / 1000 حرف (مسموح بالإرسال)`;
                 counterEl.classList.add('valid');
                 counterEl.classList.remove('invalid');
                 submitBtn.disabled = false; 
+                submitBtn.innerText = "إرسال الاستمارة";
             } else if (currentLength > 1000) {
                 counterEl.innerText = `${currentLength} / 1000 حرف (تخطيت الحد الأقصى بـ ${currentLength - 1000} حرف)`;
                 counterEl.classList.remove('valid');
                 counterEl.classList.add('invalid');
-                submitBtn.disabled = true; 
-            } else {
-                counterEl.innerText = `${currentLength} / 1000 حرف (الحد الأقصى 1000 حرف)`;
-                counterEl.classList.remove('valid');
-                counterEl.classList.remove('invalid');
                 submitBtn.disabled = true; 
             }
         }
@@ -407,20 +436,24 @@
                 .replace(/>/g, "&gt;");
         }
 
-        // دالة إرسال البيانات إلى التليجرام والانتقال لصفحة النجاح
         async function submitForm() {
             const messageInput = document.getElementById('message');
             const submitBtn = document.getElementById('submitBtn');
             
-            if (messageInput.value.length === 0 || messageInput.value.length > 1000) return;
+            // التحقق من الطول الأقصى فقط
+            if (messageInput.value.length > 1000) return;
 
             const fullName = escapeHTML(document.getElementById('fullName').value);
             const phone = escapeHTML(document.getElementById('phone').value);
             const email = escapeHTML(document.getElementById('email').value);
             const gradeVal = document.getElementById('grade').value;
+            const eduType = escapeHTML(document.getElementById('educationType').value);
             const section = escapeHTML(document.getElementById('section').value);
             const city = escapeHTML(document.getElementById('city').value);
-            const message = escapeHTML(messageInput.value);
+            
+            // إذا كان الحقل فارغاً، يرسل نصاً واضحاً بدلاً من فراغ
+            const rawMessage = messageInput.value.trim();
+            const message = rawMessage ? escapeHTML(rawMessage) : "<i>(لم يتم ذكر مشكلة - تخطى السؤال)</i>";
 
             let gradeText = "";
             if (gradeVal === "1") gradeText = "الصف الأول الثانوي";
@@ -430,7 +463,6 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "جاري الإرسال...";
 
-            // تحديث التوكن والآيدي الجديد بناءً على طلبك
             const botToken = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
             const chatId = "8244352245";
 
@@ -441,6 +473,7 @@
 <b>📱 رقم الواتساب:</b> <a href="https://wa.me/2${phone}">${phone}</a>
 <b>📧 البريد الإلكتروني:</b> ${email}
 <b>🎓 السنة الدراسية:</b> ${gradeText}
+<b>🏛️ نوع التعليم:</b> ثانوية ${eduType}
 <b>🧬 الشعبة:</b> ${section}
 <b>📍 المحافظة:</b> ${city}
 
@@ -476,10 +509,11 @@ ${message}
             }
         }
 
-        // مسح الـ LocalStorage القديم وتصفير الفورم تماماً عند عمل فريش أو خروج ودخول
         window.onload = function() {
             localStorage.removeItem('studentFormData');
             document.getElementById('studentForm').reset();
+            // تصفير نص العداد عند التحميل لأول مرة
+            document.getElementById('charCounter').innerText = `0 / 1000 حرف (يمكنك الإرسال مباشرة أو تخطي السؤال)`;
         };
     </script>
 </body>
