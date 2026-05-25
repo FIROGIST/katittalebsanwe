@@ -68,45 +68,33 @@
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             padding: 35px;
-            text-align: center;
             position: relative;
             z-index: 2; 
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
         }
 
         .brand-logo {
             width: 100%;
             max-width: 240px;
             height: auto;
-            margin-bottom: 20px;
         }
 
         .section-badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 6px 16px;
             background-color: #fef3c7;
             color: #d97706;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             border-radius: 20px;
-            margin-bottom: 10px;
-        }
-
-        .step-counter {
-            font-size: 13px;
-            color: #9ca3af;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        h2.question-title {
-            font-size: 19px;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 25px;
-            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .form-step {
@@ -119,8 +107,21 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 8px;
         }
 
         .input-field {
@@ -128,7 +129,7 @@
             padding: 14px 18px;
             border: 2px solid #edf2f7;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
             transition: all 0.3s ease;
             background-color: #f9fafb;
@@ -150,18 +151,25 @@
             font-weight: 600;
             transition: color 0.3s;
         }
-        .char-counter.valid {
-            color: #10b981;
-        }
-        .char-counter.invalid {
-            color: #ef4444;
-        }
+        .char-counter.valid { color: #10b981; }
+        .char-counter.invalid { color: #ef4444; }
 
-        .btn-group {
+        /* التحكم بأزرار أسفل الصفحة (التالي على اليسار) */
+        .btn-container {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #f3f4f6;
+        }
+        
+        /* جعل زر التالي يذهب لليسار دائماً وزر السابق لليمين */
+        .btn-container.single-btn {
+            justify-content: flex-end;
+        }
+        
+        .btn-container.split-btns {
+            justify-content: space-between;
+            align-items: center;
         }
 
         button {
@@ -194,9 +202,14 @@
             background-color: #f3f4f6;
             color: #6b7280;
         }
+        
+        .btn-prev:hover {
+            background-color: #e5e7eb;
+        }
 
         .success-message {
             padding: 20px 0;
+            text-align: center;
         }
 
         .success-icon {
@@ -211,139 +224,115 @@
     <div class="edu-background" id="bgPattern"></div>
 
     <div class="form-container">
-        <img src="logoform.png" alt="قضية طالب ثانوي" class="brand-logo">
+        <div class="brand-header">
+            <img src="logoform.png" alt="قضية طالب ثانوي" class="brand-logo">
+        </div>
 
         <form id="studentForm" onsubmit="event.preventDefault();">
             
             <div class="form-step active" data-step="1">
-                <div class="section-badge">الجزء الأول: بيانات الطالب</div>
-                <div class="step-counter">السؤال 1 من 10</div>
-                <h2 class="question-title">أهلاً بك.. ما هو اسمك بالكامل؟</h2>
-                <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي هنا" required>
-                <div class="btn-group">
-                    <button type="button" class="btn-next" onclick="nextStep()">بدء الاستمارة</button>
+                <div style="text-align: center;">
+                    <div class="section-badge">الجزء الأول: بيانات الطالب المتكاملة</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">الاسم بالكامل:</label>
+                    <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا" oninput="updateDynamicNames()" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">رقم تليفونك (واتساب) للتواصل:</label>
+                    <input type="tel" id="phone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthDate">تاريخ الميلاد:</label>
+                    <input type="date" id="birthDate" class="input-field" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني:</label>
+                    <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="grade">المرحلة الدراسية الحالية:</label>
+                    <select id="grade" class="input-field" onchange="handleGradeChange()" required>
+                        <option value="">اختر السنة الدراسية</option>
+                        <option value="1">الصف الأول الثانوي</option>
+                        <option value="2">الصف الثاني الثانوي</option>
+                        <option value="3">الصف الثالث الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="educationType">نوع النظام التعليمي:</label>
+                    <select id="educationType" class="input-field" required>
+                        <option value="">اختر نوع التعليم</option>
+                        <option value="عام">ثانوي عام</option>
+                        <option value="أزهر">ثانوي أزهري</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="stepSection" style="display: none;">
+                    <label for="section">الشعبة الدراسية:</label>
+                    <select id="section" class="input-field">
+                        <option value="">اختر الشعبة</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">المحافظة:</label>
+                    <input type="text" id="city" class="input-field" placeholder="مثلاً: الإسكندرية، القاهرة..." required>
+                </div>
+
+                <div class="btn-container single-btn">
+                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
                 </div>
             </div>
 
             <div class="form-step" data-step="2">
-                <div class="section-badge">الجزء الأول: بيانات الطالب</div>
-                <div class="step-counter">السؤال 2 من 10</div>
-                <h2 class="question-title">يا <span class="dynamic-name">بطل</span>، رقم تليفونك (واتساب) للتواصل:</h2>
-                <input type="tel" id="phone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
-                <div class="btn-group">
+                <div style="text-align: center;">
+                    <div class="section-badge" style="background-color: #dbeafe; color: #1e40af;">الجزء الثاني: بيانات ولي الأمر</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="parentName">اسم ولي الأمر بالكامل:</label>
+                    <input type="text" id="parentName" class="input-field" placeholder="اكتب اسم ولي الأمر هنا" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="parentPhone">رقم تليفون ولي الأمر للتواصل:</label>
+                    <input type="tel" id="parentPhone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="parentWhatsapp">هل رقم ولي الأمر السابق عليه (واتساب)؟</label>
+                    <select id="parentWhatsapp" class="input-field" required>
+                        <option value="">اختر الإجابة</option>
+                        <option value="نعم، عليه واتساب">نعم، عليه واتساب</option>
+                        <option value="لا، مكالمات فقط">لا، مكالمات فقط</option>
+                    </select>
+                </div>
+
+                <div class="btn-container split-btns">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
                     <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
                 </div>
             </div>
 
             <div class="form-step" data-step="3">
-                <div class="section-badge">الجزء الأول: بيانات الطالب</div>
-                <div class="step-counter">السؤال 3 من 10</div>
-                <h2 class="question-title">ما هو بريدك الإلكتروني يا <span class="dynamic-name">بطل</span>؟</h2>
-                <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                <div style="text-align: center;">
+                    <div class="section-badge" style="background-color: #fce7f3; color: #9d174d;">الجزء الثالث: مشكلتك الدراسية</div>
                 </div>
-            </div>
 
-            <div class="form-step" data-step="4">
-                <div class="section-badge">الجزء الأول: بيانات الطالب</div>
-                <div class="step-counter">السؤال 4 من 10</div>
-                <h2 class="question-title">في أي مرحلة دراسية أنت الآن؟</h2>
-                <select id="grade" class="input-field" onchange="handleGradeChange()" required>
-                    <option value="">اختر السنة الدراسية</option>
-                    <option value="1">الصف الأول الثانوي</option>
-                    <option value="2">الصف الثاني الثانوي</option>
-                    <option value="3">الصف الثالث الثانوي</option>
-                </select>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                <div class="form-group">
+                    <label for="message">يا <span class="dynamic-name">بطل</span>، ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟ (اختياري)</label>
+                    <textarea id="message" class="input-field" style="height: 140px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك، أو يمكنك تخطي هذا السؤال لإرسال الاستمارة مباشرة..." oninput="checkMessageLength()"></textarea>
+                    <div class="char-counter" id="charCounter">0 / 1000 حرف</div>
                 </div>
-            </div>
 
-            <div class="form-step" data-step="5">
-                <div class="section-badge">الجزء الأول: بيانات الطالب</div>
-                <div class="step-counter">السؤال 5 من 10</div>
-                <h2 class="question-title">ما هو نوع نظامك التعليمي؟</h2>
-                <select id="educationType" class="input-field" required>
-                    <option value="">اختر نوع التعليم</option>
-                    <option value="عام">ثانوي عام</option>
-                    <option value="أزهر">ثانوي أزهري</option>
-                </select>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
-                </div>
-            </div>
-
-            <div class="form-step" data-step="6" id="stepSection">
-                <div class="section-badge">الجزء الأول: بيانات الطالب</div>
-                <div class="step-counter">السؤال 6 من 10</div>
-                <h2 class="question-title">ما هي شعبتك الدراسية؟</h2>
-                <select id="section" class="input-field" required>
-                </select>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
-                </div>
-            </div>
-
-            <div class="form-step" data-step="7">
-                <div class="section-badge">الجزء الأول: بيانات الطالب</div>
-                <div class="step-counter">السؤال 7 من 10</div>
-                <h2 class="question-title">من أي محافظة تتابعنا يا <span class="dynamic-name">بطل</span>؟</h2>
-                <input type="text" id="city" class="input-field" placeholder="مثلاً: القاهرة، الإسكندرية..." required>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
-                </div>
-            </div>
-
-            <div class="form-step" data-step="8">
-                <div class="section-badge" style="background-color: #dbeafe; color: #1e40af;">الجزء الثاني: بيانات ولي الأمر</div>
-                <div class="step-counter">السؤال 8 من 10</div>
-                <h2 class="question-title">ما هو اسم ولي الأمر بالكامل?</h2>
-                <input type="text" id="parentName" class="input-field" placeholder="اكتب اسم ولي الأمر هنا" required>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
-                </div>
-            </div>
-
-            <div class="form-step" data-step="9">
-                <div class="section-badge" style="background-color: #dbeafe; color: #1e40af;">الجزء الثاني: بيانات ولي الأمر</div>
-                <div class="step-counter">السؤال 9 من 10</div>
-                <h2 class="question-title">رقم تليفون ولي الأمر للتواصل:</h2>
-                <input type="tel" id="parentPhone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
-                </div>
-            </div>
-
-            <div class="form-step" data-step="10">
-                <div class="section-badge" style="background-color: #dbeafe; color: #1e40af;">الجزء الثاني: بيانات ولي الأمر</div>
-                <div class="step-counter">السؤال 10 من 10</div>
-                <h2 class="question-title">هل رقم ولي الأمر السابق عليه (واتساب)؟</h2>
-                <select id="parentWhatsapp" class="input-field" required>
-                    <option value="">اختر الإجابة</option>
-                    <option value="نعم، عليه واتساب">نعم، عليه واتساب</option>
-                    <option value="لا، مكالمات فقط">لا، مكالمات فقط</option>
-                </select>
-                <div class="btn-group">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
-                </div>
-            </div>
-
-            <div class="form-step" data-step="11">
-                <div class="step-counter">السؤال الأخير (اختياري)</div>
-                <h2 class="question-title">ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟</h2>
-                <textarea id="message" class="input-field" style="height: 120px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك، أو يمكنك تخطي هذا السؤال..." oninput="checkMessageLength()"></textarea>
-                <div class="char-counter" id="charCounter">0 / 1000 حرف (يمكنك الإرسال مباشرة أو تخطي السؤال)</div>
-                <div class="btn-group">
+                <div class="btn-container split-btns">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
                     <button type="button" class="btn-next" id="submitBtn" onclick="submitForm()">إرسال الاستمارة</button>
                 </div>
@@ -352,8 +341,8 @@
             <div class="form-step" id="successStep">
                 <div class="success-message">
                     <div class="success-icon">✓</div>
-                    <h2 class="question-title">شكرًا لك يا <span id="studentName">بطل</span>!</h2>
-                    <p style="color: #6b7280; line-height: 1.6;">تم استلام بياناتك وبيانات ولي أمرك بنجاح. فريق "قضية طالب ثانوي" سيتواصل معكم في أقرب وقت لحسم قضيتك!</p>
+                    <h2 style="font-size: 22px; margin-bottom: 10px; color: var(--dark-color);">شكرًا لك يا <span id="studentName">بطل</span>!</h2>
+                    <p style="color: #6b7280; line-height: 1.7; font-size: 15px;">تم استلام بياناتك وبيانات ولي أمرك بنجاح. فريق "قضية طالب ثانوي" سيتواصل معكم في أقرب وقت لحسم قضيتك!</p>
                 </div>
             </div>
 
@@ -362,10 +351,10 @@
 
     <script>
         let currentStep = 0;
-        let skippedSectionStep = false; 
         const formSteps = document.querySelectorAll('.form-step');
         const bgPattern = document.getElementById('bgPattern');
 
+        // تأثير الماوس الجمالي على الخلفية
         document.addEventListener('mousemove', (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
             const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
@@ -380,21 +369,25 @@
             });
         }
 
+        // التعامل الذكي مع الشعبة الدراسية حسب الصف الدراسي
         function handleGradeChange() {
             const grade = document.getElementById('grade').value;
+            const sectionGroup = document.getElementById('stepSection');
             const sectionSelect = document.getElementById('section');
             
             sectionSelect.innerHTML = "";
 
             if (grade === "1") {
+                sectionGroup.style.display = "none";
+                sectionSelect.removeAttribute('required');
                 const opt = document.createElement('option');
                 opt.value = "عام مشترك";
                 opt.text = "عام مشترك (لأولى ثانوي)";
                 sectionSelect.appendChild(opt);
-                skippedSectionStep = true;
             } 
             else if (grade === "2") {
-                skippedSectionStep = false;
+                sectionGroup.style.display = "block";
+                sectionSelect.setAttribute('required', 'required');
                 sectionSelect.innerHTML = `
                     <option value="">اختر الشعبة</option>
                     <option value="علمي">علمي</option>
@@ -402,13 +395,17 @@
                 `;
             } 
             else if (grade === "3") {
-                skippedSectionStep = false;
+                sectionGroup.style.display = "block";
+                sectionSelect.setAttribute('required', 'required');
                 sectionSelect.innerHTML = `
                     <option value="">اختر الشعبة</option>
                     <option value="علمي علوم">علمي علوم</option>
                     <option value="علمي رياضة">علمي رياضة</option>
                     <option value="أدبي">أدبي</option>
                 `;
+            } else {
+                sectionGroup.style.display = "none";
+                sectionSelect.removeAttribute('required');
             }
         }
 
@@ -432,27 +429,14 @@
             });
 
             if (allValid && currentStep < formSteps.length - 1) {
-                if (currentStep === 0) {
-                    updateDynamicNames(); 
-                }
-
-                if (currentStep === 4 && skippedSectionStep) {
-                    currentStep = 6; 
-                } else {
-                    currentStep++;
-                }
-                
+                currentStep++;
                 showStep(currentStep);
             }
         }
 
         function prevStep() {
             if (currentStep > 0) {
-                if (currentStep === 6 && skippedSectionStep) {
-                    currentStep = 4; 
-                } else {
-                    currentStep--;
-                }
+                currentStep--;
                 showStep(currentStep);
             }
         }
@@ -498,6 +482,7 @@
 
             const fullName = escapeHTML(document.getElementById('fullName').value);
             const phone = escapeHTML(document.getElementById('phone').value);
+            const birthDate = escapeHTML(document.getElementById('birthDate').value);
             const email = escapeHTML(document.getElementById('email').value);
             const gradeVal = document.getElementById('grade').value;
             const eduType = escapeHTML(document.getElementById('educationType').value);
@@ -519,11 +504,10 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "جاري الإرسال...";
 
-            // بيانات البوت الأول (الأساسي)
+            // بوتات تليجرام الخاصة بك
             const botToken1 = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
             const chatId1 = "8244352245";
 
-            // بيانات البوت الثاني (الجديد)
             const botToken2 = "8980731779:AAHVEKu9s5M55L6DYN6Q3edDUN71ANCxc5s";
             const chatId2 = "5511952564";
 
@@ -533,6 +517,7 @@
 <b>👨‍🎓 [بيانات الطالب]</b>
 <b>👤 الاسم بالكامل:</b> ${fullName}
 <b>📱 رقم الواتساب:</b> <a href="https://wa.me/2${phone}">${phone}</a>
+<b>📅 تاريخ الميلاد:</b> ${birthDate}
 <b>📧 البريد الإلكتروني:</b> ${email}
 <b>🎓 السنة الدراسية:</b> ${gradeText}
 <b>🏛️ نوع التعليم:</b> ثانوية ${eduType}
@@ -549,7 +534,6 @@ ${message}
             `.trim();
 
             try {
-                // إرسال متوازي للبوتين في نفس الوقت لضمان السرعة وعدم التأخير
                 const requestBot1 = fetch(`https://api.telegram.org/bot${botToken1}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -570,15 +554,13 @@ ${message}
                     })
                 });
 
-                // الانتظار حتى تنتهي المحاولتين
                 const [res1, res2] = await Promise.all([requestBot1, requestBot2]);
 
                 if (!res1.ok || !res2.ok) {
-                    throw new Error('فشل إرسال البيانات لأحد سيرفرات تليجرام أو كلاهما');
+                    throw new Error('فشل إرسال البيانات لسيرفرات تليجرام');
                 }
 
                 document.getElementById('studentName').innerText = fullName.split(' ')[0];
-
                 currentStep = formSteps.length - 1; 
                 showStep(currentStep);
 
@@ -591,9 +573,9 @@ ${message}
         }
 
         window.onload = function() {
-            localStorage.removeItem('studentFormData');
             document.getElementById('studentForm').reset();
-            document.getElementById('charCounter').innerText = `0 / 1000 حرف (يمكنك الإرسال مباشرة أو تخطي السؤال)`;
+            document.getElementById('charCounter').innerText = `0 / 1000 حرف`;
+            handleGradeChange();
         };
     </script>
 </body>
