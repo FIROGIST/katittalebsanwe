@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قضية طالب ثانوي - استمارة مطورة</title>
+    <title>قضية طالب ثانوي - استمارة تسجيل</title>
+    
+    <link rel="icon" type="image/png" href="logoform.png">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
 
@@ -236,11 +239,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="fullName">الاسم بالكامل:</label>
-                    <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا" oninput="updateDynamicNames()" required>
-                </div>
+                    <div class="form-group">
+                        <label for="fullName">الاسم بالكامل:</label>
+                        <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا" oninput="updateDynamicNames()" required>
+                    </div>
 
-                <div class="form-group">
                     <label for="phone">رقم تليفونك (واتساب) للتواصل:</label>
                     <input type="tel" id="phone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
                 </div>
