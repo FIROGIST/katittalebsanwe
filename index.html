@@ -239,11 +239,16 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="form-group">
-                        <label for="fullName">الاسم بالكامل:</label>
-                        <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا" oninput="updateDynamicNames()" required>
-                    </div>
+                    <label for="fullName">الاسم بالكامل:</label>
+                    <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا" oninput="updateDynamicNames()" required>
+                </div>
 
+                <div class="form-group">
+                    <label for="city">المحافظة:</label>
+                    <input type="text" id="city" class="input-field" placeholder="مثلاً: الإسكندرية، القاهرة..." required>
+                </div>
+
+                <div class="form-group">
                     <label for="phone">رقم تليفونك (واتساب) للتواصل:</label>
                     <input type="tel" id="phone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
                 </div>
@@ -284,9 +289,21 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="city">المحافظة:</label>
-                    <input type="text" id="city" class="input-field" placeholder="مثلاً: الإسكندرية، القاهرة..." required>
+                <div id="seniorThreeQuestions" style="display: none;">
+                    <div class="form-group">
+                        <label for="lessonSystem">نظام دروسك إيه؟</label>
+                        <select id="lessonSystem" class="input-field">
+                            <option value="">اختر نظام دروسك</option>
+                            <option value="سنتر كلو">سنتر كلو</option>
+                            <option value="اونلاين وسنتر">اونلاين وسنتر</option>
+                            <option value="اونلاين فقط">اونلاين فقط</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="onlineLessonsCount">عدد الدروس الاونلاين الي بتاخده قد إيه؟</label>
+                        <input type="text" id="onlineLessonsCount" class="input-field" placeholder="اكتب عدد الدروس أو تفاصيلها هنا">
+                    </div>
                 </div>
 
                 <div class="btn-container single-btn">
@@ -372,32 +389,19 @@
             });
         }
 
-        // التعامل الذكي مع الشعبة الدراسية حسب الصف الدراسي
+        // التعامل الذكي مع الشعبة والأسئلة الخاصة بتالتة ثانوي
         function handleGradeChange() {
             const grade = document.getElementById('grade').value;
             const sectionGroup = document.getElementById('stepSection');
             const sectionSelect = document.getElementById('section');
+            const seniorThreeGroup = document.getElementById('seniorThreeQuestions');
+            const lessonSystem = document.getElementById('lessonSystem');
+            const onlineLessonsCount = document.getElementById('onlineLessonsCount');
             
             sectionSelect.innerHTML = "";
 
-            if (grade === "1") {
-                sectionGroup.style.display = "none";
-                sectionSelect.removeAttribute('required');
-                const opt = document.createElement('option');
-                opt.value = "عام مشترك";
-                opt.text = "عام مشترك (لأولى ثانوي)";
-                sectionSelect.appendChild(opt);
-            } 
-            else if (grade === "2") {
-                sectionGroup.style.display = "block";
-                sectionSelect.setAttribute('required', 'required');
-                sectionSelect.innerHTML = `
-                    <option value="">اختر الشعبة</option>
-                    <option value="علمي">علمي</option>
-                    <option value="أدبي">أدبي</option>
-                `;
-            } 
-            else if (grade === "3") {
+            if (grade === "3") {
+                // تالتة ثانوي: تظهر الشعب والأسئلة الإضافية وتصبح مطلوبة
                 sectionGroup.style.display = "block";
                 sectionSelect.setAttribute('required', 'required');
                 sectionSelect.innerHTML = `
@@ -406,9 +410,47 @@
                     <option value="علمي رياضة">علمي رياضة</option>
                     <option value="أدبي">أدبي</option>
                 `;
+                seniorThreeGroup.style.display = "block";
+                lessonSystem.setAttribute('required', 'required');
+                onlineLessonsCount.setAttribute('required', 'required');
+            } 
+            else if (grade === "2") {
+                // تانية ثانوي: تظهر الشعب فقط وتختفي أسئلة تالتة ثانوي
+                sectionGroup.style.display = "block";
+                sectionSelect.setAttribute('required', 'required');
+                sectionSelect.innerHTML = `
+                    <option value="">اختر الشعبة</option>
+                    <option value="علمي">علمي</option>
+                    <option value="أدبي">أدبي</option>
+                `;
+                seniorThreeGroup.style.display = "none";
+                lessonSystem.removeAttribute('required');
+                onlineLessonsCount.removeAttribute('required');
+                lessonSystem.value = "";
+                onlineLessonsCount.value = "";
+            } 
+            else if (grade === "1") {
+                // أولى ثانوي: تختفي الشعب والأسئلة الإضافية
+                sectionGroup.style.display = "none";
+                sectionSelect.removeAttribute('required');
+                const opt = document.createElement('option');
+                opt.value = "عام مشترك";
+                opt.text = "عام مشترك (لأولى ثانوي)";
+                sectionSelect.appendChild(opt);
+                
+                seniorThreeGroup.style.display = "none";
+                lessonSystem.removeAttribute('required');
+                onlineLessonsCount.removeAttribute('required');
+                lessonSystem.value = "";
+                onlineLessonsCount.value = "";
             } else {
                 sectionGroup.style.display = "none";
                 sectionSelect.removeAttribute('required');
+                seniorThreeGroup.style.display = "none";
+                lessonSystem.removeAttribute('required');
+                onlineLessonsCount.removeAttribute('required');
+                lessonSystem.value = "";
+                onlineLessonsCount.value = "";
             }
         }
 
@@ -474,7 +516,7 @@
             return text
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
+                .replace(/>/g, "&gt bridge;");
         }
 
         async function submitForm() {
@@ -492,6 +534,10 @@
             const section = escapeHTML(document.getElementById('section').value);
             const city = escapeHTML(document.getElementById('city').value);
             
+            // جلب قيم أسئلة تالتة ثانوي
+            const lessonSystemVal = escapeHTML(document.getElementById('lessonSystem').value);
+            const onlineLessonsCountVal = escapeHTML(document.getElementById('onlineLessonsCount').value);
+            
             const parentName = escapeHTML(document.getElementById('parentName').value);
             const parentPhone = escapeHTML(document.getElementById('parentPhone').value);
             const parentWhatsapp = escapeHTML(document.getElementById('parentWhatsapp').value);
@@ -504,10 +550,19 @@
             else if (gradeVal === "2") gradeText = "الصف الثاني الثانوي";
             else if (gradeVal === "3") gradeText = "الصف الثالث الثانوي";
 
+            // صياغة تفاصيل أسئلة تالتة ثانوي داخل رسالة تليجرام ديناميكياً
+            let seniorThreeTelegramDetails = "";
+            if (gradeVal === "3") {
+                seniorThreeTelegramDetails = `
+<b>📚 [تفاصيل نظام الدراسة لـ 3ث]</b>
+<b>⚙️ نظام الدروس:</b> ${lessonSystemVal}
+<b>💻 عدد الدروس الأونلاين:</b> ${onlineLessonsCountVal}
+--------------------------------------`;
+            }
+
             submitBtn.disabled = true;
             submitBtn.innerText = "جاري الإرسال...";
 
-            // بوتات تليجرام الخاصة بك
             const botToken1 = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
             const chatId1 = "8244352245";
 
@@ -519,13 +574,14 @@
 --------------------------------------
 <b>👨‍🎓 [بيانات الطالب]</b>
 <b>👤 الاسم بالكامل:</b> ${fullName}
+<b>📍 المحافظة:</b> ${city}
 <b>📱 رقم الواتساب:</b> <a href="https://wa.me/2${phone}">${phone}</a>
 <b>📅 تاريخ الميلاد:</b> ${birthDate}
 <b>📧 البريد الإلكتروني:</b> ${email}
 <b>🎓 السنة الدراسية:</b> ${gradeText}
 <b>🏛️ نوع التعليم:</b> ثانوية ${eduType}
 <b>🧬 الشعبة:</b> ${section}
-<b>📍 المحافظة:</b> ${city}
+--------------------------------------${seniorThreeTelegramDetails}
 
 <b>👨‍👩‍👦 [بيانات ولي الأمر]</b>
 <b>👤 اسم ولي الأمر:</b> ${parentName}
