@@ -145,6 +145,20 @@
             box-shadow: 0 4px 12px rgba(245, 196, 0, 0.15);
         }
 
+        /* تنسيق المربعات الثلاثة لتاريخ الميلاد مثل جوجل */
+        .date-triple-container {
+            display: flex;
+            gap: 12px;
+            flex-direction: row-reverse; /* لضمان الترتيب من اليمين لليوم، ثم الشهر، ثم السنة */
+        }
+
+        .date-triple-container select {
+            flex: 1;
+            text-align: center;
+            padding: 14px 10px;
+            font-weight: 600;
+        }
+
         /* عداد الحروف لخانة textarea */
         .char-counter {
             text-align: left;
@@ -254,8 +268,35 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="birthDate">تاريخ الميلاد:</label>
-                    <input type="date" id="birthDate" class="input-field" required>
+                    <label>تاريخ الميلاد:</label>
+                    <div class="date-triple-container">
+                        <select id="birthDay" class="input-field" required>
+                            <option value="">اليوم</option>
+                            <script>
+                                for(let i=1; i<=31; i++) {
+                                    document.write(`<option value="${i}">${i}</option>`);
+                                }
+                            </script>
+                        </select>
+                        <select id="birthMonth" class="input-field" required>
+                            <option value="">الشهر</option>
+                            <script>
+                                const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+                                months.forEach((m, index) => {
+                                    document.write(`<option value="${index + 1}">${m}</option>`);
+                                });
+                            </script>
+                        </select>
+                        <select id="birthYear" class="input-field" required>
+                            <option value="">السنة</option>
+                            <script>
+                                const currentYear = new Date().getFullYear();
+                                for(let i = currentYear - 12; i >= currentYear - 25; i--) {
+                                    document.write(`<option value="${i}">${i}</option>`);
+                                }
+                            </script>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -322,7 +363,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="parentPhone">رقم تليفون ولي الأمر للتواصل:</label>
+                    <label for="parentPhone"> تلفون ولي الامر للتواصل يكون عليه واتس:</label>
                     <input type="tel" id="parentPhone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
                 </div>
 
@@ -401,7 +442,6 @@
             sectionSelect.innerHTML = "";
 
             if (grade === "3") {
-                // تالتة ثانوي: تظهر الشعب والأسئلة الإضافية وتصبح مطلوبة
                 sectionGroup.style.display = "block";
                 sectionSelect.setAttribute('required', 'required');
                 sectionSelect.innerHTML = `
@@ -415,7 +455,6 @@
                 onlineLessonsCount.setAttribute('required', 'required');
             } 
             else if (grade === "2") {
-                // تانية ثانوي: تظهر الشعب فقط وتختفي أسئلة تالتة ثانوي
                 sectionGroup.style.display = "block";
                 sectionSelect.setAttribute('required', 'required');
                 sectionSelect.innerHTML = `
@@ -430,7 +469,6 @@
                 onlineLessonsCount.value = "";
             } 
             else if (grade === "1") {
-                // أولى ثانوي: تختفي الشعب والأسئلة الإضافية
                 sectionGroup.style.display = "none";
                 sectionSelect.removeAttribute('required');
                 const opt = document.createElement('option');
@@ -516,7 +554,7 @@
             return text
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt bridge;");
+                .replace(/>/g, "&gt;");
         }
 
         async function submitForm() {
@@ -527,14 +565,19 @@
 
             const fullName = escapeHTML(document.getElementById('fullName').value);
             const phone = escapeHTML(document.getElementById('phone').value);
-            const birthDate = escapeHTML(document.getElementById('birthDate').value);
+            
+            // تجميع تاريخ الميلاد من المربعات الثلاثة
+            const bDay = document.getElementById('birthDay').value;
+            const bMonth = document.getElementById('birthMonth').value;
+            const bYear = document.getElementById('birthYear').value;
+            const birthDate = (bYear && bMonth && bDay) ? `${bYear}-${bMonth.padStart(2, '0')}-${bDay.padStart(2, '0')}` : "";
+            
             const email = escapeHTML(document.getElementById('email').value);
             const gradeVal = document.getElementById('grade').value;
             const eduType = escapeHTML(document.getElementById('educationType').value);
             const section = escapeHTML(document.getElementById('section').value);
             const city = escapeHTML(document.getElementById('city').value);
             
-            // جلب قيم أسئلة تالتة ثانوي
             const lessonSystemVal = escapeHTML(document.getElementById('lessonSystem').value);
             const onlineLessonsCountVal = escapeHTML(document.getElementById('onlineLessonsCount').value);
             
@@ -550,7 +593,6 @@
             else if (gradeVal === "2") gradeText = "الصف الثاني الثانوي";
             else if (gradeVal === "3") gradeText = "الصف الثالث الثانوي";
 
-            // صياغة تفاصيل أسئلة تالتة ثانوي داخل رسالة تليجرام ديناميكياً
             let seniorThreeTelegramDetails = "";
             if (gradeVal === "3") {
                 seniorThreeTelegramDetails = `
