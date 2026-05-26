@@ -87,6 +87,29 @@
             height: auto;
         }
 
+        /* ===== الآية القرآنية الجديدة ===== */
+        .quran-verse {
+            text-align: center;
+            color: black;
+            font-weight: bold;
+            font-size: 1.4rem;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #fff 100%);
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            width: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .quran-verse-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
         .section-badge {
             display: inline-block;
             padding: 6px 16px;
@@ -291,7 +314,6 @@
             text-align: right;
         }
         
-        /* ===== تنسيق التنويه الجديد في الخطوة 4 ===== */
         .notice-box {
             background-color: #e0f2fe;
             border-right: 4px solid #0284c7;
@@ -453,7 +475,6 @@
             white-space: nowrap;
         }
 
-        /* مؤشر تحميل */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -503,6 +524,10 @@
                 width: 24px;
                 height: 24px;
             }
+            .quran-verse {
+                font-size: 1.1rem;
+                padding: 8px 12px;
+            }
         }
     </style>
 </head>
@@ -513,6 +538,12 @@
     <div class="form-container">
         <div class="brand-header">
             <img src="logoform.png" alt="قضية طالب ثانوي" class="brand-logo">
+            <!-- ✅ الآية القرآنية الجديدة -->
+            <div class="quran-verse-wrapper">
+                <div class="quran-verse">
+                    ﴿ وَتَوَكَّلْ عَلَى اللَّهِ وَكَفَىٰ بِاللَّهِ وَكِيلًا ﴾
+                </div>
+            </div>
         </div>
 
         <form id="studentForm" onsubmit="event.preventDefault();">
@@ -672,13 +703,12 @@
                 </div>
             </div>
 
-            <!-- الخطوة 4: بيانات المنصات (تم إضافة التنويه) -->
+            <!-- الخطوة 4: بيانات المنصات -->
             <div class="form-step" data-step="4" id="stepPlatforms">
                 <div style="text-align: center;">
                     <div class="section-badge" style="background-color: #e0f2fe; color: #0369a1;">الجزء الرابع: بيانات المنصات التعليمية الأونلاين</div>
                 </div>
 
-                <!-- ✅ التنويه الجديد -->
                 <div class="notice-box">
                     <strong>📌 تنويه هام:</strong><br>
                     يتم طلب بيانات حساباتك على المنصات التعليمية الإلكترونية لغرض المتابعة الدورية والتأكد من إنجازك للمهام المتفق عليها مع فريق المتابعة.<br><br>
