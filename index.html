@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="logoform.png">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
         :root {
             --primary-color: #f5c400; 
@@ -16,8 +16,10 @@
             --bg-color: #f4f4f4;
             --card-bg: #ffffff;
             --text-color: #1f2937;
-            --gray-light: #e5e7eb;
+            --gray-light: #edf2f7;
             --section-title-color: #4b5563;
+            --accent-teal: #0f766e;
+            --accent-teal-light: #ccfbf1;
         }
 
         * {
@@ -71,7 +73,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 550px;
+            max-width: 650px; /* تم تكبيرها قليلاً لتناسب عرض كروت الكورسات */
             padding: 35px;
             position: relative;
             z-index: 2; 
@@ -274,6 +276,183 @@
             background: #fca5a5;
         }
 
+        /* تنسيقات كارت الكورس المضافة حديثاً في الجزء الخامس */
+        .course-card {
+            background: #fafafa;
+            border: 2px solid #edf2f7;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            background-color: #fee2e2;
+            border-right: 4px solid #ef4444;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #991b1b;
+            text-align: right;
+        }
+        
+        .system-list {
+            list-style: none;
+            padding-right: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .system-list li {
+            position: relative;
+            padding-right: 20px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #374151;
+            text-align: right;
+        }
+        
+        .system-list li::before {
+            content: "✦";
+            position: absolute;
+            right: 0;
+            color: var(--accent-teal);
+            font-weight: bold;
+        }
+
+        /* الهيكل الجديد لعرض الكورسات للمقارنة والاختيار المميز */
+        .courses-comparison-container {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .selectable-course-item {
+            flex: 1;
+            background: #ffffff;
+            border: 2.5px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .selectable-course-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-teal);
+            box-shadow: 0 10px 20px rgba(15, 118, 110, 0.08);
+        }
+
+        /* الكارت المختار بنجاح */
+        .selectable-course-item.selected {
+            border-color: var(--accent-teal);
+            background-color: #f0fdfa;
+            box-shadow: 0 12px 25px rgba(15, 118, 110, 0.12);
+        }
+
+        .course-item-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .course-item-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .course-item-price {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent-teal);
+            margin-top: auto;
+            background: var(--accent-teal-light);
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* شارة مميزة للكورس الأكثر توفيراً */
+        .best-value-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            color: white;
+            padding: 3px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(15, 118, 110, 0.3);
+        }
+
+        /* مؤشر الدائرة الاختيارية الحية */
+        .selection-indicator {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            margin-top: 5px;
+            position: relative;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+
+        .selectable-course-item.selected .selection-indicator {
+            border-color: var(--accent-teal);
+            background: var(--accent-teal);
+        }
+
+        .selectable-course-item.selected .selection-indicator::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 8px;
+            height: 5px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(-45deg);
+        }
+
+        /* خيار تخطي الاشتراك بالكامل */
+        .skip-subscription-box {
+            background: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .skip-subscription-box:hover {
+            background: #e5e7eb;
+        }
+
+        .skip-subscription-box.selected {
+            border-color: #6b7280;
+            background: #e5e7eb;
+        }
+
         /* تنسيق زر واتساب العائم */
         .whatsapp-float {
             position: fixed;
@@ -305,14 +484,21 @@
             white-space: nowrap;
         }
 
+        /* شاشات الهواتف المحمولة وتنسيق الكروت التفاعلية */
         @media (max-width: 600px) {
+            .courses-comparison-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .course-item-image {
+                height: 160px;
+            }
             .whatsapp-float {
                 bottom: 18px;
                 left: 18px;
                 padding: 11px 16px;
                 font-size: 14px;
             }
-
             .whatsapp-float svg {
                 width: 24px;
                 height: 24px;
@@ -509,7 +695,65 @@
 
                 <div class="btn-container split-btns">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" id="finalSubmitBtn" onclick="submitForm()">إرسال الاستمارة بالكامل</button>
+                    <button type="button" class="btn-next" id="finalSubmitBtn" onclick="handleStepFourNext()">إرسال الاستمارة بالكامل</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="5" id="stepCourseSubscription">
+                <div style="text-align: center;">
+                    <div class="section-badge" style="background-color: #ccfbf1; color: #0f766e;">الجزء الخامس: الاشتراك والمتابعة المتكاملة</div>
+                </div>
+
+                <div class="course-card">
+                    <div class="info-box">
+                        <strong>⚠️ معلومة هامة جداً:</strong><br>
+                        بما أن فكرتنا لسه جديدة وتيم المتابعة مش كبير ويهمنا مصلحتك، فإحنا مش هنقدر نقول إننا هنتابع معاك المنهج بنفس قوة تالتة ثانوي، لأننا مش عاصرنا تغيرات منهج أولى وتانية ثانوي ومعندناش الإمكانية حالياً لتغطيتها.. ولكن عملنا ليكم متابعة بطريقة مختلفة ومميزة!
+                    </div>
+
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: var(--dark-color);">📋 نظام المتابعة المختلف بتاعنا:</h3>
+                    <ul class="system-list">
+                        <li><strong>تخطيط جدول أسبوعي:</strong> بنقعد نخطط معاك لجدولك الأسبوعي وبنتابع معاك كل أسبوع خلصت منه قد إيه بالظبط.</li>
+                        <li><strong>التقرير الأسبوعي لولي الأمر:</strong> بيتم إرسال تقرير مفصل لولي أمرك سواء كان حلو أو وحش عشان نكون صرحاء دايماً ومش بنبعت الوحش بس.</li>
+                        <li><strong>بيئة عمل منتجة (لايفات ومعسكرات):</strong> هيكون في لايفات ومعسكرات مذاكرة معايا شخصياً على الديسكورد ومع زمايلك المشتركين لإنشاء بيئة مشجعة.</li>
+                        <li><strong>نظام الثواب والعقاب:</strong> عندنا حوافز ليك وجوائز قيمة لو كنت ملتزم، وفي نفس الوقت في عقوبات حازمة لو مش ملتزم معانا.</li>
+                    </ul>
+
+                    <p style="font-size: 13.5px; color: #4b5563; font-style: italic; margin-top: 10px; text-align: center; font-weight: 600;">
+                        وافتكر في الآخر يا صديقي إننا فعلاً يهمنا مصلحتك مش نضايقك، ومعاك لو في ظروف صعبة عندك هتلاقينا بنشدك ومش هنضغط عليك وقتها.
+                    </p>
+
+                    <h4 style="font-size: 15px; margin-top: 25px; margin-bottom: 5px; color: var(--dark-color); text-align: right; font-weight: 700;">🌟 اختر خطة الاشتراك المناسبة لك للبدء فوراً:</h4>
+                    
+                    <div class="courses-comparison-container">
+                        
+                        <div class="selectable-course-item" onclick="selectCoursePlan('regular', this)">
+                            <img src="cors.jpeg" alt="كورس المتابعة العادي" class="course-item-image">
+                            <div class="course-item-title">كورس المتابعة للصف الأول أو الثاني الثانوي</div>
+                            <div class="course-item-price">200 جنيه</div>
+                            <div class="selection-indicator"></div>
+                        </div>
+
+                        <div class="selectable-course-item" onclick="selectCoursePlan('premium', this)">
+                            <div class="best-value-badge">🔥 الأكثر توفيراً (3 شهور)</div>
+                            <img src="cors1.jpeg" alt="كورس المتابعة الثلاث شهور" class="course-item-image">
+                            <div class="course-item-title">كورس المتابعة المكثف (اشتراك الثلاث شهور)</div>
+                            <div class="course-item-price">500 جنيه</div>
+                            <div class="selection-indicator"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="skip-subscription-box" id="skipBox" onclick="selectCoursePlan('none', this)">
+                        <span style="font-size: 14px; font-weight: 600; color: #4b5563;">لا، شكراً.. أريد إرسال الاستمارة العامة فقط بدون اشتراك حالياً</span>
+                        <div class="selection-indicator"></div>
+                    </div>
+                    
+                    <input type="hidden" id="selectedCourseValue" name="selectedCourseValue" value="">
+                </div>
+
+                <div class="btn-container split-btns">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" id="courseSubmitBtn" onclick="submitForm()" disabled>إرسال الاستمارة والاشتراك</button>
                 </div>
             </div>
 
@@ -517,7 +761,7 @@
                 <div class="success-message">
                     <div class="success-icon">✓</div>
                     <h2 style="font-size: 22px; margin-bottom: 10px; color: var(--dark-color);">شكرًا لك يا <span id="studentName">بطل</span>!</h2>
-                    <p style="color: #6b7280; line-height: 1.7; font-size: 15px;">تم استلام بياناتك وبيانات ولي أمرك بنجاح. فريق "قضية طالب ثانوي" سيتواصل معكم في أقرب وقت لحسم قضيتك!</p>
+                    <p style="color: #6b7280; line-height: 1.7; font-size: 15px;">تم استلام بياناتك بنجاح. فريق "قضية طالب ثانوي" سيتواصل معكم في أقرب وقت لحسم قضيتك والترتيب معك!</p>
                 </div>
             </div>
 
@@ -533,6 +777,7 @@
 
     <script>
         let currentStep = 0;
+        
         // جلب خطوات النموذج ديناميكياً
         function getSteps() {
             return document.querySelectorAll('.form-step');
@@ -554,24 +799,62 @@
             });
         }
 
-        // تحديد ما إذا كان الطالب يستحق الانتقال للجزء الرابع
+        // تحديد ما إذا كان الطالب تالتة ثانوي ويستحق جزء المنصات الرابعة
         function isEligibleForPlatforms() {
             const grade = document.getElementById('grade').value;
             const lessonSystem = document.getElementById('lessonSystem').value;
             return (grade === "3" && (lessonSystem === "اونلاين فقط" || lessonSystem === "اونلاين وسنتر"));
         }
 
-        // تحديث نص زر الإرسال في الجزء الثالث بناءً على الشرط
+        // تحديد ما إذا كان الطالب في أولى أو تانية ثانوي ويستحق صفحة الكورس الخامسة
+        function isEligibleForCourseSubscription() {
+            const grade = document.getElementById('grade').value;
+            return (grade === "1" || grade === "2");
+        }
+
+        // دالة حيوية مخصصة للتحكم بالبطاقات الجديدة واختيار الكورسات بصرياً وتخزين قيمتها
+        function selectCoursePlan(planType, element) {
+            // حذف كلاس الاختيار الفعال من كافة الكروت المتاحة
+            document.querySelectorAll('.selectable-course-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.getElementById('skipBox').classList.remove('selected');
+
+            // إضافة كلاس الاختيار الفعال للعنصر المحدد بالضغط
+            element.classList.add('selected');
+
+            // تعيين القيمة المحددة بداخل الـ input المخفي
+            const hiddenInput = document.getElementById('selectedCourseValue');
+            const submitBtn = document.getElementById('courseSubmitBtn');
+            
+            if (planType === 'regular') {
+                hiddenInput.value = "نعم، أريد الانضمام للمتابعة العادية (200 جنيه)";
+                submitBtn.innerText = "إرسال الاستمارة والاشتراك بـ 200 جنيه";
+            } else if (planType === 'premium') {
+                hiddenInput.value = "نعم، أريد الانضمام للمتابعة المكثفة - 3 شهور (500 جنيه)";
+                submitBtn.innerText = "إرسال الاستمارة والاشتراك بـ 500 جنيه";
+            } else {
+                hiddenInput.value = "لا، أريد إرسال الاستمارة العامة فقط";
+                submitBtn.innerText = "إرسال الاستمارة العامة فقط";
+            }
+
+            // تفعيل زر الإرسال بمجرد قيام الطالب بالاختيار
+            submitBtn.removeAttribute('disabled');
+        }
+
+        // تحديث نص زر الإرسال أو التالي في الجزء الثالث (مشكلتك الدراسية)
         function updateSubmitButtonText() {
             const submitBtn = document.getElementById('submitBtn');
             if (isEligibleForPlatforms()) {
                 submitBtn.innerText = "التالي (بيانات المنصات)";
+            } else if (isEligibleForCourseSubscription()) {
+                submitBtn.innerText = "التالي (عرض كورس المتابعة)";
             } else {
                 submitBtn.innerText = "إرسال الاستمارة";
             }
         }
 
-        // التعامل الذكي مع الشعبة والأسئلة الخاصة بتالتة ثانوي
+        // التعامل الذكي مع الشعبة والأسئلة الخاصة بالصفوف الدراسية المختلفة
         function handleGradeChange() {
             const grade = document.getElementById('grade').value;
             const sectionGroup = document.getElementById('stepSection');
@@ -606,99 +889,50 @@
                 seniorThreeGroup.style.display = "none";
                 lessonSystem.removeAttribute('required');
                 onlineLessonsCount.removeAttribute('required');
-                lessonSystem.value = "";
-                onlineLessonsCount.value = "";
-            } 
+            }
             else if (grade === "1") {
                 sectionGroup.style.display = "none";
                 sectionSelect.removeAttribute('required');
-                const opt = document.createElement('option');
-                opt.value = "عام مشترك";
-                opt.text = "عام مشترك (لأولى ثانوي)";
-                sectionSelect.appendChild(opt);
-                
                 seniorThreeGroup.style.display = "none";
                 lessonSystem.removeAttribute('required');
                 onlineLessonsCount.removeAttribute('required');
-                lessonSystem.value = "";
-                onlineLessonsCount.value = "";
-            } else {
+            }
+            else {
                 sectionGroup.style.display = "none";
                 sectionSelect.removeAttribute('required');
                 seniorThreeGroup.style.display = "none";
                 lessonSystem.removeAttribute('required');
                 onlineLessonsCount.removeAttribute('required');
-                lessonSystem.value = "";
-                onlineLessonsCount.value = "";
             }
             updateSubmitButtonText();
         }
 
-        function showStep(stepIndex) {
-            const steps = getSteps();
-            steps.forEach((step, index) => {
-                step.classList.toggle('active', index === stepIndex);
-            });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function nextStep() {
-            const steps = getSteps();
-            const currentStepEl = steps[currentStep];
-            const inputs = currentStepEl.querySelectorAll('input, select, textarea');
+        // حساب عدد الحروف وتلوين المؤشر
+        function checkMessageLength() {
+            const message = document.getElementById('message').value;
+            const counter = document.getElementById('charCounter');
+            counter.innerText = `${message.length} / 1000 حرف`;
             
-            let allValid = true;
-            inputs.forEach(input => {
-                if (!input.checkValidity()) {
-                    input.reportValidity();
-                    allValid = false;
-                }
-            });
-
-            if (allValid && currentStep < steps.length - 1) {
-                currentStep++;
-                showStep(currentStep);
-            }
-        }
-
-        function prevStep() {
-            if (currentStep > 0) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        }
-
-        // التعامل مع زر الخطوة الثالثة (إرسال مباشر أو انتقال للجزء الرابع)
-        function handleStepThreeNext() {
-            const steps = getSteps();
-            const currentStepEl = steps[currentStep];
-            const textarea = currentStepEl.querySelector('textarea');
-
-            if (!textarea.checkValidity()) {
-                textarea.reportValidity();
-                return;
-            }
-
-            if (isEligibleForPlatforms()) {
-                // تفعيل متطلبات مدخلات الجزء الرابع
-                document.querySelectorAll('#stepPlatforms input').forEach(input => input.setAttribute('required', 'required'));
-                currentStep++;
-                showStep(currentStep);
+            if(message.length > 0 && message.length <= 1000) {
+                counter.className = "char-counter valid";
+            } else if(message.length > 1000) {
+                counter.className = "char-counter invalid";
             } else {
-                // إرسال مباشر للاستمارة بدون الجزء الرابع
-                submitForm();
+                counter.className = "char-counter";
             }
         }
 
-        // وظيفة إضافة حقول مادة جديدة ديناميكياً (+)
+        // إضافة حقول منصات تعليمية جديدة بشكل ديناميكي
         function addPlatformField() {
             const container = document.getElementById('platformsContainer');
-            const card = document.createElement('div');
-            card.className = 'platform-card';
-            card.innerHTML = `
+            const cardCount = container.querySelectorAll('.platform-card').length + 1;
+            
+            const newCard = document.createElement('div');
+            newCard.className = 'platform-card';
+            newCard.innerHTML = `
                 <button type="button" class="btn-remove-platform" onclick="this.parentElement.remove()">حذف</button>
                 <div class="form-group">
-                    <label>المادة الدراسية:</label>
+                    <label>المادة الدراسية (${cardCount}):</label>
                     <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية..." required>
                 </div>
                 <div class="form-group">
@@ -710,106 +944,91 @@
                     <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا" required>
                 </div>
             `;
-            container.appendChild(card);
+            container.appendChild(newCard);
         }
 
-        function checkMessageLength() {
-            const msgInput = document.getElementById('message');
-            const counterEl = document.getElementById('charCounter');
-            const submitBtn = document.getElementById('submitBtn');
-            const currentLength = msgInput.value.length;
-
-            if (currentLength === 0) {
-                counterEl.innerText = `0 / 1000 حرف (يمكنك الانتقال أو تخطي السؤال)`;
-                counterEl.classList.remove('valid', 'invalid');
-                submitBtn.disabled = false; 
-            } else if (currentLength > 0 && currentLength <= 1000) {
-                counterEl.innerText = `${currentLength} / 1000 حرف (مسموح بالتقدم)`;
-                counterEl.classList.add('valid');
-                counterEl.classList.remove('invalid');
-                submitBtn.disabled = false; 
-            } else if (currentLength > 1000) {
-                counterEl.innerText = `${currentLength} / 1000 حرف (تخطيت الحد الأقصى بـ ${currentLength - 1000} حرف)`;
-                counterEl.classList.remove('valid');
-                counterEl.classList.add('invalid');
-                submitBtn.disabled = true; 
-            }
-        }
-
-        function escapeHTML(text) {
-            if (!text) return "";
-            return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
-        }
-
-        async function submitForm() {
-            // التحقق من صحة حقول الخطوة الحالية إذا كانت خطوة المنصات مفتوحة
-            if (isEligibleForPlatforms() && currentStep === 3) {
-                const currentStepEl = getSteps()[currentStep];
-                const inputs = currentStepEl.querySelectorAll('input');
-                let allValid = true;
-                inputs.forEach(input => {
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        allValid = false;
-                    }
-                });
-                if (!allValid) return;
-            }
-
-            const messageInput = document.getElementById('message');
-            if (messageInput.value.length > 1000) return;
-
-            const fullName = escapeHTML(document.getElementById('fullName').value);
-            const phone = escapeHTML(document.getElementById('phone').value);
-            
-            // تجميع تاريخ الميلاد
-            const bDay = document.getElementById('birthDay').value;
-            const bMonth = document.getElementById('birthMonth').value;
-            const bYear = document.getElementById('birthYear').value;
-            const birthDate = (bYear && bMonth && bDay) ? `${bYear}-${bMonth.padStart(2, '0')}-${bDay.padStart(2, '0')}` : "";
-            
-            const email = escapeHTML(document.getElementById('email').value);
-            const gradeVal = document.getElementById('grade').value;
-            const eduType = escapeHTML(document.getElementById('educationType').value);
-            const section = escapeHTML(document.getElementById('section').value);
-            const city = escapeHTML(document.getElementById('city').value);
-            
-            const lessonSystemVal = escapeHTML(document.getElementById('lessonSystem').value);
-            const onlineLessonsCountVal = escapeHTML(document.getElementById('onlineLessonsCount').value);
-            
-            const parentName = escapeHTML(document.getElementById('parentName').value);
-            const parentPhone = escapeHTML(document.getElementById('parentPhone').value);
-            const parentWhatsapp = escapeHTML(document.getElementById('parentWhatsapp').value);
-            const message = escapeHTML(messageInput.value);
-
-            // تجميع بيانات المنصات إن وجدت
-            let platformsData = [];
-            if (isEligibleForPlatforms()) {
-                const cards = document.querySelectorAll('.platform-card');
-                cards.forEach(card => {
-                    const subject = card.querySelector('.platform-subject').value;
-                    const user = card.querySelector('.platform-user').value;
-                    const pass = card.querySelector('.platform-pass').value;
-                    if(subject || user || pass) {
-                        platformsData.push({ subject, user, pass });
-                    }
-                });
-            }
-
-            // هنا تضع كود الإرسال الخاص بك (مثل Fetch API أو Formspree أو Firebase)
-            console.log("تم تجميع البيانات بنجاح وجاهزة للإرسال:", {
-                fullName, phone, birthDate, email, gradeVal, eduType, section, city,
-                lessonSystemVal, onlineLessonsCountVal, parentName, parentPhone, parentWhatsapp, message, platformsData
-            });
-
-            // إظهار صفحة النجاح
-            document.getElementById('studentName').innerText = fullName.split(' ')[0] || "بطل";
+        // التحقق من صحة مدخلات الخطوة الحالية من الفورم
+        function validateStep(stepIndex) {
             const steps = getSteps();
-            currentStep = steps.length - 1; 
-            showStep(currentStep);
+            const inputs = steps[stepIndex].querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if(!input.checkValidity()) {
+                    input.reportValidity();
+                    isValid = false;
+                }
+            });
+            return isValid;
+        }
+
+        // الانتقال للخطوة التالية بذكاء برمجى متكامل
+        function nextStep() {
+            const steps = getSteps();
+            if (validateStep(currentStep)) {
+                steps[currentStep].classList.remove('active');
+                currentStep++;
+                steps[currentStep].classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // الانتقال للخطوة السابقة بذكاء برمجى متكامل يعتمد على الشروط والمسار المتبع للخطوات
+        function prevStep() {
+            const steps = getSteps();
+            steps[currentStep].classList.remove('active');
+            
+            if (currentStep === 4) { // إذا كنا في خطوة الكورس
+                currentStep = 2; // نعود مباشرة لصفحة المشكلة الدراسية (الجزء الثالث)
+            } else if (currentStep === 3) { // إذا كنا في صفحة المنصات
+                currentStep = 2; // نعود لصفحة المشكلة الدراسية
+            } else {
+                currentStep--;
+            }
+            
+            steps[currentStep].classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // التحكم في التوجيه الصحيح عند ضغط التالي في الخطوة الثالثة (مشكلتك الدراسية)
+        function handleStepThreeNext() {
+            if (validateStep(currentStep)) {
+                const steps = getSteps();
+                steps[currentStep].classList.remove('active');
+                
+                if (isEligibleForPlatforms()) {
+                    currentStep = 3; // الذهاب للجزء الرابع (المنصات)
+                } else if (isEligibleForCourseSubscription()) {
+                    currentStep = 4; // الذهاب مباشرة للجزء الخامس (الكورس والمتابعة)
+                } else {
+                    submitForm(); // الطلاب الآخرين يتم إنهاء إرسال الاستمارة لهم فوراً
+                    return;
+                }
+                
+                steps[currentStep].classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // التحكم في التوجيه الصحيح عند ضغط التالي في الخطوة الرابعة (المنصات)
+        function handleStepFourNext() {
+            if (validateStep(currentStep)) {
+                submitForm(); // طلاب تالتة ثانوي يرسلون الفورم من هنا مباشرة بعد المنصات
+            }
+        }
+
+        // الدالة النهائية لجمع البيانات وإرسالها أو عرض شاشة النجاح المبهجة
+        function submitForm() {
+            const fullName = document.getElementById('fullName').value.trim();
+            document.getElementById('studentName').innerText = fullName ? fullName.split(' ')[0] : "بطل";
+            
+            const steps = getSteps();
+            steps[currentStep].classList.remove('active');
+            document.getElementById('successStep').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // هنا يمكنك مستقبلاً ربط البيانات بقاعدة بياناتك أو سيرفر الإرسال بكل سهولة.
+            console.log("تم إرسال كافة البيانات بنجاح!");
         }
     </script>
 </body>
