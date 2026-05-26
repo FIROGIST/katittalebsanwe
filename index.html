@@ -39,7 +39,6 @@
             position: relative;
         }
 
-        /* تثبيت طبقة الخلفية بشكل كامل ومستقل عن التمرير */
         .edu-background {
             position: fixed;
             top: -5%; 
@@ -56,7 +55,6 @@
             will-change: transform;
         }
 
-        /* طبقة التظليل الفاتحة لضمان الـ Contrast */
         .edu-background::before {
             content: '';
             position: absolute;
@@ -67,13 +65,12 @@
             background: rgba(244, 244, 244, 0.78);
         }
 
-        /* حاوية الكارت الرئيسي */
         .form-container {
             background-color: var(--card-bg);
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 650px; /* تم تكبيرها قليلاً لتناسب عرض كروت الكورسات */
+            max-width: 650px;
             padding: 35px;
             position: relative;
             z-index: 2; 
@@ -147,11 +144,10 @@
             box-shadow: 0 4px 12px rgba(245, 196, 0, 0.15);
         }
 
-        /* تنسيق المربعات الثلاثة لتاريخ الميلاد مثل جوجل */
         .date-triple-container {
             display: flex;
             gap: 12px;
-            flex-direction: row-reverse; /* لضمان الترتيب من اليمين لليوم، ثم الشهر، ثم السنة */
+            flex-direction: row-reverse;
         }
 
         .date-triple-container select {
@@ -161,7 +157,6 @@
             font-weight: 600;
         }
 
-        /* عداد الحروف لخانة textarea */
         .char-counter {
             text-align: left;
             font-size: 12px;
@@ -173,7 +168,6 @@
         .char-counter.valid { color: #10b981; }
         .char-counter.invalid { color: #ef4444; }
 
-        /* التحكم بأزرار أسفل الصفحة (التالي على اليسار) */
         .btn-container {
             display: flex;
             margin-top: 35px;
@@ -181,7 +175,6 @@
             border-top: 1px solid #f3f4f6;
         }
         
-        /* جعل زر التالي يذهب لليسار دائماً وزر السابق لليمين */
         .btn-container.single-btn {
             justify-content: flex-end;
         }
@@ -237,7 +230,6 @@
             margin-bottom: 15px;
         }
 
-        /* تنسيق كروت المنصات المكررة */
         .platform-card {
             background: #fff;
             border: 2px dashed #edf2f7;
@@ -257,6 +249,7 @@
             font-size: 15px;
             margin-bottom: 15px;
             border-radius: 12px;
+            cursor: pointer;
         }
         .btn-add-platform:hover {
             background-color: #fde68a;
@@ -271,12 +264,13 @@
             padding: 4px 10px;
             font-size: 12px;
             border-radius: 6px;
+            border: none;
+            cursor: pointer;
         }
         .btn-remove-platform:hover {
             background: #fca5a5;
         }
 
-        /* تنسيقات كارت الكورس المضافة حديثاً في الجزء الخامس */
         .course-card {
             background: #fafafa;
             border: 2px solid #edf2f7;
@@ -321,7 +315,6 @@
             font-weight: bold;
         }
 
-        /* الهيكل الجديد لعرض الكورسات للمقارنة والاختيار المميز */
         .courses-comparison-container {
             display: flex;
             gap: 16px;
@@ -351,7 +344,6 @@
             box-shadow: 0 10px 20px rgba(15, 118, 110, 0.08);
         }
 
-        /* الكارت المختار بنجاح */
         .selectable-course-item.selected {
             border-color: var(--accent-teal);
             background-color: #f0fdfa;
@@ -386,22 +378,6 @@
             margin-bottom: 10px;
         }
 
-        /* شارة مميزة للكورس الأكثر توفيراً */
-        .best-value-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #0f766e, #14b8a6);
-            color: white;
-            padding: 3px 12px;
-            font-size: 11px;
-            font-weight: 700;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(15, 118, 110, 0.3);
-        }
-
-        /* مؤشر الدائرة الاختيارية الحية */
         .selection-indicator {
             width: 22px;
             height: 22px;
@@ -430,48 +406,6 @@
             transform: rotate(-45deg);
         }
 
-        /* خيار تخطي الاشتراك بالكامل */
-        .skip-subscription-box {
-            background: #f3f4f6;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 12px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s ease;
-            margin-top: 15px;
-        }
-
-        .skip-subscription-box:hover {
-            background: #e5e7eb;
-        }
-
-        .skip-subscription-box.selected {
-            border-color: #6b7280;
-            background: #e5e7eb;
-        }
-
-        /* تم إصلاح وتفعيل إشارة الصح لخانة لا شكرا */
-        .skip-subscription-box.selected .selection-indicator {
-            border-color: #6b7280;
-            background: #6b7280;
-        }
-
-        .skip-subscription-box.selected .selection-indicator::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            width: 8px;
-            height: 5px;
-            border-left: 2px solid white;
-            border-bottom: 2px solid white;
-            transform: rotate(-45deg);
-        }
-
-        /* تنسيق زر واتساب العائم */
         .whatsapp-float {
             position: fixed;
             bottom: 25px;
@@ -502,7 +436,6 @@
             white-space: nowrap;
         }
 
-        /* شاشات الهواتف المحمولة وتنسيق الكروت التفاعلية */
         @media (max-width: 600px) {
             .courses-comparison-container {
                 flex-direction: column;
@@ -535,6 +468,7 @@
 
         <form id="studentForm" onsubmit="event.preventDefault();">
             
+            <!-- الخطوة 1: بيانات الطالب -->
             <div class="form-step active" data-step="1">
                 <div style="text-align: center;">
                     <div class="section-badge">الجزء الأول: بيانات الطالب المتكاملة</div>
@@ -640,6 +574,7 @@
                 </div>
             </div>
 
+            <!-- الخطوة 2: بيانات ولي الأمر -->
             <div class="form-step" data-step="2">
                 <div style="text-align: center;">
                     <div class="section-badge" style="background-color: #dbeafe; color: #1e40af;">الجزء الثاني: بيانات ولي الأمر</div>
@@ -670,6 +605,7 @@
                 </div>
             </div>
 
+            <!-- الخطوة 3: المشكلة الدراسية -->
             <div class="form-step" data-step="3">
                 <div style="text-align: center;">
                     <div class="section-badge" style="background-color: #fce7f3; color: #9d174d;">الجزء الثالث: مشكلتك الدراسية</div>
@@ -683,10 +619,11 @@
 
                 <div class="btn-container split-btns">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" id="submitBtn" onclick="handleStepThreeNext()">إرسال الاستمارة</button>
+                    <button type="button" class="btn-next" id="submitBtn" onclick="handleStepThreeNext()">التالي</button>
                 </div>
             </div>
 
+            <!-- الخطوة 4: بيانات المنصات -->
             <div class="form-step" data-step="4" id="stepPlatforms">
                 <div style="text-align: center;">
                     <div class="section-badge" style="background-color: #e0f2fe; color: #0369a1;">الجزء الرابع: بيانات المنصات التعليمية الأونلاين</div>
@@ -694,17 +631,18 @@
 
                 <div id="platformsContainer">
                     <div class="platform-card">
+                        <button type="button" class="btn-remove-platform" onclick="this.parentElement.remove()">حذف</button>
                         <div class="form-group">
                             <label>المادة الدراسية:</label>
-                            <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية..." required>
+                            <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية...">
                         </div>
                         <div class="form-group">
                             <label>الرقم أو الجيميل (المسجل به في المنصة):</label>
-                            <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا" required>
+                            <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا">
                         </div>
                         <div class="form-group">
                             <label>كلمة المرور (الباسورد):</label>
-                            <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا" required>
+                            <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا">
                         </div>
                     </div>
                 </div>
@@ -713,10 +651,11 @@
 
                 <div class="btn-container split-btns">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" id="finalSubmitBtn" onclick="handleStepFourNext()">إرسال الاستمارة بالكامل</button>
+                    <button type="button" class="btn-next" onclick="handleStepFourNext()">التالي</button>
                 </div>
             </div>
 
+            <!-- الخطوة 5: الاشتراك والمتابعة (تم حذف خيار "لا شكراً" وشارة الأكثر توفيراً) -->
             <div class="form-step" data-step="5" id="stepCourseSubscription">
                 <div style="text-align: center;">
                     <div class="section-badge" style="background-color: #ccfbf1; color: #0f766e;">الجزء الخامس: الاشتراك والمتابعة المتكاملة</div>
@@ -743,7 +682,7 @@
                     <h4 style="font-size: 15px; margin-top: 25px; margin-bottom: 5px; color: var(--dark-color); text-align: right; font-weight: 700;">🌟 اختر خطة الاشتراك المناسبة لك للبدء فوراً:</h4>
                     
                     <div class="courses-comparison-container">
-                        
+                        <!-- الكارد الأول - كورس عادي -->
                         <div class="selectable-course-item" onclick="selectCoursePlan('regular', this)">
                             <img src="cors.jpeg" alt="كورس المتابعة العادي" class="course-item-image">
                             <div class="course-item-title">كورس المتابعة للصف الأول أو الثاني الثانوي</div>
@@ -751,20 +690,16 @@
                             <div class="selection-indicator"></div>
                         </div>
 
+                        <!-- الكارد الثاني - كورس 3 شهور (تم حذف شارة الأكثر توفيراً) -->
                         <div class="selectable-course-item" onclick="selectCoursePlan('premium', this)">
-                            <div class="best-value-badge">🔥 الأكثر توفيراً (3 شهور)</div>
                             <img src="cors1.jpeg" alt="كورس المتابعة الثلاث شهور" class="course-item-image">
                             <div class="course-item-title">كورس المتابعة المكثف (اشتراك الثلاث شهور)</div>
                             <div class="course-item-price">500 جنيه</div>
                             <div class="selection-indicator"></div>
                         </div>
-
                     </div>
 
-                    <div class="skip-subscription-box" id="skipBox" onclick="selectCoursePlan('none', this)">
-                        <span style="font-size: 14px; font-weight: 600; color: #4b5563;">لا، شكراً.. أريد إرسال الاستمارة العامة فقط بدون اشتراك حالياً</span>
-                        <div class="selection-indicator"></div>
-                    </div>
+                    <!-- تم حذف خيار "لا، شكراً" بالكامل -->
                     
                     <input type="hidden" id="selectedCourseValue" name="selectedCourseValue" value="">
                 </div>
@@ -775,6 +710,7 @@
                 </div>
             </div>
 
+            <!-- خطوة النجاح -->
             <div class="form-step" id="successStep">
                 <div class="success-message">
                     <div class="success-icon">✓</div>
@@ -794,16 +730,19 @@
     </a>
 
     <script>
+        // ========== المتغيرات العامة ==========
         let currentStepIndex = 0;
+        const steps = document.querySelectorAll('.form-step');
         const bgPattern = document.getElementById('bgPattern');
 
-        // تأثير الماوس الجمالي على الخلفية
+        // تأثير الماوس على الخلفية
         document.addEventListener('mousemove', (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
             const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
             bgPattern.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
 
+        // ========== دوال المساعدة ==========
         function updateDynamicNames() {
             const fullName = document.getElementById('fullName').value.trim();
             const firstName = fullName ? fullName.split(' ')[0] : "بطل";
@@ -812,27 +751,13 @@
             });
         }
 
-        // تحديد ما إذا كان الطالب تالتة ثانوي ويستحق جزء المنصات الرابعة
-        function isEligibleForPlatforms() {
-            const grade = document.getElementById('grade').value;
-            const lessonSystem = document.getElementById('lessonSystem').value;
-            return (grade === "3" && (lessonSystem === "اونلاين فقط" || lessonSystem === "اونلاين وسنتر"));
-        }
-
-        // تحديد ما إذا كان الطالب في أولى أو تانية ثانوي ويستحق صفحة الكورس الخامسة
-        function isEligibleForCourseSubscription() {
-            const grade = document.getElementById('grade').value;
-            return (grade === "1" || grade === "2");
-        }
-
-        // التعامل مع تغير الصف الدراسي وتحديث خيارات الشعبة
+        // ========== التعامل مع الصف الدراسي ==========
         function handleGradeChange() {
             const grade = document.getElementById('grade').value;
             const stepSection = document.getElementById('stepSection');
             const sectionSelect = document.getElementById('section');
             const seniorThreeQuestions = document.getElementById('seniorThreeQuestions');
             
-            // إعادة تعيين الخيارات
             sectionSelect.innerHTML = '<option value="">اختر الشعبة</option>';
             sectionSelect.required = false;
 
@@ -865,14 +790,10 @@
 
         function updateSubmitButtonText() {
             const submitBtn = document.getElementById('submitBtn');
-            if (isEligibleForPlatforms() || isEligibleForCourseSubscription()) {
-                submitBtn.innerText = "التالي";
-            } else {
-                submitBtn.innerText = "إرسال الاستمارة";
-            }
+            submitBtn.innerText = "التالي";
         }
 
-        // عداد الحروف لرسالة المشاكل
+        // ========== عداد الحروف ==========
         function checkMessageLength() {
             const textarea = document.getElementById('message');
             const counter = document.getElementById('charCounter');
@@ -888,138 +809,112 @@
             }
         }
 
-        // إضافة حقول منصة جديدة
+        // ========== إضافة/حذف منصات ==========
         function addPlatformField() {
             const container = document.getElementById('platformsContainer');
-            const cardCount = container.querySelectorAll('.platform-card').length;
-            
             const newCard = document.createElement('div');
             newCard.className = 'platform-card';
             newCard.innerHTML = `
                 <button type="button" class="btn-remove-platform" onclick="this.parentElement.remove()">حذف</button>
                 <div class="form-group">
                     <label>المادة الدراسية:</label>
-                    <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية..." required>
+                    <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية...">
                 </div>
                 <div class="form-group">
                     <label>الرقم أو الجيميل (المسجل به في المنصة):</label>
-                    <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا" required>
+                    <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا">
                 </div>
                 <div class="form-group">
                     <label>كلمة المرور (الباسورد):</label>
-                    <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا" required>
+                    <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا">
                 </div>
             `;
             container.appendChild(newCard);
         }
 
-        // تحديد خطة الاشتراك أو التخطي (تم تفعيل علامة الصح لـ لا شكرا)
+        // ========== اختيار خطة الاشتراك (تم تعديلها لأن حذفنا خيار "لا شكراً") ==========
         function selectCoursePlan(planType, element) {
             // إلغاء تحديد الكروت الأخرى
             document.querySelectorAll('.selectable-course-item').forEach(item => {
                 item.classList.remove('selected');
             });
-            document.getElementById('skipBox').classList.remove('selected');
 
-            // تفعيل الكارت الحالي وعلامة الصح الخاصة به
+            // تفعيل الكارت الحالي
             element.classList.add('selected');
             document.getElementById('selectedCourseValue').value = planType;
 
-            // التحكم في زر الإرسال بناءً على الاختيار
+            // تفعيل زر الإرسال
             const submitBtn = document.getElementById('courseSubmitBtn');
             submitBtn.removeAttribute('disabled');
-
-            if (planType === 'none') {
-                submitBtn.innerText = "إرسال الاستمارة العامة فقط";
-            } else {
-                submitBtn.innerText = "إرسال الاستمارة والاشتراك";
-            }
+            submitBtn.innerText = "إرسال الاستمارة والاشتراك";
         }
 
-        // التحقق من صحة الحقول في الخطوة الحالية قبل الانتقال
+        // ========== التحقق من صحة الحقول ==========
         function validateCurrentStepInputs() {
-            const steps = document.querySelectorAll('.form-step');
             const currentStepEl = steps[currentStepIndex];
             const inputs = currentStepEl.querySelectorAll('input[required], select[required], textarea[required]');
             
             for (let i = 0; i < inputs.length; i++) {
                 if (!inputs[i].checkValidity()) {
                     inputs[i].reportValidity();
+                    inputs[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return false;
                 }
             }
             return true;
         }
 
-        // دالة الانتقال للخطوة التالية
+        // ========== دوال التنقل بين الخطوات ==========
+        
         function nextStep() {
             if (!validateCurrentStepInputs()) return;
 
-            const steps = document.querySelectorAll('.form-step');
             steps[currentStepIndex].classList.remove('active');
             currentStepIndex++;
             steps[currentStepIndex].classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // دالة الرجوع للخطوة السابقة
         function prevStep() {
-            const steps = document.querySelectorAll('.form-step');
             steps[currentStepIndex].classList.remove('active');
-            
-            // تحديد مسار الرجوع بناء على حالة الطالب الدراسية
-            if (currentStepIndex === 4 && !isEligibleForPlatforms()) {
-                currentStepIndex = 2; // تخطي خطوة المنصات إذا لم يكن مؤهلاً لها عند الرجوع
-            } else {
-                currentStepIndex--;
-            }
-            
+            currentStepIndex--;
+            if (currentStepIndex < 0) currentStepIndex = 0;
             steps[currentStepIndex].classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // التحكم في زر الخطوة الثالثة (مشكلتك الدراسية)
+        // ========== معالجة الأزرار الخاصة ==========
+        
         function handleStepThreeNext() {
             if (!validateCurrentStepInputs()) return;
 
-            const steps = document.querySelectorAll('.form-step');
             steps[currentStepIndex].classList.remove('active');
-
-            if (isEligibleForPlatforms()) {
-                currentStepIndex = 3; // الذهاب للجزء الرابع (المنصات)
-                steps[currentStepIndex].classList.add('active');
-            } else if (isEligibleForCourseSubscription()) {
-                currentStepIndex = 4; // الذهاب للجزء الخامس (الاشتراك) مباشرة لتخطي المنصات
-                steps[currentStepIndex].classList.add('active');
-            } else {
-                submitForm(); // إرسال الاستمارة مباشرة إذا كان طالب تالتة ثانوي سنتر فقط مثلاً
-            }
+            currentStepIndex = 3; // الخطوة 4
+            steps[currentStepIndex].classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // التحكم في زر الخطوة الرابعة (المنصات)
         function handleStepFourNext() {
             if (!validateCurrentStepInputs()) return;
 
-            submitForm(); // بالنسبة لطلاب تالتة ثانوي يتم الإرسال مباشرة بعد جزء المنصات
+            steps[currentStepIndex].classList.remove('active');
+            currentStepIndex = 4; // الخطوة 5
+            steps[currentStepIndex].classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // إنهاء وإرسال النموذج وعرض صفحة النجاح
+        // ========== إرسال الاستمارة ==========
         function submitForm() {
-            const steps = document.querySelectorAll('.form-step');
-            
-            // تحديث الاسم ديناميكياً في رسالة النجاح
             const fullName = document.getElementById('fullName').value.trim();
             const firstName = fullName ? fullName.split(' ')[0] : "بطل";
             document.getElementById('studentName').innerText = firstName;
 
-            // إخفاء الخطوة الحالية وعرض كارت النجاح
             steps[currentStepIndex].classList.remove('active');
             document.getElementById('successStep').classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // هنا يمكنك إضافة كود إرسال البيانات إلى السيرفر أو الـ API الخاص بك إذا أردت مستقبلاً
             console.log("تم إرسال الاستمارة بنجاح!");
+            console.log("الاشتراك المختار:", document.getElementById('selectedCourseValue').value);
         }
     </script>
 </body>
