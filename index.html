@@ -453,6 +453,24 @@
             background: #e5e7eb;
         }
 
+        /* تم إصلاح وتفعيل إشارة الصح لخانة لا شكرا */
+        .skip-subscription-box.selected .selection-indicator {
+            border-color: #6b7280;
+            background: #6b7280;
+        }
+
+        .skip-subscription-box.selected .selection-indicator::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 8px;
+            height: 5px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(-45deg);
+        }
+
         /* تنسيق زر واتساب العائم */
         .whatsapp-float {
             position: fixed;
@@ -714,7 +732,7 @@
                     <ul class="system-list">
                         <li><strong>تخطيط جدول أسبوعي:</strong> بنقعد نخطط معاك لجدولك الأسبوعي وبنتابع معاك كل أسبوع خلصت منه قد إيه بالظبط.</li>
                         <li><strong>التقرير الأسبوعي لولي الأمر:</strong> بيتم إرسال تقرير مفصل لولي أمرك سواء كان حلو أو وحش عشان نكون صرحاء دايماً ومش بنبعت الوحش بس.</li>
-                        <li><strong>بيئة عمل منتجة (لايفات ومعسكرات):</strong> هيكون في لايفات ومعسكرات مذاكرة معايا شخصياً على الديسكورد ومع زمايلك المشتركين لإنشاء بيئة مشجعة.</li>
+                        <li><strong>بيئة عمل منتجة (لايفات ومعسكرات):</strong> هيكون في لايفات ومعسكرات مذاكرة معايا شخصياً على الديسكورد ومع زمايلك المشتركين لإيجاد بيئة مشجعة.</li>
                         <li><strong>نظام الثواب والعقاب:</strong> عندنا حوافز ليك وجوائز قيمة لو كنت ملتزم، وفي نفس الوقت في عقوبات حازمة لو مش ملتزم معانا.</li>
                     </ul>
 
@@ -776,12 +794,7 @@
     </a>
 
     <script>
-        let currentStep = 0;
-        
-        // جلب خطوات النموذج ديناميكياً
-        function getSteps() {
-            return document.querySelectorAll('.form-step');
-        }
+        let currentStepIndex = 0;
         const bgPattern = document.getElementById('bgPattern');
 
         // تأثير الماوس الجمالي على الخلفية
@@ -812,127 +825,80 @@
             return (grade === "1" || grade === "2");
         }
 
-        // دالة حيوية مخصصة للتحكم بالبطاقات الجديدة واختيار الكورسات بصرياً وتخزين قيمتها
-        function selectCoursePlan(planType, element) {
-            // حذف كلاس الاختيار الفعال من كافة الكروت المتاحة
-            document.querySelectorAll('.selectable-course-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.getElementById('skipBox').classList.remove('selected');
-
-            // إضافة كلاس الاختيار الفعال للعنصر المحدد بالضغط
-            element.classList.add('selected');
-
-            // تعيين القيمة المحددة بداخل الـ input المخفي
-            const hiddenInput = document.getElementById('selectedCourseValue');
-            const submitBtn = document.getElementById('courseSubmitBtn');
+        // التعامل مع تغير الصف الدراسي وتحديث خيارات الشعبة
+        function handleGradeChange() {
+            const grade = document.getElementById('grade').value;
+            const stepSection = document.getElementById('stepSection');
+            const sectionSelect = document.getElementById('section');
+            const seniorThreeQuestions = document.getElementById('seniorThreeQuestions');
             
-            if (planType === 'regular') {
-                hiddenInput.value = "نعم، أريد الانضمام للمتابعة العادية (200 جنيه)";
-                submitBtn.innerText = "إرسال الاستمارة والاشتراك بـ 200 جنيه";
-            } else if (planType === 'premium') {
-                hiddenInput.value = "نعم، أريد الانضمام للمتابعة المكثفة - 3 شهور (500 جنيه)";
-                submitBtn.innerText = "إرسال الاستمارة والاشتراك بـ 500 جنيه";
-            } else {
-                hiddenInput.value = "لا، أريد إرسال الاستمارة العامة فقط";
-                submitBtn.innerText = "إرسال الاستمارة العامة فقط";
-            }
+            // إعادة تعيين الخيارات
+            sectionSelect.innerHTML = '<option value="">اختر الشعبة</option>';
+            sectionSelect.required = false;
 
-            // تفعيل زر الإرسال بمجرد قيام الطالب بالاختيار
-            submitBtn.removeAttribute('disabled');
+            if (grade === "1") {
+                stepSection.style.display = "none";
+                seniorThreeQuestions.style.display = "none";
+            } else if (grade === "2") {
+                stepSection.style.display = "block";
+                sectionSelect.required = true;
+                sectionSelect.innerHTML += `
+                    <option value="علمي">علمي</option>
+                    <option value="أدبي">أدبي</option>
+                `;
+                seniorThreeQuestions.style.display = "none";
+            } else if (grade === "3") {
+                stepSection.style.display = "block";
+                sectionSelect.required = true;
+                sectionSelect.innerHTML += `
+                    <option value="علمي علوم">علمي علوم</option>
+                    <option value="علمي رياضة">علمي رياضة</option>
+                    <option value="أدبي">أدبي</option>
+                `;
+                seniorThreeQuestions.style.display = "block";
+            } else {
+                stepSection.style.display = "none";
+                seniorThreeQuestions.style.display = "none";
+            }
+            updateSubmitButtonText();
         }
 
-        // تحديث نص زر الإرسال أو التالي في الجزء الثالث (مشكلتك الدراسية)
         function updateSubmitButtonText() {
             const submitBtn = document.getElementById('submitBtn');
-            if (isEligibleForPlatforms()) {
-                submitBtn.innerText = "التالي (بيانات المنصات)";
-            } else if (isEligibleForCourseSubscription()) {
-                submitBtn.innerText = "التالي (عرض كورس المتابعة)";
+            if (isEligibleForPlatforms() || isEligibleForCourseSubscription()) {
+                submitBtn.innerText = "التالي";
             } else {
                 submitBtn.innerText = "إرسال الاستمارة";
             }
         }
 
-        // التعامل الذكي مع الشعبة والأسئلة الخاصة بالصفوف الدراسية المختلفة
-        function handleGradeChange() {
-            const grade = document.getElementById('grade').value;
-            const sectionGroup = document.getElementById('stepSection');
-            const sectionSelect = document.getElementById('section');
-            const seniorThreeGroup = document.getElementById('seniorThreeQuestions');
-            const lessonSystem = document.getElementById('lessonSystem');
-            const onlineLessonsCount = document.getElementById('onlineLessonsCount');
-            
-            sectionSelect.innerHTML = "";
-
-            if (grade === "3") {
-                sectionGroup.style.display = "block";
-                sectionSelect.setAttribute('required', 'required');
-                sectionSelect.innerHTML = `
-                    <option value="">اختر الشعبة</option>
-                    <option value="علمي علوم">علمي علوم</option>
-                    <option value="علمي رياضة">علمي رياضة</option>
-                    <option value="أدبي">أدبي</option>
-                `;
-                seniorThreeGroup.style.display = "block";
-                lessonSystem.setAttribute('required', 'required');
-                onlineLessonsCount.setAttribute('required', 'required');
-            } 
-            else if (grade === "2") {
-                sectionGroup.style.display = "block";
-                sectionSelect.setAttribute('required', 'required');
-                sectionSelect.innerHTML = `
-                    <option value="">اختر الشعبة</option>
-                    <option value="علمي">علمي</option>
-                    <option value="أدبي">أدبي</option>
-                `;
-                seniorThreeGroup.style.display = "none";
-                lessonSystem.removeAttribute('required');
-                onlineLessonsCount.removeAttribute('required');
-            }
-            else if (grade === "1") {
-                sectionGroup.style.display = "none";
-                sectionSelect.removeAttribute('required');
-                seniorThreeGroup.style.display = "none";
-                lessonSystem.removeAttribute('required');
-                onlineLessonsCount.removeAttribute('required');
-            }
-            else {
-                sectionGroup.style.display = "none";
-                sectionSelect.removeAttribute('required');
-                seniorThreeGroup.style.display = "none";
-                lessonSystem.removeAttribute('required');
-                onlineLessonsCount.removeAttribute('required');
-            }
-            updateSubmitButtonText();
-        }
-
-        // حساب عدد الحروف وتلوين المؤشر
+        // عداد الحروف لرسالة المشاكل
         function checkMessageLength() {
-            const message = document.getElementById('message').value;
+            const textarea = document.getElementById('message');
             const counter = document.getElementById('charCounter');
-            counter.innerText = `${message.length} / 1000 حرف`;
+            const length = textarea.value.length;
+            counter.innerText = `${length} / 1000 حرف`;
             
-            if(message.length > 0 && message.length <= 1000) {
-                counter.className = "char-counter valid";
-            } else if(message.length > 1000) {
+            if(length > 1000) {
                 counter.className = "char-counter invalid";
+            } else if (length > 0) {
+                counter.className = "char-counter valid";
             } else {
                 counter.className = "char-counter";
             }
         }
 
-        // إضافة حقول منصات تعليمية جديدة بشكل ديناميكي
+        // إضافة حقول منصة جديدة
         function addPlatformField() {
             const container = document.getElementById('platformsContainer');
-            const cardCount = container.querySelectorAll('.platform-card').length + 1;
+            const cardCount = container.querySelectorAll('.platform-card').length;
             
             const newCard = document.createElement('div');
             newCard.className = 'platform-card';
             newCard.innerHTML = `
                 <button type="button" class="btn-remove-platform" onclick="this.parentElement.remove()">حذف</button>
                 <div class="form-group">
-                    <label>المادة الدراسية (${cardCount}):</label>
+                    <label>المادة الدراسية:</label>
                     <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية..." required>
                 </div>
                 <div class="form-group">
@@ -947,88 +913,113 @@
             container.appendChild(newCard);
         }
 
-        // التحقق من صحة مدخلات الخطوة الحالية من الفورم
-        function validateStep(stepIndex) {
-            const steps = getSteps();
-            const inputs = steps[stepIndex].querySelectorAll('input[required], select[required], textarea[required]');
-            let isValid = true;
-            
-            inputs.forEach(input => {
-                if(!input.checkValidity()) {
-                    input.reportValidity();
-                    isValid = false;
-                }
+        // تحديد خطة الاشتراك أو التخطي (تم تفعيل علامة الصح لـ لا شكرا)
+        function selectCoursePlan(planType, element) {
+            // إلغاء تحديد الكروت الأخرى
+            document.querySelectorAll('.selectable-course-item').forEach(item => {
+                item.classList.remove('selected');
             });
-            return isValid;
-        }
+            document.getElementById('skipBox').classList.remove('selected');
 
-        // الانتقال للخطوة التالية بذكاء برمجى متكامل
-        function nextStep() {
-            const steps = getSteps();
-            if (validateStep(currentStep)) {
-                steps[currentStep].classList.remove('active');
-                currentStep++;
-                steps[currentStep].classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
+            // تفعيل الكارت الحالي وعلامة الصح الخاصة به
+            element.classList.add('selected');
+            document.getElementById('selectedCourseValue').value = planType;
 
-        // الانتقال للخطوة السابقة بذكاء برمجى متكامل يعتمد على الشروط والمسار المتبع للخطوات
-        function prevStep() {
-            const steps = getSteps();
-            steps[currentStep].classList.remove('active');
-            
-            if (currentStep === 4) { // إذا كنا في خطوة الكورس
-                currentStep = 2; // نعود مباشرة لصفحة المشكلة الدراسية (الجزء الثالث)
-            } else if (currentStep === 3) { // إذا كنا في صفحة المنصات
-                currentStep = 2; // نعود لصفحة المشكلة الدراسية
+            // التحكم في زر الإرسال بناءً على الاختيار
+            const submitBtn = document.getElementById('courseSubmitBtn');
+            submitBtn.removeAttribute('disabled');
+
+            if (planType === 'none') {
+                submitBtn.innerText = "إرسال الاستمارة العامة فقط";
             } else {
-                currentStep--;
+                submitBtn.innerText = "إرسال الاستمارة والاشتراك";
             }
+        }
+
+        // التحقق من صحة الحقول في الخطوة الحالية قبل الانتقال
+        function validateCurrentStepInputs() {
+            const steps = document.querySelectorAll('.form-step');
+            const currentStepEl = steps[currentStepIndex];
+            const inputs = currentStepEl.querySelectorAll('input[required], select[required], textarea[required]');
             
-            steps[currentStep].classList.add('active');
+            for (let i = 0; i < inputs.length; i++) {
+                if (!inputs[i].checkValidity()) {
+                    inputs[i].reportValidity();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // دالة الانتقال للخطوة التالية
+        function nextStep() {
+            if (!validateCurrentStepInputs()) return;
+
+            const steps = document.querySelectorAll('.form-step');
+            steps[currentStepIndex].classList.remove('active');
+            currentStepIndex++;
+            steps[currentStepIndex].classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // التحكم في التوجيه الصحيح عند ضغط التالي في الخطوة الثالثة (مشكلتك الدراسية)
-        function handleStepThreeNext() {
-            if (validateStep(currentStep)) {
-                const steps = getSteps();
-                steps[currentStep].classList.remove('active');
-                
-                if (isEligibleForPlatforms()) {
-                    currentStep = 3; // الذهاب للجزء الرابع (المنصات)
-                } else if (isEligibleForCourseSubscription()) {
-                    currentStep = 4; // الذهاب مباشرة للجزء الخامس (الكورس والمتابعة)
-                } else {
-                    submitForm(); // الطلاب الآخرين يتم إنهاء إرسال الاستمارة لهم فوراً
-                    return;
-                }
-                
-                steps[currentStep].classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        // التحكم في التوجيه الصحيح عند ضغط التالي في الخطوة الرابعة (المنصات)
-        function handleStepFourNext() {
-            if (validateStep(currentStep)) {
-                submitForm(); // طلاب تالتة ثانوي يرسلون الفورم من هنا مباشرة بعد المنصات
-            }
-        }
-
-        // الدالة النهائية لجمع البيانات وإرسالها أو عرض شاشة النجاح المبهجة
-        function submitForm() {
-            const fullName = document.getElementById('fullName').value.trim();
-            document.getElementById('studentName').innerText = fullName ? fullName.split(' ')[0] : "بطل";
+        // دالة الرجوع للخطوة السابقة
+        function prevStep() {
+            const steps = document.querySelectorAll('.form-step');
+            steps[currentStepIndex].classList.remove('active');
             
-            const steps = getSteps();
-            steps[currentStep].classList.remove('active');
+            // تحديد مسار الرجوع بناء على حالة الطالب الدراسية
+            if (currentStepIndex === 4 && !isEligibleForPlatforms()) {
+                currentStepIndex = 2; // تخطي خطوة المنصات إذا لم يكن مؤهلاً لها عند الرجوع
+            } else {
+                currentStepIndex--;
+            }
+            
+            steps[currentStepIndex].classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // التحكم في زر الخطوة الثالثة (مشكلتك الدراسية)
+        function handleStepThreeNext() {
+            if (!validateCurrentStepInputs()) return;
+
+            const steps = document.querySelectorAll('.form-step');
+            steps[currentStepIndex].classList.remove('active');
+
+            if (isEligibleForPlatforms()) {
+                currentStepIndex = 3; // الذهاب للجزء الرابع (المنصات)
+                steps[currentStepIndex].classList.add('active');
+            } else if (isEligibleForCourseSubscription()) {
+                currentStepIndex = 4; // الذهاب للجزء الخامس (الاشتراك) مباشرة لتخطي المنصات
+                steps[currentStepIndex].classList.add('active');
+            } else {
+                submitForm(); // إرسال الاستمارة مباشرة إذا كان طالب تالتة ثانوي سنتر فقط مثلاً
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // التحكم في زر الخطوة الرابعة (المنصات)
+        function handleStepFourNext() {
+            if (!validateCurrentStepInputs()) return;
+
+            submitForm(); // بالنسبة لطلاب تالتة ثانوي يتم الإرسال مباشرة بعد جزء المنصات
+        }
+
+        // إنهاء وإرسال النموذج وعرض صفحة النجاح
+        function submitForm() {
+            const steps = document.querySelectorAll('.form-step');
+            
+            // تحديث الاسم ديناميكياً في رسالة النجاح
+            const fullName = document.getElementById('fullName').value.trim();
+            const firstName = fullName ? fullName.split(' ')[0] : "بطل";
+            document.getElementById('studentName').innerText = firstName;
+
+            // إخفاء الخطوة الحالية وعرض كارت النجاح
+            steps[currentStepIndex].classList.remove('active');
             document.getElementById('successStep').classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // هنا يمكنك مستقبلاً ربط البيانات بقاعدة بياناتك أو سيرفر الإرسال بكل سهولة.
-            console.log("تم إرسال كافة البيانات بنجاح!");
+
+            // هنا يمكنك إضافة كود إرسال البيانات إلى السيرفر أو الـ API الخاص بك إذا أردت مستقبلاً
+            console.log("تم إرسال الاستمارة بنجاح!");
         }
     </script>
 </body>
