@@ -70,7 +70,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 650px;
+            max-width: 750px;
             padding: 35px;
             position: relative;
             z-index: 2; 
@@ -87,7 +87,6 @@
             height: auto;
         }
 
-        /* ===== الآية القرآنية الجديدة ===== */
         .quran-verse {
             text-align: center;
             color: black;
@@ -359,10 +358,13 @@
             gap: 16px;
             margin-top: 20px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .selectable-course-item {
             flex: 1;
+            min-width: 180px;
             background: #ffffff;
             border: 2.5px solid #e5e7eb;
             border-radius: 16px;
@@ -415,6 +417,14 @@
             padding: 4px 14px;
             border-radius: 20px;
             margin-bottom: 10px;
+        }
+
+        .course-features {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 8px;
+            text-align: center;
+            line-height: 1.5;
         }
 
         .selection-indicator {
@@ -506,7 +516,7 @@
             font-weight: 600;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .courses-comparison-container {
                 flex-direction: column;
                 gap: 15px;
@@ -528,6 +538,9 @@
                 font-size: 1.1rem;
                 padding: 8px 12px;
             }
+            .form-container {
+                max-width: 650px;
+            }
         }
     </style>
 </head>
@@ -538,7 +551,6 @@
     <div class="form-container">
         <div class="brand-header">
             <img src="logoform.png" alt="قضية طالب ثانوي" class="brand-logo">
-            <!-- ✅ الآية القرآنية الجديدة -->
             <div class="quran-verse-wrapper">
                 <div class="quran-verse">
                     ﴿ وَتَوَكَّلْ عَلَى اللَّهِ وَكَفَىٰ بِاللَّهِ وَكِيلًا ﴾
@@ -741,13 +753,14 @@
                 </div>
             </div>
 
-            <!-- الخطوة 5: الاشتراك والمتابعة -->
+            <!-- الخطوة 5: الاشتراك والمتابعة (مع 3 كورسات) -->
             <div class="form-step" data-step="5" id="stepCourseSubscription">
                 <div style="text-align: center;">
                     <div class="section-badge" style="background-color: #ccfbf1; color: #0f766e;">الجزء الخامس: الاشتراك والمتابعة المتكاملة</div>
                 </div>
 
                 <div class="course-card">
+                    <!-- المعلومات الهامة -->
                     <div class="info-box">
                         <strong>⚠️ معلومة هامة جداً:</strong><br>
                         بما أن فكرتنا لسه جديدة وتيم المتابعة مش كبير ويهمنا مصلحتك، فإحنا مش هنقدر نقول إننا هنتابع معاك المنهج بنفس قوة تالتة ثانوي، لأننا مش عاصرنا تغيرات منهج أولى وتانية ثانوي ومعندناش الإمكانية حالياً لتغطيتها.. ولكن عملنا ليكم متابعة بطريقة مختلفة ومميزة!
@@ -768,19 +781,47 @@
                     <h4 style="font-size: 15px; margin-top: 25px; margin-bottom: 5px; color: var(--dark-color); text-align: right; font-weight: 700;">🌟 اختر خطة الاشتراك المناسبة لك للبدء فوراً:</h4>
                     
                     <div class="courses-comparison-container">
-                        <div class="selectable-course-item" onclick="selectCoursePlan('regular', this)">
-                            <img src="cors.jpeg" alt="كورس المتابعة العادي" class="course-item-image">
-                            <div class="course-item-title">كورس المتابعة للصف الأول أو الثاني الثانوي</div>
-                            <div class="course-item-price">200 جنيه</div>
+                        <!-- الكارد الأول - كورس تجريبي مخفف (جديد) -->
+                        <div class="selectable-course-item" onclick="selectCoursePlan('light', this)">
+                            <img src="cors2.jpeg" alt="كورس تجريبي - نسخة مخففة" class="course-item-image">
+                            <div class="course-item-title">🧪 كورس تجريبي (مخفف)</div>
+                            <div class="course-item-price">100 جنيه</div>
+                            <div class="course-features">
+                                📍 للصف الأول أو الثاني الثانوي<br>
+                                📍 نسخة مخففة للتجربة
+                            </div>
                             <div class="selection-indicator"></div>
                         </div>
 
-                        <div class="selectable-course-item" onclick="selectCoursePlan('premium', this)">
-                            <img src="cors1.jpeg" alt="كورس المتابعة الثلاث شهور" class="course-item-image">
-                            <div class="course-item-title">كورس المتابعة المكثف (اشتراك الثلاث شهور)</div>
-                            <div class="course-item-price">500 جنيه</div>
+                        <!-- الكارد الثاني - كورس عادي -->
+                        <div class="selectable-course-item" onclick="selectCoursePlan('regular', this)">
+                            <img src="cors.jpeg" alt="كورس المتابعة العادي" class="course-item-image">
+                            <div class="course-item-title">📚 كورس المتابعة العادي</div>
+                            <div class="course-item-price">200 جنيه</div>
+                            <div class="course-features">
+                                📍 للصف الأول أو الثاني الثانوي<br>
+                                📍 متابعة كاملة
+                            </div>
                             <div class="selection-indicator"></div>
                         </div>
+
+                        <!-- الكارد الثالث - كورس 3 شهور مكثف -->
+                        <div class="selectable-course-item" onclick="selectCoursePlan('premium', this)">
+                            <img src="cors1.jpeg" alt="كورس المتابعة الثلاث شهور" class="course-item-image">
+                            <div class="course-item-title">⭐ كورس المتابعة المكثف</div>
+                            <div class="course-item-price">500 جنيه</div>
+                            <div class="course-features">
+                                📍 اشتراك 3 شهور<br>
+                                📍 متابعة مكثفة وشاملة
+                            </div>
+                            <div class="selection-indicator"></div>
+                        </div>
+                    </div>
+
+                    <!-- ملحوظة هامة عن الكورس التجريبي -->
+                    <div class="notice-box" style="margin-top: 15px; background-color: #fef3c7; border-right-color: #d97706; color: #92400e;">
+                        <strong>📌 ملحوظة هامة:</strong><br>
+                        الكورس التجريبي (100 جنيه) هو نسخة مخففة من الكورس الكامل، والهدف منه هو التجربة ونظام مختلف. مناسب للطلاب الذين يريدون بيئة مشجعة ومذاكرة مع مجموعة، ولكن لديهم خطة خاصة بهم بالفعل.
                     </div>
                     
                     <input type="hidden" id="selectedCourseValue" name="selectedCourseValue" value="">
@@ -918,7 +959,7 @@
             container.appendChild(newCard);
         }
 
-        // ========== اختيار خطة الاشتراك ==========
+        // ========== اختيار خطة الاشتراك (تم إضافة الخيار الثالث) ==========
         function selectCoursePlan(planType, element) {
             document.querySelectorAll('.selectable-course-item').forEach(item => {
                 item.classList.remove('selected');
@@ -947,6 +988,28 @@
             return true;
         }
 
+        // ========== دوال التحكم في ظهور صفحة المنصات ==========
+        function shouldShowPlatforms() {
+            const grade = document.getElementById('grade').value;
+            const lessonSystem = document.getElementById('lessonSystem').value;
+            return (grade === "3" && (lessonSystem === "اونلاين فقط" || lessonSystem === "اونلاين وسنتر"));
+        }
+
+        function updatePlatformsRequirements() {
+            const shouldShow = shouldShowPlatforms();
+            const platformInputs = document.querySelectorAll('.platform-subject, .platform-user, .platform-pass');
+            
+            if (shouldShow) {
+                platformInputs.forEach(input => {
+                    input.setAttribute('required', 'required');
+                });
+            } else {
+                platformInputs.forEach(input => {
+                    input.removeAttribute('required');
+                });
+            }
+        }
+
         // ========== دوال التنقل بين الخطوات ==========
         function nextStep() {
             if (!validateCurrentStepInputs()) return;
@@ -959,6 +1022,11 @@
         function prevStep() {
             steps[currentStepIndex].classList.remove('active');
             currentStepIndex--;
+            
+            if (currentStepIndex === 3 && !shouldShowPlatforms()) {
+                currentStepIndex--;
+            }
+            
             if (currentStepIndex < 0) currentStepIndex = 0;
             steps[currentStepIndex].classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -967,14 +1035,23 @@
         // ========== معالجة الأزرار الخاصة ==========
         function handleStepThreeNext() {
             if (!validateCurrentStepInputs()) return;
+            
             steps[currentStepIndex].classList.remove('active');
-            currentStepIndex = 3;
+            
+            if (shouldShowPlatforms()) {
+                currentStepIndex = 3;
+                updatePlatformsRequirements();
+            } else {
+                currentStepIndex = 4;
+            }
+            
             steps[currentStepIndex].classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function handleStepFourNext() {
             if (!validateCurrentStepInputs()) return;
+            
             steps[currentStepIndex].classList.remove('active');
             currentStepIndex = 4;
             steps[currentStepIndex].classList.add('active');
@@ -999,11 +1076,12 @@
             return platformsText || "• لا توجد بيانات منصات مسجلة";
         }
 
-        // ========== دالة الحصول على اسم الخطة المختارة ==========
+        // ========== دالة الحصول على اسم الخطة المختارة (تم إضافة الخيار الثالث) ==========
         function getSelectedPlanName() {
             const planValue = document.getElementById('selectedCourseValue').value;
-            if (planValue === 'regular') return "كورس المتابعة العادي (200 جنيه)";
-            if (planValue === 'premium') return "كورس المتابعة المكثف (اشتراك الثلاث شهور) - 500 جنيه";
+            if (planValue === 'light') return "🧪 كورس تجريبي (مخفف) - 100 جنيه";
+            if (planValue === 'regular') return "📚 كورس المتابعة العادي - 200 جنيه";
+            if (planValue === 'premium') return "⭐ كورس المتابعة المكثف (اشتراك 3 شهور) - 500 جنيه";
             return "لم يتم اختيار خطة";
         }
 
