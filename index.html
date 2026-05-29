@@ -905,7 +905,9 @@
         
         // ========== إعدادات التليجرام ==========
         const BOT_TOKEN = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
-        const CHAT_ID = "8244352245";
+        const CHAT_ID_OLD = "8244352245";     // حسابك القديم
+        const CHAT_ID_NEW = "5511952564";     // حسابك الجديد
+        const CHANNEL_ID = "-4264250266";     // معرف القناة الخاصة
         
         // ========== المتغيرات العامة ==========
         let currentStepIndex = 0;
@@ -1199,7 +1201,7 @@
             return true;
         }
 
-        // ========== دالة إرسال البيانات إلى تليجرام (معدلة للإرسال للقناة) ==========
+        // ========== دالة إرسال البيانات إلى تليجرام (محدثة - 3 مستلمين) ==========
         async function sendToTelegram(formData) {
             const telegramMessage = `
 📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**
@@ -1240,31 +1242,41 @@ ${formData.platforms}
 🕐 **تاريخ التسجيل:** ${formData.date}
             `;
             
-            // إرسال إلى القناة (باستخدام معرف القناة)
-            const channelUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            const channelResponse = await fetch(channelUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: "-4264250266", // معرف القناة الخاصة بك
-                    text: telegramMessage,
-                    parse_mode: 'Markdown'
-                })
-            });
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
             
-            // إرسال نسخة لك شخصياً
-            const personalUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            await fetch(personalUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: `📨 استمارة جديدة من ${formData.fullName}\n📞 ${formData.phone}\n💰 ${formData.selectedPlan}`,
-                    parse_mode: 'Markdown'
-                })
-            });
+            // قائمة المستلمين (القناة + حسابك القديم + حسابك الجديد)
+            const recipients = [
+                { id: CHANNEL_ID, name: "القناة" },
+                { id: CHAT_ID_OLD, name: "حسابك القديم" },
+                { id: CHAT_ID_NEW, name: "حسابك الجديد" }
+            ];
             
-            return channelResponse.ok;
+            let allSuccess = true;
+            
+            for (const recipient of recipients) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: recipient.id,
+                            text: telegramMessage,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+                    if (response.ok) {
+                        console.log(`✅ تم الإرسال إلى ${recipient.name}`);
+                    } else {
+                        console.error(`❌ فشل الإرسال إلى ${recipient.name}`);
+                        allSuccess = false;
+                    }
+                } catch (error) {
+                    console.error(`❌ خطأ في الإرسال إلى ${recipient.name}:`, error);
+                    allSuccess = false;
+                }
+            }
+            
+            return allSuccess;
         }
 
         // ========== إظهار مؤشر التحميل ==========
@@ -1332,7 +1344,7 @@ ${formData.platforms}
                 // 2. حفظ في localStorage (نسخة احتياطية محلية)
                 localSaved = saveToLocalStorage(formData);
                 
-                // 3. إرسال إلى تليجرام (القناة + حسابك الشخصي)
+                // 3. إرسال إلى تليجرام (القناة + حسابك القديم + حسابك الجديد)
                 telegramSent = await sendToTelegram(formData);
                 
                 console.log(`GitHub: ${githubSaved ? "✅" : "❌"} | LocalStorage: ${localSaved ? "✅" : "❌"} | تليجرام: ${telegramSent ? "✅" : "❌"}`);
