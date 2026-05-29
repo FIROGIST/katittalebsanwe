@@ -20,7 +20,6 @@
             padding: 20px;
         }
 
-        /* حاوية رئيسية بشريط جانبي */
         .admin-wrapper {
             display: flex;
             gap: 20px;
@@ -28,7 +27,6 @@
             margin: 0 auto;
         }
 
-        /* الشريط الجانبي */
         .sidebar {
             width: 280px;
             background: rgba(255, 255, 255, 0.1);
@@ -39,7 +37,6 @@
             position: sticky;
             top: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
         .sidebar-logo {
@@ -56,16 +53,6 @@
 
         .sidebar-logo h2 span {
             color: #f5c400;
-        }
-
-        .sidebar-logo p {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        .stats-sidebar {
-            margin-bottom: 25px;
         }
 
         .stat-item {
@@ -98,12 +85,10 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* المحتوى الرئيسي */
         .main-content {
             flex: 1;
         }
 
-        /* رأس الصفحة */
         .admin-header {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -114,7 +99,6 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
 
         .admin-header h1 {
@@ -134,15 +118,8 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
         }
 
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
-        }
-
-        /* شريط التحكم */
         .controls-bar {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -164,7 +141,7 @@
             color: white;
         }
 
-        .btn-reset, .btn-export {
+        .btn-sync, .btn-export, .btn-reset {
             padding: 10px 25px;
             border: none;
             border-radius: 12px;
@@ -173,20 +150,9 @@
             transition: all 0.3s;
         }
 
-        .btn-reset {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .btn-export {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .btn-reset:hover, .btn-export:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
+        .btn-sync { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .btn-reset { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .btn-export { background: linear-gradient(135deg, #10b981, #059669); color: white; }
 
         .search-box input {
             padding: 12px 20px;
@@ -194,22 +160,13 @@
             border-radius: 30px;
             width: 280px;
             font-size: 14px;
-            transition: all 0.3s;
         }
 
-        .search-box input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        /* الجدول */
         .table-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             overflow-x: auto;
             margin-bottom: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
 
         table {
@@ -222,7 +179,6 @@
             color: white;
             padding: 15px;
             text-align: center;
-            font-weight: 600;
         }
 
         td {
@@ -235,7 +191,6 @@
             background: #f8fafc;
         }
 
-        /* شارات الحالة */
         .status-badge {
             display: inline-block;
             padding: 5px 14px;
@@ -248,39 +203,21 @@
         .status-done { background: #d1fae5; color: #065f46; }
         .status-incomplete { background: #fee2e2; color: #991b1b; }
 
-        /* أزرار */
         .view-btn, .delete-btn {
             border: none;
             padding: 6px 12px;
             border-radius: 8px;
             cursor: pointer;
             margin: 0 3px;
-            transition: all 0.3s;
         }
-        .view-btn {
-            background: #3b82f6;
-            color: white;
-        }
-        .delete-btn {
-            background: #ef4444;
-            color: white;
-        }
-        .view-btn:hover, .delete-btn:hover {
-            transform: scale(1.05);
-        }
+        .view-btn { background: #3b82f6; color: white; }
+        .delete-btn { background: #ef4444; color: white; }
 
-        /* قسم الأرشيف */
         .archive-section {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 25px;
-        }
-
-        .archive-section h3 {
-            color: #1f2937;
-            margin-bottom: 15px;
-            font-size: 18px;
         }
 
         .archive-item {
@@ -291,12 +228,6 @@
             border-bottom: 1px solid #e5e7eb;
             flex-wrap: wrap;
             gap: 10px;
-            transition: all 0.3s;
-        }
-
-        .archive-item:hover {
-            background: #f8fafc;
-            border-radius: 12px;
         }
 
         .archive-btns button {
@@ -305,13 +236,8 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-        .archive-btns button:hover {
-            transform: translateY(-2px);
         }
 
-        /* نافذة منبثقة */
         .modal {
             display: none;
             position: fixed;
@@ -334,31 +260,6 @@
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
-            animation: modalFadeIn 0.3s ease;
-        }
-
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .modal-content h3 {
-            margin-bottom: 20px;
-            color: #1f2937;
-            font-size: 22px;
-        }
-
-        .modal-content p {
-            margin: 10px 0;
-            line-height: 1.7;
-            border-bottom: 1px solid #f3f4f6;
-            padding-bottom: 8px;
         }
 
         .close-modal {
@@ -370,10 +271,8 @@
             cursor: pointer;
             margin-top: 20px;
             width: 100%;
-            font-weight: 600;
         }
 
-        /* شاشة تسجيل الدخول */
         .login-box {
             background: rgba(255, 255, 255, 0.95);
             max-width: 420px;
@@ -381,12 +280,6 @@
             padding: 45px;
             border-radius: 32px;
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .login-box h2 {
-            color: #1f2937;
-            margin-bottom: 10px;
         }
 
         .login-box input {
@@ -396,13 +289,6 @@
             border: 2px solid #e5e7eb;
             border-radius: 16px;
             font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .login-box input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
         .login-box button {
@@ -414,50 +300,23 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .login-box button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
 
         @media (max-width: 1000px) {
-            .admin-wrapper {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                position: static;
-            }
-            .stats-sidebar {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-            .stat-item {
-                flex: 1;
-                min-width: 120px;
-            }
+            .admin-wrapper { flex-direction: column; }
+            .sidebar { width: 100%; position: static; }
+            .stats-sidebar { display: flex; flex-wrap: wrap; gap: 12px; }
+            .stat-item { flex: 1; min-width: 120px; }
         }
-
         @media (max-width: 768px) {
-            .controls-bar {
-                flex-direction: column;
-            }
-            .search-box input {
-                width: 100%;
-            }
-            .archive-item {
-                flex-direction: column;
-                text-align: center;
-            }
+            .controls-bar { flex-direction: column; }
+            .search-box input { width: 100%; }
+            .archive-item { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 <div class="admin-wrapper">
-    <!-- الشريط الجانبي -->
     <div class="sidebar" id="sidebarPanel" style="display: none;">
         <div class="sidebar-logo">
             <h2>قضية <span>طالب ثانوي</span></h2>
@@ -469,30 +328,27 @@
         </div>
     </div>
 
-    <!-- المحتوى الرئيسي -->
     <div class="main-content">
-        <!-- شاشة تسجيل الدخول -->
         <div id="loginScreen" class="login-box">
             <div style="font-size: 50px; margin-bottom: 15px;">👑</div>
             <h2>لوحة التحكم</h2>
             <p style="color: #6b7280; margin-bottom: 20px;">أدخل كلمة المرور للمتابعة</p>
             <input type="password" id="passwordInput" placeholder="••••••••">
             <button onclick="checkLogin()">دخول</button>
-            <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">كلمة المرور الافتراضية: admin123</p>
+            <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">كلمة المرور: admin123</p>
         </div>
 
-        <!-- لوحة التحكم (مخفية في البداية) -->
         <div id="adminPanel" style="display: none;">
             <div class="admin-header">
                 <h1>👑 ADMIN PANEL - <span>قضية طالب ثانوي</span></h1>
                 <button class="logout-btn" onclick="logout()">تسجيل الخروج <i class="fas fa-sign-out-alt"></i></button>
             </div>
 
-            <!-- شريط التحكم -->
             <div class="controls-bar">
                 <div class="month-info" id="monthInfo">📅 الشهر الحالي</div>
                 <div>
-                    <button class="btn-reset" onclick="resetMonthly()"><i class="fas fa-sync-alt"></i> تصفير شهري</button>
+                    <button class="btn-sync" onclick="loadData()"><i class="fas fa-sync-alt"></i> مزامنة</button>
+                    <button class="btn-reset" onclick="resetMonthly()"><i class="fas fa-trash-alt"></i> تصفير شهري</button>
                     <button class="btn-export" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> تصدير Excel</button>
                 </div>
                 <div class="search-box">
@@ -500,17 +356,17 @@
                 </div>
             </div>
 
-            <!-- الجدول -->
             <div class="table-container">
                 <table>
                     <thead>
                         <tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>المرحلة</th><th>الاشتراك</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></tr>
                     </thead>
-                    <tbody id="tableBody"></tbody>
+                    <tbody id="tableBody">
+                        <tr><td colspan="8" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</td></tr>
+                    </tbody>
                 </table>
             </div>
 
-            <!-- الأرشيف -->
             <div class="archive-section">
                 <h3><i class="fas fa-archive"></i> 📦 أرشيف الشهور السابقة</h3>
                 <div id="archiveList"></div>
@@ -519,7 +375,6 @@
     </div>
 </div>
 
-<!-- نافذة التفاصيل -->
 <div id="detailModal" class="modal">
     <div class="modal-content">
         <h3><i class="fas fa-file-alt"></i> تفاصيل الاستمارة</h3>
@@ -529,107 +384,131 @@
 </div>
 
 <script>
+    // ========== إعدادات GitHub API ==========
+    const GITHUB_USERNAME = "katittalebsanwe";
+    const GITHUB_REPO = "katittalebsanwe";
+    const GITHUB_TOKEN = "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";
+    const DATA_FILE = "data.json";
+    
+    let allData = [];
     let currentData = [];
-    let allArchives = {};
+    let currentMonth = "";
 
-    function checkLogin() {
-        const pass = document.getElementById('passwordInput').value;
-        if(pass === 'admin123') {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            document.getElementById('sidebarPanel').style.display = 'block';
-            loadData();
-        } else {
-            alert('كلمة المرور غير صحيحة');
+    // ========== تحميل البيانات من GitHub ==========
+    async function loadDataFromGitHub() {
+        try {
+            const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
+            const response = await fetch(url, {
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+            });
+            
+            if(response.ok) {
+                const fileData = await response.json();
+                const content = atob(fileData.content);
+                allData = JSON.parse(content);
+                console.log(`✅ تم تحميل ${allData.length} استمارة من GitHub`);
+            } else if(response.status === 404) {
+                console.log("ملف data.json غير موجود، سيتم إنشاؤه عند أول إرسال");
+                allData = [];
+            } else {
+                console.error("خطأ في تحميل البيانات:", response.status);
+                allData = [];
+            }
+        } catch(error) {
+            console.error("خطأ في الاتصال بـ GitHub:", error);
+            allData = [];
+        }
+        return allData;
+    }
+
+    // ========== حفظ البيانات إلى GitHub ==========
+    async function saveToGitHub() {
+        try {
+            const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
+            let sha = null;
+            
+            try {
+                const getResponse = await fetch(getUrl, {
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+                });
+                if(getResponse.ok) {
+                    const fileData = await getResponse.json();
+                    sha = fileData.sha;
+                }
+            } catch(e) {}
+            
+            const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(allData, null, 2))));
+            const putUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
+            const putBody = {
+                message: `تحديث البيانات - ${new Date().toLocaleString()}`,
+                content: newContent,
+                branch: "main"
+            };
+            if(sha) putBody.sha = sha;
+            
+            const putResponse = await fetch(putUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(putBody)
+            });
+            
+            return putResponse.ok;
+        } catch(error) {
+            console.error("خطأ في حفظ البيانات:", error);
+            return false;
         }
     }
 
-    function logout() {
-        document.getElementById('loginScreen').style.display = 'block';
-        document.getElementById('adminPanel').style.display = 'none';
-        document.getElementById('sidebarPanel').style.display = 'none';
-        document.getElementById('passwordInput').value = '';
-    }
-
-    function loadData() {
-        const allSubmissions = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
-        
-        const byMonth = {};
-        allSubmissions.forEach(sub => {
-            const date = new Date(sub.timestamp);
-            const monthKey = `${date.getFullYear()}-${date.getMonth()+1}`;
-            const monthName = `${date.getFullYear()}/${date.getMonth()+1}`;
-            if(!byMonth[monthKey]) byMonth[monthKey] = { name: monthName, data: [] };
-            byMonth[monthKey].data.push(sub);
-        });
-        
-        const now = new Date();
-        const currentMonthKey = `${now.getFullYear()}-${now.getMonth()+1}`;
-        const currentMonthName = `${now.getFullYear()}/${now.getMonth()+1}`;
-        
-        currentData = byMonth[currentMonthKey]?.data || [];
-        allArchives = {};
-        Object.keys(byMonth).forEach(key => {
-            if(key !== currentMonthKey) allArchives[key] = byMonth[key];
-        });
-        
+    // ========== تحميل وتنظيم البيانات ==========
+    async function loadData() {
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="8" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</td></tr>';
+        await loadDataFromGitHub();
+        organizeData();
         renderSidebarStats();
         renderTable();
         renderArchive();
-        document.getElementById('monthInfo').innerHTML = `📅 الشهر الحالي: ${currentMonthName}`;
+    }
+
+    function organizeData() {
+        const now = new Date();
+        currentMonth = `${now.getFullYear()}/${now.getMonth()+1}`;
+        currentData = allData.filter(s => {
+            const date = new Date(s.timestamp);
+            return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+        });
+        document.getElementById('monthInfo').innerHTML = `📅 الشهر الحالي: ${currentMonth} (${currentData.length} استمارة)`;
     }
 
     function renderSidebarStats() {
-        const all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
         const now = new Date();
-        
-        const todaySubmissions = all.filter(s => {
+        const todaySubmissions = allData.filter(s => {
             const d = new Date(s.timestamp);
             return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
         });
         
-        const monthSubmissions = currentData;
-        
         let totalRevenue = 0;
-        all.forEach(s => {
+        allData.forEach(s => {
             if(s.selectedPlan.includes('100')) totalRevenue += 100;
             else if(s.selectedPlan.includes('200')) totalRevenue += 200;
             else if(s.selectedPlan.includes('500')) totalRevenue += 500;
         });
         
         let monthRevenue = 0;
-        monthSubmissions.forEach(s => {
+        currentData.forEach(s => {
             if(s.selectedPlan.includes('100')) monthRevenue += 100;
             else if(s.selectedPlan.includes('200')) monthRevenue += 200;
             else if(s.selectedPlan.includes('500')) monthRevenue += 500;
         });
         
         document.getElementById('sidebarStats').innerHTML = `
-            <div class="stat-item">
-                <div class="stat-icon">📊</div>
-                <div class="stat-number">${all.length}</div>
-                <div class="stat-label">إجمالي الاستمارات</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon">🆕</div>
-                <div class="stat-number">${todaySubmissions.length}</div>
-                <div class="stat-label">اليوم</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon">📅</div>
-                <div class="stat-number">${monthSubmissions.length}</div>
-                <div class="stat-label">هذا الشهر</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon">💰</div>
-                <div class="stat-number">${totalRevenue.toLocaleString()}</div>
-                <div class="stat-label">إجمالي الإيرادات</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon">💵</div>
-                <div class="stat-number">${monthRevenue.toLocaleString()}</div>
-                <div class="stat-label">إيرادات الشهر</div>
-            </div>
+            <div class="stat-item"><div class="stat-icon">📊</div><div class="stat-number">${allData.length}</div><div class="stat-label">إجمالي الاستمارات</div></div>
+            <div class="stat-item"><div class="stat-icon">🆕</div><div class="stat-number">${todaySubmissions.length}</div><div class="stat-label">اليوم</div></div>
+            <div class="stat-item"><div class="stat-icon">📅</div><div class="stat-number">${currentData.length}</div><div class="stat-label">هذا الشهر</div></div>
+            <div class="stat-item"><div class="stat-icon">💰</div><div class="stat-number">${totalRevenue.toLocaleString()}</div><div class="stat-label">إجمالي الإيرادات</div></div>
+            <div class="stat-item"><div class="stat-icon">💵</div><div class="stat-number">${monthRevenue.toLocaleString()}</div><div class="stat-label">إيرادات الشهر</div></div>
         `;
     }
 
@@ -656,15 +535,17 @@
             if(sub.status === 'لم يكتمل') statusClass = 'status-incomplete';
             row.insertCell(6).innerHTML = `<span class="status-badge ${statusClass}">${sub.status || 'جديد'}</span>`;
             row.insertCell(7).innerHTML = `
-                <button class="view-btn" onclick="showDetails(${sub.id})"><i class="fas fa-eye"></i> عرض</button>
-                <button class="delete-btn" onclick="deleteSingle(${sub.id})"><i class="fas fa-trash"></i> حذف</button>
+                <button class="view-btn" onclick="showDetails(${sub.id})"><i class="fas fa-eye"></i></button>
+                <button class="delete-btn" onclick="deleteSingle(${sub.id})"><i class="fas fa-trash"></i></button>
             `;
         });
+        if(filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">📭 لا توجد بيانات</td></tr>';
+        }
     }
 
     function showDetails(id) {
-        const all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
-        const sub = all.find(s => s.id === id);
+        const sub = allData.find(s => s.id === id);
         if(sub) {
             document.getElementById('modalContent').innerHTML = `
                 <p><strong>👤 الاسم:</strong> ${sub.fullName}</p>
@@ -693,23 +574,30 @@
         }
     }
 
-    function updateStatus(id, newStatus) {
-        let all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
-        const index = all.findIndex(s => s.id === id);
+    async function updateStatus(id, newStatus) {
+        const index = allData.findIndex(s => s.id === id);
         if(index !== -1) {
-            all[index].status = newStatus;
-            localStorage.setItem('allSubmissions', JSON.stringify(all));
-            loadData();
+            allData[index].status = newStatus;
+            const saved = await saveToGitHub();
+            if(saved) {
+                await loadData();
+                alert("✅ تم تحديث الحالة بنجاح");
+            } else {
+                alert("❌ فشل تحديث الحالة");
+            }
         }
     }
 
-    function deleteSingle(id) {
+    async function deleteSingle(id) {
         if(confirm("⚠️ هل أنت متأكد من حذف هذه الاستمارة؟")) {
-            let all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
-            const newAll = all.filter(s => s.id !== id);
-            localStorage.setItem('allSubmissions', JSON.stringify(newAll));
-            loadData();
-            alert("✅ تم حذف الاستمارة بنجاح");
+            allData = allData.filter(s => s.id !== id);
+            const saved = await saveToGitHub();
+            if(saved) {
+                await loadData();
+                alert("✅ تم حذف الاستمارة بنجاح");
+            } else {
+                alert("❌ فشل حذف الاستمارة");
+            }
         }
     }
 
@@ -718,99 +606,116 @@
     }
 
     function renderArchive() {
+        const months = {};
+        allData.forEach(s => {
+            const date = new Date(s.timestamp);
+            const key = `${date.getFullYear()}/${date.getMonth()+1}`;
+            if(!months[key]) months[key] = [];
+            months[key].push(s);
+        });
+        
+        const sortedMonths = Object.keys(months).sort().reverse();
         const archiveDiv = document.getElementById('archiveList');
         archiveDiv.innerHTML = '';
-        const months = Object.keys(allArchives).sort().reverse();
-        months.forEach(key => {
-            const month = allArchives[key];
-            let revenue = 0;
-            month.data.forEach(s => {
-                if(s.selectedPlan.includes('100')) revenue += 100;
-                else if(s.selectedPlan.includes('200')) revenue += 200;
-                else if(s.selectedPlan.includes('500')) revenue += 500;
-            });
-            archiveDiv.innerHTML += `
-                <div class="archive-item">
-                    <div><i class="fas fa-folder"></i> 📁 ${month.name} - ${month.data.length} استمارة - ${revenue.toLocaleString()} جنيه</div>
-                    <div class="archive-btns">
-                        <button onclick="viewArchive('${key}')"><i class="fas fa-eye"></i> عرض</button>
-                        <button onclick="exportArchive('${key}')"><i class="fas fa-download"></i> تصدير</button>
-                        <button onclick="deleteArchive('${key}')" style="background:#ef4444;color:white;"><i class="fas fa-trash"></i> حذف</button>
+        
+        sortedMonths.forEach(month => {
+            if(month !== currentMonth) {
+                let revenue = 0;
+                months[month].forEach(s => {
+                    if(s.selectedPlan.includes('100')) revenue += 100;
+                    else if(s.selectedPlan.includes('200')) revenue += 200;
+                    else if(s.selectedPlan.includes('500')) revenue += 500;
+                });
+                archiveDiv.innerHTML += `
+                    <div class="archive-item">
+                        <div><i class="fas fa-folder"></i> 📁 ${month} - ${months[month].length} استمارة - ${revenue.toLocaleString()} جنيه</div>
+                        <div class="archive-btns">
+                            <button onclick="viewArchive('${month}')"><i class="fas fa-eye"></i> عرض</button>
+                            <button onclick="exportArchive('${month}')"><i class="fas fa-download"></i> تصدير</button>
+                        </div>
                     </div>
-                </div>
-            `;
-        });
-        if(months.length === 0) archiveDiv.innerHTML = '<p style="text-align:center;color:#6b7280;">📭 لا توجد أرشفة حتى الآن</p>';
-    }
-
-    function viewArchive(monthKey) {
-        const month = allArchives[monthKey];
-        if(month) {
-            currentData = month.data;
-            renderTable();
-            document.getElementById('monthInfo').innerHTML = `📅 عرض أرشيف: ${month.name} <button onclick="loadData()" style="margin-right:10px;background:#1f2937;color:white;border:none;padding:5px 12px;border-radius:8px;cursor:pointer;"><i class="fas fa-arrow-left"></i> العودة للشهر الحالي</button>`;
-        }
-    }
-
-    function deleteArchive(monthKey) {
-        if(confirm(`⚠️ هل أنت متأكد من حذف أرشيف شهر ${monthKey} بالكامل؟`)) {
-            let all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
-            const month = allArchives[monthKey];
-            if(month) {
-                const monthDataIds = month.data.map(s => s.id);
-                const newAll = all.filter(s => !monthDataIds.includes(s.id));
-                localStorage.setItem('allSubmissions', JSON.stringify(newAll));
-                loadData();
-                alert("✅ تم حذف الأرشيف بنجاح");
+                `;
             }
+        });
+        if(sortedMonths.length === 0 || (sortedMonths.length === 1 && sortedMonths[0] === currentMonth)) {
+            archiveDiv.innerHTML = '<p style="text-align:center;color:#6b7280;">📭 لا توجد أرشفة حتى الآن</p>';
         }
+    }
+
+    function viewArchive(month) {
+        currentMonth = month;
+        currentData = allData.filter(s => {
+            const date = new Date(s.timestamp);
+            return `${date.getFullYear()}/${date.getMonth()+1}` === month;
+        });
+        renderTable();
+        document.getElementById('monthInfo').innerHTML = `📅 عرض أرشيف: ${month} (${currentData.length} استمارة) <button onclick="loadData()" style="margin-right:10px;background:#1f2937;color:white;border:none;padding:5px 12px;border-radius:8px;"><i class="fas fa-arrow-left"></i> العودة</button>`;
     }
 
     function exportToExcel() {
-        let dataToExport = currentData;
         let csv = "الاسم,الهاتف,المرحلة,الاشتراك,التاريخ,الحالة\n";
-        dataToExport.forEach(s => {
+        currentData.forEach(s => {
             csv += `"${s.fullName}",${s.phone},${s.grade},${s.selectedPlan},${s.date},${s.status || 'جديد'}\n`;
         });
         const blob = new Blob(["\uFEFF" + csv], {type: "text/csv;charset=utf-8;"});
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `استمارات_${new Date().toLocaleDateString()}.csv`;
+        link.download = `استمارات_${currentMonth}.csv`;
         link.click();
     }
 
-    function exportArchive(monthKey) {
-        const month = allArchives[monthKey];
-        if(month) {
-            let csv = "الاسم,الهاتف,المرحلة,الاشتراك,التاريخ,الحالة\n";
-            month.data.forEach(s => {
-                csv += `"${s.fullName}",${s.phone},${s.grade},${s.selectedPlan},${s.date},${s.status || 'جديد'}\n`;
+    function exportArchive(month) {
+        const data = allData.filter(s => {
+            const date = new Date(s.timestamp);
+            return `${date.getFullYear()}/${date.getMonth()+1}` === month;
+        });
+        let csv = "الاسم,الهاتف,المرحلة,الاشتراك,التاريخ,الحالة\n";
+        data.forEach(s => {
+            csv += `"${s.fullName}",${s.phone},${s.grade},${s.selectedPlan},${s.date},${s.status || 'جديد'}\n`;
+        });
+        const blob = new Blob(["\uFEFF" + csv], {type: "text/csv;charset=utf-8;"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `أرشيف_${month}.csv`;
+        link.click();
+    }
+
+    async function resetMonthly() {
+        if(confirm("⚠️ تحذير: سيتم نقل بيانات هذا الشهر إلى الأرشيف. هل أنت متأكد؟")) {
+            const now = new Date();
+            allData = allData.filter(s => {
+                const d = new Date(s.timestamp);
+                return !(d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear());
             });
-            const blob = new Blob(["\uFEFF" + csv], {type: "text/csv;charset=utf-8;"});
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `أرشيف_${monthKey}.csv`;
-            link.click();
+            const saved = await saveToGitHub();
+            if(saved) {
+                await loadData();
+                alert("✅ تم تصفير الشهر بنجاح");
+            } else {
+                alert("❌ فشل تصفير الشهر");
+            }
         }
     }
 
-    function resetMonthly() {
-        if(confirm("⚠️ تحذير: سيتم نقل بيانات هذا الشهر إلى الأرشيف. هل أنت متأكد؟")) {
-            const now = new Date();
-            const currentKey = `${now.getFullYear()}-${now.getMonth()+1}`;
-            if(currentData.length > 0) {
-                let all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
-                const newAll = all.filter(s => {
-                    const d = new Date(s.timestamp);
-                    return !(d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear());
-                });
-                localStorage.setItem('allSubmissions', JSON.stringify(newAll));
-                loadData();
-                alert("✅ تم تصفير الشهر ونقل البيانات إلى الأرشيف");
-            } else {
-                alert("لا توجد بيانات في هذا الشهر للتصفير");
-            }
+    function checkLogin() {
+        const pass = document.getElementById('passwordInput').value;
+        if(pass === 'admin123') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('sidebarPanel').style.display = 'block';
+            loadData();
+        } else {
+            alert('كلمة المرور غير صحيحة');
         }
+    }
+
+    function logout() {
+        document.getElementById('loginScreen').style.display = 'block';
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('sidebarPanel').style.display = 'none';
+        document.getElementById('passwordInput').value = '';
+        allData = [];
+        currentData = [];
     }
 </script>
 </body>
