@@ -166,7 +166,7 @@
             color: white;
         }
 
-        .btn-sync, .btn-export, .btn-reset {
+        .btn-sync, .btn-export {
             padding: 10px 25px;
             border: none;
             border-radius: 12px;
@@ -176,10 +176,9 @@
         }
 
         .btn-sync { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-        .btn-reset { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
         .btn-export { background: linear-gradient(135deg, #10b981, #059669); color: white; }
 
-        .btn-sync:hover, .btn-reset:hover, .btn-export:hover {
+        .btn-sync:hover, .btn-export:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
@@ -253,47 +252,6 @@
         .view-btn { background: #3b82f6; color: white; }
         .delete-btn { background: #ef4444; color: white; }
         .view-btn:hover, .delete-btn:hover { transform: scale(1.05); }
-
-        .archive-section {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-
-        .archive-section h3 {
-            color: #1f2937;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .archive-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #e5e7eb;
-            flex-wrap: wrap;
-            gap: 10px;
-            transition: all 0.3s;
-        }
-
-        .archive-item:hover {
-            background: #f8fafc;
-            border-radius: 12px;
-        }
-
-        .archive-btns button {
-            margin: 0 5px;
-            padding: 6px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .archive-btns button:hover {
-            transform: translateY(-2px);
-        }
 
         .modal {
             display: none;
@@ -414,7 +372,6 @@
         @media (max-width: 768px) {
             .controls-bar { flex-direction: column; }
             .search-box input { width: 100%; }
-            .archive-item { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -463,7 +420,7 @@
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>المرحلة</th><th>الاشتراك</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></td>
+                        <tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>المرحلة</th><th>الاشتراك</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></tr>
                     </thead>
                     <tbody id="tableBody">
                         <tr><td colspan="8" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> جاري التحميل من تليجرام...</td></tr>
@@ -485,7 +442,9 @@
 <script>
     // ========== إعدادات تليجرام ==========
     const BOT_TOKEN = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
-    // قراءة الرسائل من المحادثات الخاصة (حسابيك الشخصيين)
+    
+    // معرفات المحادثات التي يرسل إليها البوت (حساباتك الشخصية)
+    // البوت يرسل إلى هذه الحسابات، ونحن نقرأ الرسائل منها
     const CHAT_IDS = ["8244352245", "5511952564"]; // حسابك القديم والجديد
     
     let submissionsData = []; // مصفوفة لتخزين الاستمارات
