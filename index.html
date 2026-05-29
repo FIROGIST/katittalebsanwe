@@ -897,6 +897,12 @@
     </div>
 
     <script>
+        // ========== إعدادات GitHub API ==========
+        const GITHUB_USERNAME = "katittalebsanwe";
+        const GITHUB_REPO = "katittalebsanwe";
+        const GITHUB_TOKEN = "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";
+        const DATA_FILE = "data.json";
+        
         // ========== إعدادات التليجرام ==========
         const BOT_TOKEN = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
         const CHAT_ID = "8244352245";
@@ -1129,7 +1135,58 @@
             return "لم يتم اختيار خطة";
         }
 
-        // ========== دالة حفظ البيانات في localStorage ==========
+        // ========== دالة حفظ البيانات في GitHub API ==========
+        async function saveToGitHub(formData) {
+            try {
+                // جلب البيانات الحالية من GitHub
+                const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
+                let existingData = [];
+                let sha = null;
+                
+                try {
+                    const getResponse = await fetch(getUrl, {
+                        headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+                    });
+                    if(getResponse.ok) {
+                        const fileData = await getResponse.json();
+                        const content = atob(fileData.content);
+                        existingData = JSON.parse(content);
+                        sha = fileData.sha;
+                    }
+                } catch(e) {
+                    console.log("ملف data.json غير موجود، سيتم إنشاؤه");
+                }
+                
+                // إضافة البيانات الجديدة
+                existingData.push(formData);
+                const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(existingData, null, 2))));
+                
+                // حفظ في GitHub
+                const putUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
+                const putBody = {
+                    message: `إضافة استمارة جديدة - ${formData.fullName}`,
+                    content: newContent,
+                    branch: "main"
+                };
+                if(sha) putBody.sha = sha;
+                
+                const putResponse = await fetch(putUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(putBody)
+                });
+                
+                return putResponse.ok;
+            } catch(error) {
+                console.error("خطأ في حفظ البيانات على GitHub:", error);
+                return false;
+            }
+        }
+
+        // ========== دالة حفظ البيانات في localStorage (نسخة احتياطية) ==========
         function saveToLocalStorage(formData) {
             let allSubmissions = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
             allSubmissions.push(formData);
@@ -1247,7 +1304,15 @@ ${formData.platforms}
             showLoading();
             
             try {
-                // حفظ في localStorage
+                // حفظ في GitHub (مركزي)
+                const githubSaved = await saveToGitHub(formData);
+                if (githubSaved) {
+                    console.log("✅ تم حفظ البيانات في GitHub");
+                } else {
+                    console.log("⚠️ فشل حفظ البيانات في GitHub");
+                }
+                
+                // حفظ في localStorage (نسخة احتياطية محلية)
                 saveToLocalStorage(formData);
                 
                 // إرسال إلى تليجرام
