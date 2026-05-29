@@ -485,47 +485,77 @@
 <script>
     // ========== إعدادات تليجرام ==========
     const BOT_TOKEN = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
-    const CHANNEL_ID = "-4264250266"; // معرف القناة الخاصة بك
+    // قراءة الرسائل من المحادثات الخاصة (حسابيك الشخصيين)
+    const CHAT_IDS = ["8244352245", "5511952564"]; // حسابك القديم والجديد
     
     let submissionsData = []; // مصفوفة لتخزين الاستمارات
     
-    // ========== تحميل البيانات من تليجرام ==========
+    // ========== تحميل البيانات من تليجرام (من المحادثات الخاصة) ==========
     async function loadFromTelegram() {
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> جاري التحميل من تليجرام...</td></tr>';
         
+        let allMessages = [];
+        
         try {
-            // جلب آخر 100 رسالة من القناة
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?chat_id=${CHANNEL_ID}&limit=100`;
-            const response = await fetch(url);
-            const data = await response.json();
+            // جلب الرسائل من جميع المحادثات المحددة
+            for (const chatId of CHAT_IDS) {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?chat_id=${chatId}&limit=100`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.ok && data.result) {
+                    for (const update of data.result) {
+                        const message = update.message;
+                        if (message && message.text && message.text.includes("📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**")) {
+                            allMessages.push({
+                                text: message.text,
+                                date: message.date,
+                                chatId: chatId
+                            });
+                        }
+                    }
+                    console.log(`✅ تم تحميل ${data.result.length} رسالة من المحادثة ${chatId}`);
+                } else {
+                    console.warn(`⚠️ فشل جلب البيانات من المحادثة ${chatId}:`, data);
+                }
+            }
             
-            if (data.ok && data.result) {
+            if (allMessages.length > 0) {
                 const submissions = [];
                 
-                for (const update of data.result) {
-                    const message = update.message || update.channel_post;
-                    if (message && message.text && message.text.includes("📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**")) {
-                        const parsed = parseTelegramMessage(message.text, message.date);
-                        if (parsed) {
-                            submissions.push(parsed);
-                        }
+                for (const msg of allMessages) {
+                    const parsed = parseTelegramMessage(msg.text, msg.date);
+                    if (parsed) {
+                        submissions.push(parsed);
+                    }
+                }
+                
+                // إزالة التكرارات بناءً على المعرف (id)
+                const uniqueSubmissions = [];
+                const ids = new Set();
+                for (const sub of submissions) {
+                    if (!ids.has(sub.id)) {
+                        ids.add(sub.id);
+                        uniqueSubmissions.push(sub);
                     }
                 }
                 
                 // ترتيب من الأحدث إلى الأقدم
-                submissions.sort((a, b) => b.timestamp - a.timestamp);
-                submissionsData = submissions;
+                uniqueSubmissions.sort((a, b) => b.timestamp - a.timestamp);
+                submissionsData = uniqueSubmissions;
                 
                 renderStats();
                 renderTable();
-                console.log(`✅ تم تحميل ${submissions.length} استمارة من تليجرام`);
+                console.log(`✅ تم تحميل ${uniqueSubmissions.length} استمارة من تليجرام (من ${CHAT_IDS.length} محادثة)`);
                 document.getElementById('connectionStatus').innerHTML = '🤖 متصل بتليجرام ✅';
                 document.getElementById('connectionStatus').style.background = '#10b981';
             } else {
-                console.error("فشل جلب البيانات من تليجرام:", data);
-                tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">⚠️ فشل الاتصال بتليجرام. تأكد من أن البوت مشرف في القناة.</td></tr>';
-                document.getElementById('connectionStatus').innerHTML = '⚠️ خطأ في الاتصال';
+                console.log("📭 لا توجد رسائل استمارة في المحادثات");
+                submissionsData = [];
+                renderStats();
+                renderTable();
+                document.getElementById('connectionStatus').innerHTML = '📭 لا توجد بيانات';
                 document.getElementById('connectionStatus').style.background = '#f59e0b';
             }
         } catch (error) {
