@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - قضية طالب ثانوي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .admin-container { max-width: 1400px; margin: 0 auto; }
+        
+        /* Login Box */
+        .login-box { background: white; max-width: 400px; margin: 100px auto; padding: 40px; border-radius: 20px; text-align: center; }
+        .login-box input { width: 100%; padding: 15px; margin: 15px 0; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; }
+        .login-box button { background: #1f2937; color: white; padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; }
+        
+        /* Header */
+        .admin-header { background: white; border-radius: 20px; padding: 20px 30px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .admin-header h1 { font-size: 24px; color: #1f2937; }
+        .admin-header h1 span { color: #f5c400; }
+        .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .stat-card { background: white; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .stat-card .number { font-size: 32px; font-weight: 800; color: #1f2937; }
+        .stat-card .label { color: #6b7280; font-size: 14px; margin-top: 5px; }
+        
+        /* Controls */
+        .controls-bar { background: white; border-radius: 20px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; align-items: center; }
+        .month-info { font-size: 18px; font-weight: 700; }
+        .btn-reset, .btn-export { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        .btn-reset { background: #f59e0b; color: white; }
+        .btn-export { background: #10b981; color: white; }
+        .search-box input { padding: 10px 15px; border: 2px solid #e5e7eb; border-radius: 10px; width: 250px; font-size: 14px; }
+        
+        /* Table */
+        .table-container { background: white; border-radius: 20px; overflow-x: auto; margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #1f2937; color: white; padding: 12px; text-align: center; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #f3f4f6; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-new { background: #dbeafe; color: #1e40af; }
+        .status-contacted { background: #fef3c7; color: #92400e; }
+        .status-done { background: #d1fae5; color: #065f46; }
+        .view-btn { background: #3b82f6; color: white; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+        
+        /* Archive */
+        .archive-section { background: white; border-radius: 20px; padding: 20px; margin-bottom: 25px; }
+        .archive-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; gap: 10px; }
+        .archive-btns button { margin: 0 5px; padding: 5px 15px; border: none; border-radius: 6px; cursor: pointer; background: #e5e7eb; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; border-radius: 20px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h3 { margin-bottom: 20px; }
+        .modal-content p { margin: 8px 0; line-height: 1.6; }
+        .close-modal { background: #1f2937; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; }
+        
+        @media (max-width: 768px) { .controls-bar { flex-direction: column; } .search-box input { width: 100%; } .archive-item { flex-direction: column; text-align: center; } }
+    </style>
+</head>
+<body>
+<div class="admin-container" id="adminApp">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-box">
+        <h2>🔐 لوحة التحكم</h2>
+        <input type="password" id="passwordInput" placeholder="كلمة المرور">
+        <button onclick="checkLogin()">دخول</button>
+        <p style="margin-top: 15px; font-size: 12px; color: #6b7280;">كلمة المرور الافتراضية: admin123</p>
+    </div>
+
+    <!-- Admin Panel (hidden by default) -->
+    <div id="adminPanel" style="display: none;">
+        <div class="admin-header">
+            <h1>👑 ADMIN PANEL - <span>قضية طالب ثانوي</span></h1>
+            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <!-- Controls -->
+        <div class="controls-bar">
+            <div class="month-info" id="monthInfo"></div>
+            <div>
+                <button class="btn-reset" onclick="resetMonthly()">🔄 تصفير شهري</button>
+                <button class="btn-export" onclick="exportToExcel()">📥 تصدير Excel</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم أو الهاتف..." onkeyup="renderTable()">
+            </div>
+        </div>
+
+        <!-- Current Month Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>المرحلة</th><th>الاشتراك</th><th>التاريخ</th><th>الحالة</th><th></th></tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Archive Section -->
+        <div class="archive-section">
+            <h3 style="margin-bottom: 15px;">📦 أرشيف الشهور السابقة</h3>
+            <div id="archiveList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for details -->
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <h3>📋 تفاصيل الاستمارة</h3>
+        <div id="modalContent"></div>
+        <button class="close-modal" onclick="closeModal()">إغلاق</button>
+    </div>
+</div>
+
+<script>
+    let currentData = [];
+    let allArchives = {};
+    let currentViewMonth = null;
+
+    function checkLogin() {
+        const pass = document.getElementById('passwordInput').value;
+        if(pass === 'admin123') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadData();
+        } else {
+            alert('كلمة المرور غير صحيحة');
+        }
+    }
+
+    function logout() {
+        document.getElementById('loginScreen').style.display = 'block';
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('passwordInput').value = '';
+    }
+
+    function loadData() {
+        const allSubmissions = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
+        
+        const byMonth = {};
+        allSubmissions.forEach(sub => {
+            const date = new Date(sub.timestamp);
+            const monthKey = `${date.getFullYear()}-${date.getMonth()+1}`;
+            const monthName = `${date.getFullYear()}/${date.getMonth()+1}`;
+            if(!byMonth[monthKey]) byMonth[monthKey] = { name: monthName, data: [] };
+            byMonth[monthKey].data.push(sub);
+        });
+        
+        const now = new Date();
+        const currentMonthKey = `${now.getFullYear()}-${now.getMonth()+1}`;
+        const currentMonthName = `${now.getFullYear()}/${now.getMonth()+1}`;
+        
+        currentData = byMonth[currentMonthKey]?.data || [];
+        allArchives = {};
+        Object.keys(byMonth).forEach(key => {
+            if(key !== currentMonthKey) allArchives[key] = byMonth[key];
+        });
+        
+        renderStats();
+        renderTable();
+        renderArchive();
+        document.getElementById('monthInfo').innerHTML = `📅 الشهر الحالي: ${currentMonthName}`;
+    }
+
+    function renderStats() {
+        const all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
+        const now = new Date();
+        
+        const todaySubmissions = all.filter(s => {
+            const d = new Date(s.timestamp);
+            return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        });
+        
+        const monthSubmissions = currentData;
+        
+        let totalRevenue = 0;
+        all.forEach(s => {
+            if(s.selectedPlan.includes('100')) totalRevenue += 100;
+            else if(s.selectedPlan.includes('200')) totalRevenue += 200;
+            else if(s.selectedPlan.includes('500')) totalRevenue += 500;
+        });
+        
+        let monthRevenue = 0;
+        monthSubmissions.forEach(s => {
+            if(s.selectedPlan.includes('100')) monthRevenue += 100;
+            else if(s.selectedPlan.includes('200')) monthRevenue += 200;
+            else if(s.selectedPlan.includes('500')) monthRevenue += 500;
+        });
+        
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card"><div class="number">${all.length}</div><div class="label">📊 إجمالي الاستمارات</div></div>
+            <div class="stat-card"><div class="number">${todaySubmissions.length}</div><div class="label">🆕 اليوم</div></div>
+            <div class="stat-card"><div class="number">${monthSubmissions.length}</div><div class="label">📅 هذا الشهر</div></div>
+            <div class="stat-card"><div class="number">${totalRevenue.toLocaleString()}</div><div class="label">💰 إجمالي الإيرادات</div></div>
+            <div class="stat-card"><div class="number">${monthRevenue.toLocaleString()}</div><div class="label">💵 إيرادات هذا الشهر</div></div>
+        `;
+    }
+
+    function renderTable() {
+        const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+        let filtered = currentData.filter(s => 
+            s.fullName.toLowerCase().includes(search) || 
+            s.phone.includes(search)
+        );
+        
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        filtered.forEach((sub, idx) => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = idx+1;
+            row.insertCell(1).innerText = sub.fullName;
+            row.insertCell(2).innerText = sub.phone;
+            row.insertCell(3).innerText = sub.grade;
+            row.insertCell(4).innerText = sub.selectedPlan;
+            row.insertCell(5).innerText = sub.date;
+            let statusClass = 'status-new';
+            if(sub.status === 'تم التواصل') statusClass = 'status-contacted';
+            if(sub.status === 'منتهي') statusClass = 'status-done';
+            row.insertCell(6).innerHTML = `<span class="status-badge ${statusClass}">${sub.status || 'جديد'}</span>`;
+            row.insertCell(7).innerHTML = `<button class="view-btn" onclick="showDetails(${sub.id})">👁️ عرض</button>`;
+        });
+    }
+
+    function showDetails(id) {
+        const all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
+        const sub = all.find(s => s.id === id);
+        if(sub) {
+            document.getElementById('modalContent').innerHTML = `
+                <p><strong>👤 الاسم:</strong> ${sub.fullName}</p>
+                <p><strong>📍 المحافظة:</strong> ${sub.city}</p>
+                <p><strong>📞 الهاتف:</strong> ${sub.phone}</p>
+                <p><strong>📧 البريد:</strong> ${sub.email}</p>
+                <p><strong>🎂 تاريخ الميلاد:</strong> ${sub.birthDay}/${sub.birthMonth}/${sub.birthYear}</p>
+                <p><strong>📚 المرحلة:</strong> ${sub.grade}</p>
+                <p><strong>🎓 الشعبة:</strong> ${sub.section}</p>
+                <p><strong>👨‍👦 ولي الأمر:</strong> ${sub.parentName}</p>
+                <p><strong>📱 هاتف ولي الأمر:</strong> ${sub.parentPhone}</p>
+                <p><strong>💬 المشكلة:</strong> ${sub.message}</p>
+                <p><strong>💰 الاشتراك:</strong> ${sub.selectedPlan}</p>
+                <p><strong>📦 المنصات:</strong> ${sub.platforms}</p>
+                <p><strong>🕐 التاريخ:</strong> ${sub.date}</p>
+                <p><strong>📌 الحالة:</strong> 
+                    <select id="statusSelect" onchange="updateStatus(${sub.id}, this.value)">
+                        <option value="جديد" ${sub.status === 'جديد' ? 'selected' : ''}>جديد</option>
+                        <option value="تم التواصل" ${sub.status === 'تم التواصل' ? 'selected' : ''}>تم التواصل</option>
+                        <option value="منتهي" ${sub.status === 'منتهي' ? 'selected' : ''}>منتهي</option>
+                    </select>
+                </p>
+            `;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+    }
+
+    function updateStatus(id, newStatus) {
+        let all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
+        const index = all.findIndex(s => s.id === id);
+        if(index !== -1) {
+            all[index].status = newStatus;
+            localStorage.setItem('allSubmissions', JSON.stringify(all));
+            loadData();
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('detailModal').style.display = 'none';
+    }
+
+    function renderArchive() {
+        const archiveDiv = document.getElementById('archiveList');
+        archiveDiv.innerHTML = '';
+        const months = Object.keys(allArchives).sort().reverse();
+        months.forEach(key => {
+            const month = allArchives[key];
+            let revenue = 0;
+            month.data.forEach(s => {
+                if(s.selectedPlan.includes('100')) revenue += 100;
+                else if(s.selectedPlan.includes('200')) revenue += 200;
+                else if(s.selectedPlan.includes('500')) revenue += 500;
+            });
+            archiveDiv.innerHTML += `
+                <div class="archive-item">
+                    <div>📁 ${month.name} - ${month.data.length} استمارة - ${revenue.toLocaleString()} جنيه</div>
+                    <div class="archive-btns">
+                        <button onclick="viewArchive('${key}')">📄 عرض</button>
+                        <button onclick="exportArchive('${key}')">📥 تصدير</button>
+                    </div>
+                </div>
+            `;
+        });
+        if(months.length === 0) archiveDiv.innerHTML = '<p style="text-align:center;color:#6b7280;">لا توجد أرشفة حتى الآن</p>';
+    }
+
+    function viewArchive(monthKey) {
+        const month = allArchives[monthKey];
+        if(month) {
+            currentData = month.data;
+            renderTable();
+            document.getElementById('monthInfo').innerHTML = `📅 عرض أرشيف: ${month.name} <button onclick="loadData()" style="margin-right:10px;background:#1f2937;color:white;border:none;padding:5px 12px;border-radius:8px;cursor:pointer;">↺ العودة للشهر الحالي</button>`;
+        }
+    }
+
+    function exportToExcel() {
+        let dataToExport = currentData;
+        let csv = "الاسم,الهاتف,المرحلة,الاشتراك,التاريخ,الحالة\n";
+        dataToExport.forEach(s => {
+            csv += `"${s.fullName}",${s.phone},${s.grade},${s.selectedPlan},${s.date},${s.status || 'جديد'}\n`;
+        });
+        const blob = new Blob(["\uFEFF" + csv], {type: "text/csv;charset=utf-8;"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `استمارات_${new Date().toLocaleDateString()}.csv`;
+        link.click();
+    }
+
+    function exportArchive(monthKey) {
+        const month = allArchives[monthKey];
+        if(month) {
+            let csv = "الاسم,الهاتف,المرحلة,الاشتراك,التاريخ,الحالة\n";
+            month.data.forEach(s => {
+                csv += `"${s.fullName}",${s.phone},${s.grade},${s.selectedPlan},${s.date},${s.status || 'جديد'}\n`;
+            });
+            const blob = new Blob(["\uFEFF" + csv], {type: "text/csv;charset=utf-8;"});
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `أرشيف_${monthKey}.csv`;
+            link.click();
+        }
+    }
+
+    function resetMonthly() {
+        if(confirm("⚠️ تحذير: سيتم نقل بيانات هذا الشهر إلى الأرشيف. هل أنت متأكد؟")) {
+            const now = new Date();
+            const currentKey = `${now.getFullYear()}-${now.getMonth()+1}`;
+            if(currentData.length > 0) {
+                let all = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
+                // Remove current month from main storage (they stay in archive via the monthly view)
+                const newAll = all.filter(s => {
+                    const d = new Date(s.timestamp);
+                    return !(d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear());
+                });
+                localStorage.setItem('allSubmissions', JSON.stringify(newAll));
+                loadData();
+                alert("✅ تم تصفير الشهر ونقل البيانات إلى الأرشيف");
+            } else {
+                alert("لا توجد بيانات في هذا الشهر للتصفير");
+            }
+        }
+    }
+</script>
+</body>
+</html>
