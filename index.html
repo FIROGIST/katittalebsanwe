@@ -1,4 +1,4 @@
-01<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -74,6 +74,68 @@
             padding: 35px;
             position: relative;
             z-index: 2; 
+        }
+
+        /* ===== قائمة اختيار اللغة ===== */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.95);
+            padding: 8px 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            direction: ltr;
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-btn img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .lang-btn span {
+            font-weight: 600;
+            color: #333;
+        }
+        .lang-btn.active {
+            background: #f5c400;
+        }
+        .lang-btn.active span {
+            color: #111;
+        }
+        .lang-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 600px) {
+            .language-selector {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+            }
+            .lang-btn span {
+                display: none;
+            }
+            .lang-btn img {
+                width: 28px;
+                height: 28px;
+            }
         }
 
         .brand-header {
@@ -567,13 +629,29 @@
 </head>
 <body>
 
+    <!-- قائمة اختيار اللغة -->
+    <div class="language-selector">
+        <button class="lang-btn active" data-lang="ar" onclick="changeLanguage('ar')">
+            <img src="https://flagcdn.com/eg.svg" alt="مصر" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Flag_of_Egypt.svg/40px-Flag_of_Egypt.svg.png'">
+            <span>العربية</span>
+        </button>
+        <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">
+            <img src="https://flagcdn.com/us.svg" alt="USA" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/40px-Flag_of_the_United_States.svg.png'">
+            <span>English</span>
+        </button>
+        <button class="lang-btn" data-lang="ru" onclick="changeLanguage('ru')">
+            <img src="https://flagcdn.com/ru.svg" alt="Russia" onerror="this.src='https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/40px-Flag_of_Russia.svg.png'">
+            <span>Русский</span>
+        </button>
+    </div>
+
     <div class="edu-background" id="bgPattern"></div>
 
     <div class="form-container">
         <div class="brand-header">
             <img src="logoform.png" alt="قضية طالب ثانوي" class="brand-logo">
             <div class="quran-verse-wrapper">
-                <div class="quran-verse">
+                <div class="quran-verse" id="quranVerse">
                     ﴿ وَتَوَكَّلْ عَلَى اللَّهِ وَكَفَىٰ بِاللَّهِ وَكِيلًا ﴾
                 </div>
             </div>
@@ -584,26 +662,26 @@
             <!-- الخطوة 1: بيانات الطالب -->
             <div class="form-step active" data-step="1">
                 <div style="text-align: center;">
-                    <div class="section-badge">الجزء الأول: بيانات الطالب المتكاملة</div>
+                    <div class="section-badge" id="step1Badge">الجزء الأول: بيانات الطالب المتكاملة</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="fullName">الاسم بالكامل:</label>
+                    <label for="fullName" id="fullNameLabel">الاسم بالكامل:</label>
                     <input type="text" id="fullName" class="input-field" placeholder="اكتب اسمك الثلاثي أو الرباعي هنا" oninput="updateDynamicNames()" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="city">المحافظة:</label>
+                    <label for="city" id="cityLabel">المحافظة:</label>
                     <input type="text" id="city" class="input-field" placeholder="مثلاً: الإسكندرية، القاهرة..." required>
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">رقم تليفونك (واتساب) للتواصل:</label>
+                    <label for="phone" id="phoneLabel">رقم تليفونك (واتساب) للتواصل:</label>
                     <input type="tel" id="phone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
                 </div>
 
                 <div class="form-group">
-                    <label>تاريخ الميلاد:</label>
+                    <label id="birthLabel">تاريخ الميلاد:</label>
                     <div class="date-triple-container">
                         <select id="birthDay" class="input-field" required>
                             <option value="">اليوم</option>
@@ -635,12 +713,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">البريد الإلكتروني:</label>
+                    <label for="email" id="emailLabel">البريد الإلكتروني:</label>
                     <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="grade">المرحلة الدراسية الحالية:</label>
+                    <label for="grade" id="gradeLabel">المرحلة الدراسية الحالية:</label>
                     <select id="grade" class="input-field" onchange="handleGradeChange()" required>
                         <option value="">اختر السنة الدراسية</option>
                         <option value="1">الصف الأول الثانوي</option>
@@ -650,7 +728,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="educationType">نوع النظام التعليمي:</label>
+                    <label for="educationType" id="educationLabel">نوع النظام التعليمي:</label>
                     <select id="educationType" class="input-field" required>
                         <option value="">اختر نوع التعليم</option>
                         <option value="عام">ثانوي عام</option>
@@ -659,7 +737,7 @@
                 </div>
 
                 <div class="form-group" id="stepSection" style="display: none;">
-                    <label for="section">الشعبة الدراسية:</label>
+                    <label for="section" id="sectionLabel">الشعبة الدراسية:</label>
                     <select id="section" class="input-field">
                         <option value="">اختر الشعبة</option>
                     </select>
@@ -667,7 +745,7 @@
 
                 <div id="seniorThreeQuestions" style="display: none;">
                     <div class="form-group">
-                        <label for="lessonSystem">نظام دروسك إيه؟</label>
+                        <label for="lessonSystem" id="lessonSystemLabel">نظام دروسك إيه؟</label>
                         <select id="lessonSystem" class="input-field" onchange="updateSubmitButtonText()">
                             <option value="">اختر نظام دروسك</option>
                             <option value="سنتر">سنتر</option>
@@ -677,34 +755,34 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="onlineLessonsCount">عدد الدروس الاونلاين الي بتاخده قد إيه؟</label>
+                        <label for="onlineLessonsCount" id="onlineLessonsLabel">عدد الدروس الاونلاين الي بتاخده قد إيه؟</label>
                         <input type="text" id="onlineLessonsCount" class="input-field" placeholder="اكتب عدد الدروس أو تفاصيلها هنا">
                     </div>
                 </div>
 
                 <div class="btn-container single-btn">
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                    <button type="button" class="btn-next" id="nextBtn1" onclick="nextStep()">التالي</button>
                 </div>
             </div>
 
             <!-- الخطوة 2: بيانات ولي الأمر -->
             <div class="form-step" data-step="2">
                 <div style="text-align: center;">
-                    <div class="section-badge" style="background-color: #dbeafe; color: #1e40af;">الجزء الثاني: بيانات ولي الأمر</div>
+                    <div class="section-badge" id="step2Badge" style="background-color: #dbeafe; color: #1e40af;">الجزء الثاني: بيانات ولي الأمر</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="parentName">اسم ولي الأمر بالكامل:</label>
+                    <label for="parentName" id="parentNameLabel">اسم ولي الأمر بالكامل:</label>
                     <input type="text" id="parentName" class="input-field" placeholder="اكتب اسم ولي الأمر هنا" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="parentPhone"> تلفون ولي الامر للتواصل يكون عليه واتس:</label>
+                    <label for="parentPhone" id="parentPhoneLabel"> تلفون ولي الامر للتواصل يكون عليه واتس:</label>
                     <input type="tel" id="parentPhone" class="input-field" placeholder="01xxxxxxxxx" pattern="01[0125][0-9]{8}" title="يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="parentWhatsapp">هل رقم ولي الأمر السابق عليه (واتساب)؟</label>
+                    <label for="parentWhatsapp" id="parentWhatsappLabel">هل رقم ولي الأمر السابق عليه (واتساب)؟</label>
                     <select id="parentWhatsapp" class="input-field" required>
                         <option value="">اختر الإجابة</option>
                         <option value="نعم، عليه واتساب">نعم، عليه واتساب</option>
@@ -713,25 +791,25 @@
                 </div>
 
                 <div class="btn-container split-btns">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="nextStep()">التالي</button>
+                    <button type="button" class="btn-prev" id="prevBtn2" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" id="nextBtn2" onclick="nextStep()">التالي</button>
                 </div>
             </div>
 
             <!-- الخطوة 3: المشكلة الدراسية -->
             <div class="form-step" data-step="3">
                 <div style="text-align: center;">
-                    <div class="section-badge" style="background-color: #fce7f3; color: #9d174d;">الجزء الثالث: مشكلتك الدراسية</div>
+                    <div class="section-badge" id="step3Badge" style="background-color: #fce7f3; color: #9d174d;">الجزء الثالث: مشكلتك الدراسية</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="message">يا <span class="dynamic-name">بطل</span>، ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟ (اختياري)</label>
+                    <label for="message" id="messageLabel">يا <span class="dynamic-name">بطل</span>، ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟ (اختياري)</label>
                     <textarea id="message" class="input-field" style="height: 140px; resize: none;" placeholder="اكتب بالتفصيل لنتمكن من مساعدتك، أو يمكنك تخطي هذا السؤال للخطوة التالية..." oninput="checkMessageLength()"></textarea>
                     <div class="char-counter" id="charCounter">0 / 1000 حرف</div>
                 </div>
 
                 <div class="btn-container split-btns">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-prev" id="prevBtn3" onclick="prevStep()">السابق</button>
                     <button type="button" class="btn-next" id="submitBtn" onclick="handleStepThreeNext()">التالي</button>
                 </div>
             </div>
@@ -739,10 +817,10 @@
             <!-- الخطوة 4: بيانات المنصات -->
             <div class="form-step" data-step="4" id="stepPlatforms">
                 <div style="text-align: center;">
-                    <div class="section-badge" style="background-color: #e0f2fe; color: #0369a1;">الجزء الرابع: بيانات المنصات التعليمية الأونلاين</div>
+                    <div class="section-badge" id="step4Badge" style="background-color: #e0f2fe; color: #0369a1;">الجزء الرابع: بيانات المنصات التعليمية الأونلاين</div>
                 </div>
 
-                <div class="notice-box">
+                <div class="notice-box" id="platformsNotice">
                     <strong>📌 تنويه هام:</strong><br>
                     يتم طلب بيانات حساباتك على المنصات التعليمية الإلكترونية لغرض المتابعة الدورية والتأكد من إنجازك للمهام المتفق عليها مع فريق المتابعة.<br><br>
                     مع العلم أن هذه البيانات تعتبر سرية تمامًا، ولا يطلع عليها أي طالب أو شخص خارج فريق المتابعة وإدارة "قضية طالب ثانوي".
@@ -752,122 +830,79 @@
                     <div class="platform-card">
                         <button type="button" class="btn-remove-platform" onclick="this.parentElement.remove()">حذف</button>
                         <div class="form-group">
-                            <label>المادة الدراسية:</label>
+                            <label id="subjectLabel">المادة الدراسية:</label>
                             <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية...">
                         </div>
                         <div class="form-group">
-                            <label>الرقم أو الجيميل (المسجل به في المنصة):</label>
+                            <label id="accountLabel">الرقم أو الجيميل (المسجل به في المنصة):</label>
                             <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا">
                         </div>
                         <div class="form-group">
-                            <label>كلمة المرور (الباسورد):</label>
+                            <label id="passwordLabel">كلمة المرور (الباسورد):</label>
                             <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا">
                         </div>
                     </div>
                 </div>
 
-                <button type="button" class="btn-add-platform" onclick="addPlatformField()">+ إضافة مادة أونلاين أخرى</button>
+                <button type="button" class="btn-add-platform" id="addPlatformBtn" onclick="addPlatformField()">+ إضافة مادة أونلاين أخرى</button>
 
                 <div class="btn-container split-btns">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
-                    <button type="button" class="btn-next" onclick="handleStepFourNext()">التالي</button>
+                    <button type="button" class="btn-prev" id="prevBtn4" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-next" id="nextBtn4" onclick="handleStepFourNext()">التالي</button>
                 </div>
             </div>
 
-            <!-- الخطوة 5: الاشتراك والمتابعة (مع 3 كورسات ومواصفات كل كورس) -->
+            <!-- الخطوة 5: الاشتراك والمتابعة -->
             <div class="form-step" data-step="5" id="stepCourseSubscription">
                 <div style="text-align: center;">
-                    <div class="section-badge" style="background-color: #ccfbf1; color: #0f766e;">الجزء الخامس: الاشتراك والمتابعة المتكاملة</div>
+                    <div class="section-badge" id="step5Badge" style="background-color: #ccfbf1; color: #0f766e;">الجزء الخامس: الاشتراك والمتابعة المتكاملة</div>
                 </div>
 
                 <div class="course-card">
-                    
-                    <!-- المعلومات الهامة العامة -->
-                    <div class="info-box">
+                    <div class="info-box" id="subscriptionInfo">
                         <strong>⚠️ معلومة هامة جداً:</strong><br>
                         بما أن فكرتنا لسه جديدة وتيم المتابعة مش كبير ويهمنا مصلحتك، فإحنا مش هنقدر نقول إننا هنتابع معاك المنهج بنفس قوة تالتة ثانوي، لأننا مش عاصرنا تغيرات منهج أولى وتانية ثانوي ومعندناش الإمكانية حالياً لتغطيتها.. ولكن عملنا ليكم متابعة بطريقة مختلفة ومميزة!
                     </div>
 
-                    <h4 style="font-size: 15px; margin-top: 25px; margin-bottom: 5px; color: var(--dark-color); text-align: right; font-weight: 700;">🌟 اختر خطة الاشتراك المناسبة لك للبدء فوراً:</h4>
+                    <h4 style="font-size: 15px; margin-top: 25px; margin-bottom: 5px; color: var(--dark-color); text-align: right; font-weight: 700;" id="choosePlanLabel">🌟 اختر خطة الاشتراك المناسبة لك للبدء فوراً:</h4>
                     
                     <div class="courses-comparison-container">
-                        
-                        <!-- الكارد الأول - كورس تجريبي (100 جنيه) -->
                         <div class="selectable-course-item" onclick="selectCoursePlan('light', this)">
                             <img src="cors2.jpeg" alt="كورس تجريبي" class="course-item-image">
-                            <div class="course-item-title">🧪 كورس الصف الأول أو الثاني الثانوي (تجريبي)</div>
+                            <div class="course-item-title" id="courseLightTitle">🧪 كورس الصف الأول أو الثاني الثانوي (تجريبي)</div>
                             <div class="course-item-price">100 جنيه</div>
-                            
-                            <div class="course-features-list">
-                                <strong>📌 معلومة هامة:</strong><br>
-                                الكورس دا نسخة مخففة من الكورس التاني والهدف منه التجربة ونظام مختلف للي بس عايز ناس تذاكر معاه وبيئة تساعده، لكن هو بيعرف يخطط كل حاجة وعنده خطة ماشي عليها.
-                                <br><br>
+                            <div class="course-features-list" id="courseLightFeatures">
                                 <strong>📋 نظام الكورس:</strong>
-                                <ul style="list-style: none; padding-right: 5px; margin-top: 8px;">
-                                    <li>❶ لايفات ومعسكرات على الديسكورد</li>
-                                    <li>❷ متاح استشارات طوال الأسبوع</li>
-                                    <li>❸ مساعدة ونصائح وتحفيز دائم</li>
-                                    <li>❹ إخبار ولي الأمر عن المستوى بشكل عام</li>
-                                </ul>
+                                <ul><li>❶ لايفات ومعسكرات على الديسكورد</li><li>❷ متاح استشارات طوال الأسبوع</li><li>❸ مساعدة ونصائح وتحفيز دائم</li><li>❹ إخبار ولي الأمر عن المستوى بشكل عام</li></ul>
                             </div>
                             <div class="selection-indicator"></div>
                         </div>
-
-                        <!-- الكارد الثاني - كورس عادي (200 جنيه) -->
                         <div class="selectable-course-item" onclick="selectCoursePlan('regular', this)">
                             <img src="cors.jpeg" alt="كورس متابعة عادي" class="course-item-image">
-                            <div class="course-item-title">📚 كورس الصف الأول أو الثاني الثانوي (متابعة)</div>
+                            <div class="course-item-title" id="courseRegularTitle">📚 كورس الصف الأول أو الثاني الثانوي (متابعة)</div>
                             <div class="course-item-price">200 جنيه</div>
-                            
-                            <div class="course-features-list">
-                                <strong>📌 معلومة هامة:</strong><br>
-                                بما أن فكرتنا لسه جديدة وتيم المتابعة مش كبير ويهمنا مصلحتك، فإحنا مش هنقدر نقول إننا هنتابع معاك المنهج بنفس قوة تالتة ثانوي، لأننا مش عاصرنا تغيرات منهج أولى وتانية ثانوي ومعندناش الإمكانية حالياً لتغطيتها. ولكن عملنا ليكم متابعة بطريقة مختلفة!
-                                <br><br>
+                            <div class="course-features-list" id="courseRegularFeatures">
                                 <strong>📋 نظام المتابعة:</strong>
-                                <ul style="list-style: none; padding-right: 5px; margin-top: 8px;">
-                                    <li>❶ تخطيط معك لجدول أسبوعي وبنتابع معاك كل أسبوع خلصت منه قد إيه</li>
-                                    <li>❷ بيتم إرسال التقرير الأسبوعي لولي الأمر سواء كان حلو أو وحش (مش بنبعت الوحش بس)</li>
-                                    <li>❸ لايفات ومعسكرات مذاكرة معايا على الديسكورد ومع زمايلك المشتركين وبيئة عمل منتجة</li>
-                                    <li>❹ نظام الثواب والعقاب - عندنا حوافز ليك وجوائز لو كنت ملتزم، وفي نفس الوقت في عقوبات لو مش ملتزم معانا</li>
-                                </ul>
-                                <br>
-                                <strong>💙 وافتكر في الآخر يا صديقي:</strong> إننا فعلاً يهمنا مصلحتك مش نضايقك، ومعاك لو في ظروف صعبة عندك هتلاقينا معاك وبنشدك ومش هنضغط عليك وقتها.
+                                <ul><li>❶ تخطيط جدول أسبوعي</li><li>❷ تقرير أسبوعي لولي الأمر</li><li>❸ لايفات ومعسكرات</li><li>❹ نظام ثواب وعقاب</li></ul>
                             </div>
                             <div class="selection-indicator"></div>
                         </div>
-
-                        <!-- الكارد الثالث - كورس مكثف (500 جنيه - 3 شهور) -->
                         <div class="selectable-course-item" onclick="selectCoursePlan('premium', this)">
                             <img src="cors1.jpeg" alt="كورس متابعة مكثف" class="course-item-image">
-                            <div class="course-item-title">⭐ كورس الصف الأول أو الثاني الثانوي (اشتراك 3 شهور)</div>
+                            <div class="course-item-title" id="coursePremiumTitle">⭐ كورس الصف الأول أو الثاني الثانوي (اشتراك 3 شهور)</div>
                             <div class="course-item-price">500 جنيه</div>
-                            
-                            <div class="course-features-list">
-                                <strong>📌 معلومة هامة:</strong><br>
-                                بما أن فكرتنا لسه جديدة وتيم المتابعة مش كبير ويهمنا مصلحتك، فإحنا مش هنقدر نقول إننا هنتابع معاك المنهج بنفس قوة تالتة ثانوي، لأننا مش عاصرنا تغيرات منهج أولى وتانية ثانوي ومعندناش الإمكانية حالياً لتغطيتها. ولكن عملنا ليكم متابعة بطريقة مختلفة!
-                                <br><br>
-                                <strong>📋 نظام المتابعة:</strong>
-                                <ul style="list-style: none; padding-right: 5px; margin-top: 8px;">
-                                    <li>❶ تخطيط معك لجدول أسبوعي وبنتابع معاك كل أسبوع خلصت منه قد إيه</li>
-                                    <li>❷ بيتم إرسال التقرير الأسبوعي لولي الأمر سواء كان حلو أو وحش (مش بنبعت الوحش بس)</li>
-                                    <li>❸ لايفات ومعسكرات مذاكرة معايا على الديسكورد ومع زمايلك المشتركين وبيئة عمل منتجة</li>
-                                    <li>❹ نظام الثواب والعقاب - عندنا حوافز ليك وجوائز لو كنت ملتزم، وفي نفس الوقت في عقوبات لو مش ملتزم معانا</li>
-                                </ul>
-                                <br>
-                                <strong>💙 وافتكر في الآخر يا صديقي:</strong> إننا فعلاً يهمنا مصلحتك مش نضايقك، ومعاك لو في ظروف صعبة عندك هتلاقينا معاك وبنشدك ومش هنضغط عليك وقتها.
-                                <br><br>
-                                <strong>🔥 مميزات إضافية:</strong> متابعة مكثفة وشاملة لمدة 3 شهور كاملة!
+                            <div class="course-features-list" id="coursePremiumFeatures">
+                                <strong>📋 نظام المتابعة المكثف:</strong>
+                                <ul><li>❶ تخطيط جدول أسبوعي</li><li>❷ تقرير أسبوعي لولي الأمر</li><li>❸ لايفات ومعسكرات</li><li>❹ نظام ثواب وعقاب</li><li>❺ متابعة مكثفة 3 شهور</li></ul>
                             </div>
                             <div class="selection-indicator"></div>
                         </div>
-
                     </div>
-                    
-                    <input type="hidden" id="selectedCourseValue" name="selectedCourseValue" value="">
+                    <input type="hidden" id="selectedCourseValue">
                 </div>
 
                 <div class="btn-container split-btns">
-                    <button type="button" class="btn-prev" onclick="prevStep()">السابق</button>
+                    <button type="button" class="btn-prev" id="prevBtn5" onclick="prevStep()">السابق</button>
                     <button type="button" class="btn-next" id="courseSubmitBtn" onclick="submitForm()" disabled>إرسال الاستمارة والاشتراك</button>
                 </div>
             </div>
@@ -876,8 +911,8 @@
             <div class="form-step" id="successStep">
                 <div class="success-message">
                     <div class="success-icon">✓</div>
-                    <h2 style="font-size: 22px; margin-bottom: 10px; color: var(--dark-color);">شكرًا لك يا <span id="studentName">بطل</span>!</h2>
-                    <p style="color: #6b7280; line-height: 1.7; font-size: 15px;">تم استلام بياناتك بنجاح. فريق "قضية طالب ثانوي" سيتواصل معكم في أقرب وقت لحسم قضيتك والترتيب معك!</p>
+                    <h2 style="font-size: 22px; margin-bottom: 10px; color: var(--dark-color);" id="successTitle">شكرًا لك يا <span id="studentName">بطل</span>!</h2>
+                    <p style="color: #6b7280; line-height: 1.7; font-size: 15px;" id="successMessage">تم استلام بياناتك بنجاح. فريق "قضية طالب ثانوي" سيتواصل معكم في أقرب وقت لحسم قضيتك والترتيب معك!</p>
                 </div>
             </div>
 
@@ -897,6 +932,188 @@
     </div>
 
     <script>
+        // ========== بيانات الترجمة ==========
+        const translations = {
+            ar: {
+                step1Badge: "الجزء الأول: بيانات الطالب المتكاملة",
+                fullNameLabel: "الاسم بالكامل:",
+                cityLabel: "المحافظة:",
+                phoneLabel: "رقم تليفونك (واتساب) للتواصل:",
+                birthLabel: "تاريخ الميلاد:",
+                emailLabel: "البريد الإلكتروني:",
+                gradeLabel: "المرحلة الدراسية الحالية:",
+                educationLabel: "نوع النظام التعليمي:",
+                sectionLabel: "الشعبة الدراسية:",
+                lessonSystemLabel: "نظام دروسك إيه؟",
+                onlineLessonsLabel: "عدد الدروس الاونلاين الي بتاخده قد إيه؟",
+                step2Badge: "الجزء الثاني: بيانات ولي الأمر",
+                parentNameLabel: "اسم ولي الأمر بالكامل:",
+                parentPhoneLabel: "تلفون ولي الامر للتواصل يكون عليه واتس:",
+                parentWhatsappLabel: "هل رقم ولي الأمر السابق عليه (واتساب)؟",
+                step3Badge: "الجزء الثالث: مشكلتك الدراسية",
+                messageLabel: "ما هي أكبر مشكلة تواجهك في الدراسة حالياً؟ (اختياري)",
+                step4Badge: "الجزء الرابع: بيانات المنصات التعليمية الأونلاين",
+                platformsNotice: "📌 تنويه هام:\nيتم طلب بيانات حساباتك على المنصات التعليمية الإلكترونية لغرض المتابعة الدورية والتأكد من إنجازك للمهام المتفق عليها مع فريق المتابعة.\n\nمع العلم أن هذه البيانات تعتبر سرية تمامًا، ولا يطلع عليها أي طالب أو شخص خارج فريق المتابعة وإدارة \"قضية طالب ثانوي\".",
+                subjectLabel: "المادة الدراسية:",
+                accountLabel: "الرقم أو الجيميل (المسجل به في المنصة):",
+                passwordLabel: "كلمة المرور (الباسورد):",
+                addPlatformBtn: "+ إضافة مادة أونلاين أخرى",
+                step5Badge: "الجزء الخامس: الاشتراك والمتابعة المتكاملة",
+                subscriptionInfo: "⚠️ معلومة هامة جداً:\nبما أن فكرتنا لسه جديدة وتيم المتابعة مش كبير ويهمنا مصلحتك، فإحنا مش هنقدر نقول إننا هنتابع معاك المنهج بنفس قوة تالتة ثانوي، لأننا مش عاصرنا تغيرات منهج أولى وتانية ثانوي ومعندناش الإمكانية حالياً لتغطيتها.. ولكن عملنا ليكم متابعة بطريقة مختلفة ومميزة!",
+                choosePlanLabel: "🌟 اختر خطة الاشتراك المناسبة لك للبدء فوراً:",
+                courseLightTitle: "🧪 كورس الصف الأول أو الثاني الثانوي (تجريبي)",
+                courseRegularTitle: "📚 كورس الصف الأول أو الثاني الثانوي (متابعة)",
+                coursePremiumTitle: "⭐ كورس الصف الأول أو الثاني الثانوي (اشتراك 3 شهور)",
+                nextBtn: "التالي",
+                prevBtn: "السابق",
+                submitBtn: "إرسال الاستمارة والاشتراك",
+                successTitle: "شكرًا لك يا {name}!",
+                successMessage: "تم استلام بياناتك بنجاح. فريق \"قضية طالب ثانوي\" سيتواصل معكم في أقرب وقت لحسم قضيتك والترتيب معك!",
+                quranVerse: "﴿ وَتَوَكَّلْ عَلَى اللَّهِ وَكَفَىٰ بِاللَّهِ وَكِيلًا ﴾"
+            },
+            en: {
+                step1Badge: "Part 1: Student Information",
+                fullNameLabel: "Full Name:",
+                cityLabel: "Governorate:",
+                phoneLabel: "Phone Number (WhatsApp):",
+                birthLabel: "Date of Birth:",
+                emailLabel: "Email:",
+                gradeLabel: "Current Grade:",
+                educationLabel: "Education System:",
+                sectionLabel: "Section:",
+                lessonSystemLabel: "Your Lesson System:",
+                onlineLessonsLabel: "Number of online lessons you take:",
+                step2Badge: "Part 2: Parent Information",
+                parentNameLabel: "Parent Full Name:",
+                parentPhoneLabel: "Parent Phone Number (WhatsApp):",
+                parentWhatsappLabel: "Does this number have WhatsApp?",
+                step3Badge: "Part 3: Your Academic Problem",
+                messageLabel: "What is the biggest problem you face in studying? (Optional)",
+                step4Badge: "Part 4: Online Platforms Information",
+                platformsNotice: "📌 Important Notice:\nYour platform account information is requested for periodic follow-up and to ensure you complete agreed tasks with the follow-up team.\n\nYour information is completely confidential and only viewed by the follow-up team and management of \"High School Student Case\".",
+                subjectLabel: "Subject:",
+                accountLabel: "Email/Username:",
+                passwordLabel: "Password:",
+                addPlatformBtn: "+ Add Another Online Subject",
+                step5Badge: "Part 5: Subscription & Follow-up",
+                subscriptionInfo: "⚠️ Very Important Notice:\nOur idea is new and our follow-up team is small, and we care about your interest. We cannot guarantee to follow up the curriculum with the same strength as third secondary, because we haven't experienced first and second secondary curriculum changes and currently lack the capacity to cover them.. But we have created a different and distinctive follow-up method for you!",
+                choosePlanLabel: "🌟 Choose the subscription plan that suits you to start immediately:",
+                courseLightTitle: "🧪 First or Second Secondary (Trial)",
+                courseRegularTitle: "📚 First or Second Secondary (Follow-up)",
+                coursePremiumTitle: "⭐ First or Second Secondary (3 Months)",
+                nextBtn: "Next",
+                prevBtn: "Previous",
+                submitBtn: "Submit Application",
+                successTitle: "Thank you {name}!",
+                successMessage: "Your data has been received successfully. The \"High School Student Case\" team will contact you as soon as possible to resolve your case and arrange with you!",
+                quranVerse: "And rely upon Allah; and sufficient is Allah as a Disposer of affairs."
+            },
+            ru: {
+                step1Badge: "Часть 1: Информация о студенте",
+                fullNameLabel: "Полное имя:",
+                cityLabel: "Губернаторство:",
+                phoneLabel: "Номер телефона (WhatsApp):",
+                birthLabel: "Дата рождения:",
+                emailLabel: "Электронная почта:",
+                gradeLabel: "Текущий класс:",
+                educationLabel: "Система образования:",
+                sectionLabel: "Отделение:",
+                lessonSystemLabel: "Ваша система уроков:",
+                onlineLessonsLabel: "Количество онлайн-уроков:",
+                step2Badge: "Часть 2: Информация о родителях",
+                parentNameLabel: "Полное имя родителя:",
+                parentPhoneLabel: "Номер телефона родителя (WhatsApp):",
+                parentWhatsappLabel: "Есть ли у этого номера WhatsApp?",
+                step3Badge: "Часть 3: Ваша учебная проблема",
+                messageLabel: "Какая самая большая проблема в учебе? (Необязательно)",
+                step4Badge: "Часть 4: Информация об онлайн-платформах",
+                platformsNotice: "📌 Важное уведомление:\nИнформация о ваших аккаунтах на платформах запрашивается для периодического контроля и выполнения задач с командой сопровождения.\n\nВаша информация полностью конфиденциальна и доступна только команде сопровождения и руководству.",
+                subjectLabel: "Предмет:",
+                accountLabel: "Email/Имя пользователя:",
+                passwordLabel: "Пароль:",
+                addPlatformBtn: "+ Добавить еще предмет",
+                step5Badge: "Часть 5: Подписка и сопровождение",
+                subscriptionInfo: "⚠️ Очень важное уведомление:\nНаша идея новая, команда сопровождения небольшая, и мы заботимся о ваших интересах. Мы не можем гарантировать сопровождение программы с той же силой, что и для третьего класса, потому что мы не сталкивались с изменениями в программе первого и второго классов и в настоящее время не имеем возможности их покрыть. Но мы создали для вас другой и отличительный метод сопровождения!",
+                choosePlanLabel: "🌟 Выберите подходящий план подписки для немедленного начала:",
+                courseLightTitle: "🧪 Первый или второй класс (Пробный)",
+                courseRegularTitle: "📚 Первый или второй класс (Сопровождение)",
+                coursePremiumTitle: "⭐ Первый или второй класс (3 месяца)",
+                nextBtn: "Далее",
+                prevBtn: "Назад",
+                submitBtn: "Отправить заявку",
+                successTitle: "Спасибо, {name}!",
+                successMessage: "Ваши данные успешно получены. Команда 'High School Student Case' свяжется с вами в ближайшее время для решения вашего вопроса и организации с вами!",
+                quranVerse: "И уповай на Аллаха; и достаточно Аллаха как Распорядителя дел."
+            }
+        };
+
+        let currentLang = 'ar';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // تحديث اتجاه الصفحة
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.setAttribute('lang', 'ar');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.setAttribute('lang', lang);
+            }
+            
+            // تحديث النصوص
+            document.querySelectorAll('[id]').forEach(el => {
+                if (translations[lang][el.id]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+                        // تخطي حقول الإدخال
+                    } else if (el.tagName === 'BUTTON') {
+                        // تخطي الأزرار
+                    } else {
+                        el.innerHTML = translations[lang][el.id];
+                    }
+                }
+            });
+            
+            // تحديث رسالة النجاح بشكل خاص
+            const studentName = document.getElementById('studentName')?.innerText || 'بطل';
+            const successTitleEl = document.getElementById('successTitle');
+            if (successTitleEl) {
+                successTitleEl.innerHTML = translations[lang].successTitle.replace('{name}', studentName);
+            }
+            
+            // تحديث شارة القسم الديناميكية
+            const stepBadges = document.querySelectorAll('.section-badge');
+            if (stepBadges[0]) stepBadges[0].innerText = translations[lang].step1Badge;
+            if (stepBadges[1]) stepBadges[1].innerText = translations[lang].step2Badge;
+            if (stepBadges[2]) stepBadges[2].innerText = translations[lang].step3Badge;
+            if (stepBadges[3]) stepBadges[3].innerText = translations[lang].step4Badge;
+            if (stepBadges[4]) stepBadges[4].innerText = translations[lang].step5Badge;
+            
+            // تحديث الآية
+            const quranDiv = document.querySelector('.quran-verse');
+            if (quranDiv) quranDiv.innerText = translations[lang].quranVerse;
+            
+            // تحديث الأزرار
+            const nextBtns = document.querySelectorAll('.btn-next');
+            nextBtns.forEach(btn => {
+                if (btn.id !== 'courseSubmitBtn') btn.innerText = translations[lang].nextBtn;
+            });
+            const prevBtns = document.querySelectorAll('.btn-prev');
+            prevBtns.forEach(btn => btn.innerText = translations[lang].prevBtn);
+            
+            // تحديث زر الإرسال النهائي
+            const submitFinalBtn = document.getElementById('courseSubmitBtn');
+            if (submitFinalBtn) submitFinalBtn.innerText = translations[lang].submitBtn;
+            
+            // تحديث حالة الأزرار النشطة
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
         // ========== إعدادات GitHub API ==========
         const GITHUB_USERNAME = "katittalebsanwe";
         const GITHUB_REPO = "katittalebsanwe";
@@ -905,8 +1122,8 @@
         
         // ========== إعدادات التليجرام ==========
         const BOT_TOKEN = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
-        const CHAT_ID_OLD = "8244352245";     // حسابك القديم
-        const CHAT_ID_NEW = "5511952564";     // حسابك الجديد
+        const CHAT_ID_OLD = "8244352245";
+        const CHAT_ID_NEW = "5511952564";
         
         // ========== المتغيرات العامة ==========
         let currentStepIndex = 0;
@@ -929,7 +1146,6 @@
             });
         }
 
-        // ========== التعامل مع الصف الدراسي ==========
         function handleGradeChange() {
             const grade = document.getElementById('grade').value;
             const stepSection = document.getElementById('stepSection');
@@ -968,10 +1184,9 @@
 
         function updateSubmitButtonText() {
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "التالي";
+            submitBtn.innerText = translations[currentLang].nextBtn;
         }
 
-        // ========== عداد الحروف ==========
         function checkMessageLength() {
             const textarea = document.getElementById('message');
             const counter = document.getElementById('charCounter');
@@ -987,7 +1202,6 @@
             }
         }
 
-        // ========== إضافة/حذف منصات ==========
         function addPlatformField() {
             const container = document.getElementById('platformsContainer');
             const newCard = document.createElement('div');
@@ -995,22 +1209,21 @@
             newCard.innerHTML = `
                 <button type="button" class="btn-remove-platform" onclick="this.parentElement.remove()">حذف</button>
                 <div class="form-group">
-                    <label>المادة الدراسية:</label>
+                    <label>${translations[currentLang].subjectLabel}</label>
                     <input type="text" class="input-field platform-subject" placeholder="مثال: فيزياء، لغة عربية...">
                 </div>
                 <div class="form-group">
-                    <label>الرقم أو الجيميل (المسجل به في المنصة):</label>
+                    <label>${translations[currentLang].accountLabel}</label>
                     <input type="text" class="input-field platform-user" placeholder="اكتب الحساب أو الرقم المستخدم هنا">
                 </div>
                 <div class="form-group">
-                    <label>كلمة المرور (الباسورد):</label>
+                    <label>${translations[currentLang].passwordLabel}</label>
                     <input type="text" class="input-field platform-pass" placeholder="اكتب الباسورد الخاص بالمنصة هنا">
                 </div>
             `;
             container.appendChild(newCard);
         }
 
-        // ========== اختيار خطة الاشتراك ==========
         function selectCoursePlan(planType, element) {
             document.querySelectorAll('.selectable-course-item').forEach(item => {
                 item.classList.remove('selected');
@@ -1021,10 +1234,9 @@
 
             const submitBtn = document.getElementById('courseSubmitBtn');
             submitBtn.removeAttribute('disabled');
-            submitBtn.innerText = "إرسال الاستمارة والاشتراك";
+            submitBtn.innerText = translations[currentLang].submitBtn;
         }
 
-        // ========== التحقق من صحة الحقول ==========
         function validateCurrentStepInputs() {
             const currentStepEl = steps[currentStepIndex];
             const inputs = currentStepEl.querySelectorAll('input[required], select[required], textarea[required]');
@@ -1039,7 +1251,6 @@
             return true;
         }
 
-        // ========== دوال التحكم في ظهور صفحة المنصات ==========
         function shouldShowPlatforms() {
             const grade = document.getElementById('grade').value;
             const lessonSystem = document.getElementById('lessonSystem').value;
@@ -1061,7 +1272,6 @@
             }
         }
 
-        // ========== دوال التنقل بين الخطوات ==========
         function nextStep() {
             if (!validateCurrentStepInputs()) return;
             steps[currentStepIndex].classList.remove('active');
@@ -1083,7 +1293,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ========== معالجة الأزرار الخاصة ==========
         function handleStepThreeNext() {
             if (!validateCurrentStepInputs()) return;
             
@@ -1109,7 +1318,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ========== دالة تجميع بيانات المنصات ==========
         function getPlatformsData() {
             const platformCards = document.querySelectorAll('.platform-card');
             let platformsText = "";
@@ -1127,7 +1335,6 @@
             return platformsText || "• لا توجد بيانات منصات مسجلة";
         }
 
-        // ========== دالة الحصول على اسم الخطة المختارة ==========
         function getSelectedPlanName() {
             const planValue = document.getElementById('selectedCourseValue').value;
             if (planValue === 'light') return "🧪 كورس تجريبي (مخفف) - 100 جنيه";
@@ -1136,7 +1343,6 @@
             return "لم يتم اختيار خطة";
         }
 
-        // ========== دالة حفظ البيانات في GitHub API ==========
         async function saveToGitHub(formData) {
             try {
                 const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
@@ -1191,7 +1397,6 @@
             }
         }
 
-        // ========== دالة حفظ البيانات في localStorage (نسخة احتياطية) ==========
         function saveToLocalStorage(formData) {
             let allSubmissions = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
             allSubmissions.push(formData);
@@ -1200,7 +1405,6 @@
             return true;
         }
 
-        // ========== دالة إرسال البيانات إلى تليجرام (بدون القناة - فقط حسابيك الشخصيين) ==========
         async function sendToTelegram(formData) {
             const telegramMessage = `
 📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**
@@ -1243,7 +1447,6 @@ ${formData.platforms}
             
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
             
-            // قائمة المستلمين (حسابيك الشخصيين فقط - بدون القناة)
             const recipients = [
                 { id: CHAT_ID_OLD, name: "حسابك القديم" },
                 { id: CHAT_ID_NEW, name: "حسابك الجديد" }
@@ -1277,7 +1480,6 @@ ${formData.platforms}
             return allSuccess;
         }
 
-        // ========== إظهار مؤشر التحميل ==========
         function showLoading() {
             let loadingDiv = document.getElementById('loadingOverlay');
             if (loadingDiv) {
@@ -1292,7 +1494,6 @@ ${formData.platforms}
             }
         }
 
-        // ========== إرسال الاستمارة ==========
         async function submitForm() {
             const fullName = document.getElementById('fullName').value.trim();
             const firstName = fullName ? fullName.split(' ')[0] : "بطل";
@@ -1303,7 +1504,6 @@ ${formData.platforms}
                 return;
             }
             
-            // تجميع البيانات
             const formData = {
                 id: Date.now(),
                 fullName: document.getElementById('fullName').value.trim() || "غير مدخل",
@@ -1336,13 +1536,8 @@ ${formData.platforms}
             let telegramSent = false;
             
             try {
-                // 1. حفظ في GitHub (مركزي)
                 githubSaved = await saveToGitHub(formData);
-                
-                // 2. حفظ في localStorage (نسخة احتياطية محلية)
                 localSaved = saveToLocalStorage(formData);
-                
-                // 3. إرسال إلى تليجرام (حسابيك الشخصيين فقط)
                 telegramSent = await sendToTelegram(formData);
                 
                 console.log(`GitHub: ${githubSaved ? "✅" : "❌"} | LocalStorage: ${localSaved ? "✅" : "❌"} | تليجرام: ${telegramSent ? "✅" : "❌"}`);
@@ -1357,6 +1552,10 @@ ${formData.platforms}
             }
             
             document.getElementById('studentName').innerText = firstName;
+            const successTitleEl = document.getElementById('successTitle');
+            if (successTitleEl) {
+                successTitleEl.innerHTML = translations[currentLang].successTitle.replace('{name}', firstName);
+            }
             steps[currentStepIndex].classList.remove('active');
             document.getElementById('successStep').classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
