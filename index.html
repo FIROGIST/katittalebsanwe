@@ -1138,7 +1138,6 @@
         // ========== دالة حفظ البيانات في GitHub API ==========
         async function saveToGitHub(formData) {
             try {
-                // جلب البيانات الحالية من GitHub
                 const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
                 let existingData = [];
                 let sha = null;
@@ -1152,16 +1151,15 @@
                         const content = atob(fileData.content);
                         existingData = JSON.parse(content);
                         sha = fileData.sha;
+                        console.log(`✅ تم جلب ${existingData.length} استمارة من GitHub`);
                     }
                 } catch(e) {
                     console.log("ملف data.json غير موجود، سيتم إنشاؤه");
                 }
                 
-                // إضافة البيانات الجديدة
                 existingData.push(formData);
                 const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(existingData, null, 2))));
                 
-                // حفظ في GitHub
                 const putUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${DATA_FILE}`;
                 const putBody = {
                     message: `إضافة استمارة جديدة - ${formData.fullName}`,
@@ -1179,9 +1177,15 @@
                     body: JSON.stringify(putBody)
                 });
                 
-                return putResponse.ok;
+                if(putResponse.ok) {
+                    console.log("✅ تم حفظ البيانات في GitHub");
+                    return true;
+                } else {
+                    console.error("فشل الحفظ في GitHub:", await putResponse.text());
+                    return false;
+                }
             } catch(error) {
-                console.error("خطأ في حفظ البيانات على GitHub:", error);
+                console.error("❌ خطأ في حفظ البيانات على GitHub:", error);
                 return false;
             }
         }
@@ -1192,6 +1196,7 @@
             allSubmissions.push(formData);
             localStorage.setItem('allSubmissions', JSON.stringify(allSubmissions));
             console.log("✅ تم حفظ البيانات في localStorage");
+            return true;
         }
 
         // ========== دالة إرسال البيانات إلى تليجرام ==========
@@ -1303,24 +1308,26 @@ ${formData.platforms}
             
             showLoading();
             
+            let githubSaved = false;
+            let localSaved = false;
+            let telegramSent = false;
+            
             try {
-                // حفظ في GitHub (مركزي)
-                const githubSaved = await saveToGitHub(formData);
-                if (githubSaved) {
-                    console.log("✅ تم حفظ البيانات في GitHub");
-                } else {
-                    console.log("⚠️ فشل حفظ البيانات في GitHub");
-                }
+                // 1. حفظ في GitHub (مركزي)
+                githubSaved = await saveToGitHub(formData);
                 
-                // حفظ في localStorage (نسخة احتياطية محلية)
-                saveToLocalStorage(formData);
+                // 2. حفظ في localStorage (نسخة احتياطية محلية)
+                localSaved = saveToLocalStorage(formData);
                 
-                // إرسال إلى تليجرام
-                const sent = await sendToTelegram(formData);
-                if (sent) {
-                    console.log("✅ تم إرسال البيانات إلى تليجرام بنجاح");
+                // 3. إرسال إلى تليجرام
+                telegramSent = await sendToTelegram(formData);
+                
+                console.log(`GitHub: ${githubSaved ? "✅" : "❌"} | LocalStorage: ${localSaved ? "✅" : "❌"} | تليجرام: ${telegramSent ? "✅" : "❌"}`);
+                
+                if(githubSaved) {
+                    console.log("✅ تم حفظ البيانات في GitHub و LocalStorage بنجاح");
                 } else {
-                    console.log("⚠️ فشل إرسال البيانات إلى تليجرام");
+                    console.log("⚠️ تم حفظ البيانات في LocalStorage فقط (فشل GitHub)");
                 }
             } catch (error) {
                 console.error("❌ خطأ في الإرسال:", error);
