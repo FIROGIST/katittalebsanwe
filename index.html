@@ -1199,7 +1199,7 @@
             return true;
         }
 
-        // ========== دالة إرسال البيانات إلى تليجرام ==========
+        // ========== دالة إرسال البيانات إلى تليجرام (معدلة للإرسال للقناة) ==========
         async function sendToTelegram(formData) {
             const telegramMessage = `
 📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**
@@ -1240,18 +1240,31 @@ ${formData.platforms}
 🕐 **تاريخ التسجيل:** ${formData.date}
             `;
             
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            const response = await fetch(url, {
+            // إرسال إلى القناة (باستخدام معرف القناة)
+            const channelUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            const channelResponse = await fetch(channelUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    chat_id: CHAT_ID,
+                    chat_id: "-4264250266", // معرف القناة الخاصة بك
                     text: telegramMessage,
                     parse_mode: 'Markdown'
                 })
             });
             
-            return response.ok;
+            // إرسال نسخة لك شخصياً
+            const personalUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            await fetch(personalUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: `📨 استمارة جديدة من ${formData.fullName}\n📞 ${formData.phone}\n💰 ${formData.selectedPlan}`,
+                    parse_mode: 'Markdown'
+                })
+            });
+            
+            return channelResponse.ok;
         }
 
         // ========== إظهار مؤشر التحميل ==========
@@ -1319,7 +1332,7 @@ ${formData.platforms}
                 // 2. حفظ في localStorage (نسخة احتياطية محلية)
                 localSaved = saveToLocalStorage(formData);
                 
-                // 3. إرسال إلى تليجرام
+                // 3. إرسال إلى تليجرام (القناة + حسابك الشخصي)
                 telegramSent = await sendToTelegram(formData);
                 
                 console.log(`GitHub: ${githubSaved ? "✅" : "❌"} | LocalStorage: ${localSaved ? "✅" : "❌"} | تليجرام: ${telegramSent ? "✅" : "❌"}`);
