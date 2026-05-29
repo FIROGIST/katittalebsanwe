@@ -891,6 +891,11 @@
         </svg>
     </a>
 
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">جاري إرسال البيانات...</div>
+    </div>
+
     <script>
         // ========== إعدادات التليجرام ==========
         const BOT_TOKEN = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
@@ -1124,70 +1129,53 @@
             return "لم يتم اختيار خطة";
         }
 
+        // ========== دالة حفظ البيانات في localStorage ==========
+        function saveToLocalStorage(formData) {
+            let allSubmissions = JSON.parse(localStorage.getItem('allSubmissions') || '[]');
+            allSubmissions.push(formData);
+            localStorage.setItem('allSubmissions', JSON.stringify(allSubmissions));
+            console.log("✅ تم حفظ البيانات في localStorage");
+        }
+
         // ========== دالة إرسال البيانات إلى تليجرام ==========
-        async function sendToTelegram() {
-            const fullName = document.getElementById('fullName').value.trim() || "غير مدخل";
-            const city = document.getElementById('city').value.trim() || "غير مدخل";
-            const phone = document.getElementById('phone').value.trim() || "غير مدخل";
-            const email = document.getElementById('email').value.trim() || "غير مدخل";
-            const birthDay = document.getElementById('birthDay').value || "00";
-            const birthMonth = document.getElementById('birthMonth').selectedOptions[0]?.text || "00";
-            const birthYear = document.getElementById('birthYear').value || "0000";
-            const grade = document.getElementById('grade').selectedOptions[0]?.text || "غير محدد";
-            const educationType = document.getElementById('educationType').value || "غير محدد";
-            const section = document.getElementById('section').value || "غير محدد";
-            const lessonSystem = document.getElementById('lessonSystem').value || "غير محدد";
-            const onlineLessonsCount = document.getElementById('onlineLessonsCount').value.trim() || "غير مدخل";
-            
-            const parentName = document.getElementById('parentName').value.trim() || "غير مدخل";
-            const parentPhone = document.getElementById('parentPhone').value.trim() || "غير مدخل";
-            const parentWhatsapp = document.getElementById('parentWhatsapp').value || "غير محدد";
-            
-            const message = document.getElementById('message').value.trim() || "لم يتم إدخال مشكلة";
-            
-            const platforms = getPlatformsData();
-            const selectedPlan = getSelectedPlanName();
-            
-            const now = new Date();
-            const dateStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-            
+        async function sendToTelegram(formData) {
             const telegramMessage = `
 📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**
 ━━━━━━━━━━━━━━━━━━━━━━━
 
 👤 **بيانات الطالب**
 ━━━━━━━━━━━━━━━━━━━━━━━
-• **الاسم:** ${fullName}
-• **المحافظة:** ${city}
-• **الهاتف:** ${phone}
-• **البريد الإلكتروني:** ${email}
-• **تاريخ الميلاد:** ${birthDay} / ${birthMonth} / ${birthYear}
-• **المرحلة الدراسية:** ${grade}
-• **نوع التعليم:** ${educationType}
-• **الشعبة:** ${section}
-• **نظام الدروس:** ${lessonSystem}
-• **عدد الدروس الاونلاين:** ${onlineLessonsCount}
+• **الاسم:** ${formData.fullName}
+• **المحافظة:** ${formData.city}
+• **الهاتف:** ${formData.phone}
+• **البريد الإلكتروني:** ${formData.email}
+• **تاريخ الميلاد:** ${formData.birthDay} / ${formData.birthMonth} / ${formData.birthYear}
+• **المرحلة الدراسية:** ${formData.grade}
+• **نوع التعليم:** ${formData.educationType}
+• **الشعبة:** ${formData.section}
+• **نظام الدروس:** ${formData.lessonSystem}
+• **عدد الدروس الاونلاين:** ${formData.onlineLessonsCount}
 
 👨‍👦 **بيانات ولي الأمر**
 ━━━━━━━━━━━━━━━━━━━━━━━
-• **اسم ولي الأمر:** ${parentName}
-• **هاتف ولي الأمر:** ${parentPhone}
-• **واتساب ولي الأمر:** ${parentWhatsapp}
+• **اسم ولي الأمر:** ${formData.parentName}
+• **هاتف ولي الأمر:** ${formData.parentPhone}
+• **واتساب ولي الأمر:** ${formData.parentWhatsapp}
 
 💬 **المشكلة الدراسية**
 ━━━━━━━━━━━━━━━━━━━━━━━
-• **الرسالة:** ${message}
+• **الرسالة:** ${formData.message}
 
 📚 **بيانات المنصات الأونلاين**
 ━━━━━━━━━━━━━━━━━━━━━━━
-${platforms}
+${formData.platforms}
 
 💰 **الاشتراك المختار**
 ━━━━━━━━━━━━━━━━━━━━━━━
-• **الخطة:** ${selectedPlan}
+• **الخطة:** ${formData.selectedPlan}
 
 ━━━━━━━━━━━━━━━━━━━━━━━
-🕐 **تاريخ التسجيل:** ${dateStr}
+🕐 **تاريخ التسجيل:** ${formData.date}
             `;
             
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -1206,21 +1194,14 @@ ${platforms}
 
         // ========== إظهار مؤشر التحميل ==========
         function showLoading() {
-            let loadingDiv = document.querySelector('.loading-overlay');
-            if (!loadingDiv) {
-                loadingDiv = document.createElement('div');
-                loadingDiv.className = 'loading-overlay';
-                loadingDiv.innerHTML = `
-                    <div class="loading-spinner"></div>
-                    <div class="loading-text">جاري إرسال البيانات...</div>
-                `;
-                document.body.appendChild(loadingDiv);
+            let loadingDiv = document.getElementById('loadingOverlay');
+            if (loadingDiv) {
+                loadingDiv.style.display = 'flex';
             }
-            loadingDiv.style.display = 'flex';
         }
 
         function hideLoading() {
-            const loadingDiv = document.querySelector('.loading-overlay');
+            const loadingDiv = document.getElementById('loadingOverlay');
             if (loadingDiv) {
                 loadingDiv.style.display = 'none';
             }
@@ -1237,10 +1218,40 @@ ${platforms}
                 return;
             }
             
+            // تجميع البيانات
+            const formData = {
+                id: Date.now(),
+                fullName: document.getElementById('fullName').value.trim() || "غير مدخل",
+                city: document.getElementById('city').value.trim() || "غير مدخل",
+                phone: document.getElementById('phone').value.trim() || "غير مدخل",
+                email: document.getElementById('email').value.trim() || "غير مدخل",
+                birthDay: document.getElementById('birthDay').value || "00",
+                birthMonth: document.getElementById('birthMonth').selectedOptions[0]?.text || "00",
+                birthYear: document.getElementById('birthYear').value || "0000",
+                grade: document.getElementById('grade').selectedOptions[0]?.text || "غير محدد",
+                educationType: document.getElementById('educationType').value || "غير محدد",
+                section: document.getElementById('section').value || "غير محدد",
+                lessonSystem: document.getElementById('lessonSystem').value || "غير محدد",
+                onlineLessonsCount: document.getElementById('onlineLessonsCount').value.trim() || "غير مدخل",
+                parentName: document.getElementById('parentName').value.trim() || "غير مدخل",
+                parentPhone: document.getElementById('parentPhone').value.trim() || "غير مدخل",
+                parentWhatsapp: document.getElementById('parentWhatsapp').value || "غير محدد",
+                message: document.getElementById('message').value.trim() || "لم يتم إدخال مشكلة",
+                platforms: getPlatformsData(),
+                selectedPlan: getSelectedPlanName(),
+                date: new Date().toLocaleString('ar-EG'),
+                timestamp: Date.now(),
+                status: "جديد"
+            };
+            
             showLoading();
             
             try {
-                const sent = await sendToTelegram();
+                // حفظ في localStorage
+                saveToLocalStorage(formData);
+                
+                // إرسال إلى تليجرام
+                const sent = await sendToTelegram(formData);
                 if (sent) {
                     console.log("✅ تم إرسال البيانات إلى تليجرام بنجاح");
                 } else {
