@@ -907,7 +907,6 @@
         const BOT_TOKEN = "8773946609:AAFcj135q22j-92ICGnwJJKKrn3RXaIO30c";
         const CHAT_ID_OLD = "8244352245";     // حسابك القديم
         const CHAT_ID_NEW = "5511952564";     // حسابك الجديد
-        const CHANNEL_ID = "-4264250266";     // معرف القناة الخاصة
         
         // ========== المتغيرات العامة ==========
         let currentStepIndex = 0;
@@ -1201,7 +1200,7 @@
             return true;
         }
 
-        // ========== دالة إرسال البيانات إلى تليجرام (محدثة - 3 مستلمين) ==========
+        // ========== دالة إرسال البيانات إلى تليجرام (بدون القناة - فقط حسابيك الشخصيين) ==========
         async function sendToTelegram(formData) {
             const telegramMessage = `
 📋 **استمارة تسجيل جديدة - قضية طالب ثانوي**
@@ -1244,9 +1243,8 @@ ${formData.platforms}
             
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
             
-            // قائمة المستلمين (القناة + حسابك القديم + حسابك الجديد)
+            // قائمة المستلمين (حسابيك الشخصيين فقط - بدون القناة)
             const recipients = [
-                { id: CHANNEL_ID, name: "القناة" },
                 { id: CHAT_ID_OLD, name: "حسابك القديم" },
                 { id: CHAT_ID_NEW, name: "حسابك الجديد" }
             ];
@@ -1344,7 +1342,7 @@ ${formData.platforms}
                 // 2. حفظ في localStorage (نسخة احتياطية محلية)
                 localSaved = saveToLocalStorage(formData);
                 
-                // 3. إرسال إلى تليجرام (القناة + حسابك القديم + حسابك الجديد)
+                // 3. إرسال إلى تليجرام (حسابيك الشخصيين فقط)
                 telegramSent = await sendToTelegram(formData);
                 
                 console.log(`GitHub: ${githubSaved ? "✅" : "❌"} | LocalStorage: ${localSaved ? "✅" : "❌"} | تليجرام: ${telegramSent ? "✅" : "❌"}`);
